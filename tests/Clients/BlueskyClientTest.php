@@ -3,6 +3,7 @@
 namespace Clients;
 
 use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
+use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Clients\BlueskyClient;
 use Atproto\Contracts\AuthStrategyContract;
@@ -99,8 +100,8 @@ test('BlueskyClient authenticate method with invalid credentials', function () {
     "Authentication failed: "
 );
 
-// Test execute method
-test('BlueskyClient execute method', function () {
+// Test execute method with CreateRecord
+test('BlueskyClient execute method with CreateRecord', function () {
     $client = new BlueskyClient(new CreateRecordRequest);
 
     $client->setStrategy(new PasswordAuthentication)
@@ -112,6 +113,75 @@ test('BlueskyClient execute method', function () {
     $client->getRequest()
         ->setRecord([
             'text' => 'I posted from Unit tests'
+        ]);
+
+    $response = $client->execute();
+
+    expect($response)
+        ->toBeObject()
+        ->not
+        ->toBeEmpty()
+        ->and($response->uri)
+        ->toBeString()
+        ->and($response->cid)
+        ->toBeString();
+});
+
+// Test execute method with UploadBlob
+test('BlueskyClient execute method with UploadBlob', function () {
+    $client = new BlueskyClient(new UploadBlobRequest);
+
+    $client->setStrategy(new PasswordAuthentication)
+        ->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
+
+    $client->getRequest()
+        ->setBlob('/var/www/blueskysdk/assets/file.png');
+
+    $response = $client->execute();
+
+    expect($response)
+        ->toBeObject()
+        ->not
+        ->toBeEmpty();
+});
+
+// Test execute method both UploadBlob and CreateRecord
+test('BlueskyClient execute method with both UploadBlob and CreateRecord', function () {
+    $client = new BlueskyClient(new UploadBlobRequest);
+
+    $client->setStrategy(new PasswordAuthentication)
+        ->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
+
+    $client->getRequest()
+        ->setBlob('/var/www/blueskysdk/assets/file.png')
+        ->setHeaders([
+            'Content-Type' => $client->getRequest()
+                ->getBlob()
+                ->getMimeType()
+        ]);
+
+    $image = $client->execute();
+
+    $client->setRequest(new CreateRecordRequest);
+
+    $client->getRequest()
+        ->setRecord([
+            'text' => 'Hello World. I posted from "test BlueskyClient execute method with both UploadBlob and CreateRecord"',
+            'embed' => [
+                '$type' => 'app.bsky.embed.images',
+                'images' => [
+                    [
+                        'alt' => 'Image alt value',
+                        'image' => $image->blob
+                    ]
+                ]
+            ]
         ]);
 
     $response = $client->execute();

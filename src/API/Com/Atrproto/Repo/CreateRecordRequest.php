@@ -3,33 +3,31 @@
 namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use InvalidArgumentException;
 
 class CreateRecordRequest implements RequestContract
 {
-    /** @var string The repository to create the record in */
-    private $repo = '';
-
-    /** @var string The key of the record */
-    private $rkey = '';
-
-    /** @var bool Whether to validate the record */
-    private $validate = true;
-
-    /** @var array The record data */
-    private $record = [];
-
-    /** @var string The collection to store the record in */
-    private $collection = 'app.bsky.feed.post';
-
-    /** @var mixed The swap commit */
-    private $swapCommit;
+    /** @var object $body The request body */
+    private $body;
 
     /** @var array The request headers */
     private $headers = [
-        'Accept: application/json',
-        'Content-Type: application/json',
+        'Accept'       => 'application/json',
+        'Content-Type' => 'application/json',
     ];
+
+    public function __construct()
+    {
+        $this->body = (object) [
+            'repo' => '',
+            'rkey' => '',
+            'validate' => true,
+            'record' => [],
+            'collection' => 'app.bsky.feed.post',
+            'swapCommit' => '',
+        ];
+    }
 
     /**
      * Set the repository for the record.
@@ -43,7 +41,7 @@ class CreateRecordRequest implements RequestContract
         if (!is_string($repo))
             throw new InvalidArgumentException("'repo' must be a string");
 
-        $this->repo = $repo;
+        $this->body->repo = $repo;
 
         return $this;
     }
@@ -55,7 +53,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getRepo()
     {
-        return $this->repo;
+        return $this->body->repo;
     }
 
     /**
@@ -73,7 +71,7 @@ class CreateRecordRequest implements RequestContract
         if (strlen($rkey) > 15 || 1 > strlen($rkey))
             throw new InvalidArgumentException("'key' length must be between 1 and 15 characters");
 
-        $this->rkey = $rkey;
+        $this->body->rkey = $rkey;
 
         return $this;
     }
@@ -85,7 +83,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getRkey()
     {
-        return $this->rkey;
+        return $this->body->rkey;
     }
 
     /**
@@ -100,7 +98,7 @@ class CreateRecordRequest implements RequestContract
         if (! is_bool($validate))
             throw new InvalidArgumentException("'validate' must be a boolean");
 
-        $this->validate = $validate;
+        $this->body->validate = $validate;
 
         return $this;
     }
@@ -112,7 +110,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getValidate()
     {
-        return $this->validate;
+        return $this->body->validate;
     }
 
     /**
@@ -135,7 +133,7 @@ class CreateRecordRequest implements RequestContract
         else if (date_create_from_format('c', $record['createdAt']) === false)
             throw new InvalidArgumentException("'createdAt' must be a valid date format. Use 'c' format instead.");
 
-        $this->record = $record;
+        $this->body->record = $record;
 
         return $this;
     }
@@ -147,7 +145,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getRecord()
     {
-        return $this->record;
+        return $this->body->record;
     }
 
     /**
@@ -172,7 +170,7 @@ class CreateRecordRequest implements RequestContract
         if (! in_array($collection, $acceptableCollections))
             throw new InvalidArgumentException("'collection' must be one of '" . implode("', '", $acceptableCollections) . "'");
 
-        $this->collection = $collection;
+        $this->body->collection = $collection;
 
         return $this;
     }
@@ -184,7 +182,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getCollection()
     {
-        return $this->collection;
+        return $this->body->collection;
     }
 
     /**
@@ -195,7 +193,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function swapCommit($swapCommit)
     {
-        $this->swapCommit = $swapCommit;
+        $this->body->swapCommit = $swapCommit;
 
         return $this;
     }
@@ -207,7 +205,7 @@ class CreateRecordRequest implements RequestContract
      */
     public function getSwapCommit()
     {
-        return $this->swapCommit;
+        return $this->body->swapCommit;
     }
 
     /**
@@ -241,20 +239,41 @@ class CreateRecordRequest implements RequestContract
     }
 
     /**
+     * Set the headers for the request.
+     *
+     * @param array $headers The header/s for the request.
+     * @return $this
+     */
+    public function setHeaders(array $headers)
+    {
+        $this->headers = array_diff_key(
+            $this->headers,
+            array_flip(array_keys($headers))
+        );
+
+        $this->headers = array_merge(
+            $this->headers,
+            $headers
+        );
+
+        return $this;
+    }
+
+    /**
      * Get the body for the request.
      *
-     * @return array The body
-     * @throws InvalidArgumentException If required fields are missing in the body
+     * @return string The body
+     * @throws RequestBodyHasMissingRequiredFields If required fields are missing in the body
      */
     public function getBody()
     {
         $fields = array_filter([
-            'repo' => $this->repo,
-            'rkey' => $this->rkey,
-            'validate' => $this->validate,
-            'record' => $this->record,
-            'collection' => $this->collection,
-            'swapCommit' => $this->swapCommit,
+            'repo' => $this->body->repo,
+            'rkey' => $this->body->rkey,
+            'validate' => $this->body->validate,
+            'record' => $this->body->record,
+            'collection' => $this->body->collection,
+            'swapCommit' => $this->body->swapCommit,
         ]);
 
         $requiredFields = [
@@ -269,9 +288,9 @@ class CreateRecordRequest implements RequestContract
         );
 
         if (! empty($missingFields))
-            throw new InvalidArgumentException("Request body has missing fields: " . implode(', ', $missingFields));
+            throw new RequestBodyHasMissingRequiredFields(implode(', ', $missingFields));
 
-        return $fields;
+        return json_encode($fields);
     }
 
     /**
@@ -291,11 +310,10 @@ class CreateRecordRequest implements RequestContract
      */
     public function boot($authResponse)
     {
-        $this->headers = array_merge(
-            $this->headers,
-            ["Authorization: Bearer $authResponse->accessJwt"]
-        );
+        $this->headers = array_merge($this->headers, [
+            "Authorization" => "Bearer $authResponse->accessJwt"
+        ]);
 
-        $this->repo = $authResponse->did;
+        $this->body->repo = $authResponse->did;
     }
 }

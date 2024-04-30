@@ -20,7 +20,8 @@
   },
   "require": {
     "ext-json": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-fileinfo": "*"
   },
   "config": {
     "allow-plugins": {

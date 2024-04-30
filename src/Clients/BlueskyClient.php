@@ -10,8 +10,7 @@ use Atproto\Exceptions\cURLException;
 use Atproto\Exceptions\Http\InvalidRequestException;
 use Atproto\Exceptions\Http\Token\ExpiredTokenException;
 use Atproto\Exceptions\Http\Token\InvalidTokenException;
-use Exception;
-use http\Exception\RuntimeException;
+use RuntimeException;
 
 /**
  * Class BlueskyClient
@@ -65,6 +64,18 @@ class BlueskyClient implements ClientContract
     public function setStrategy(AuthStrategyContract $strategyContract)
     {
         $this->authStrategy = $strategyContract;
+        return $this;
+    }
+
+    /**
+     * Set the request object for the client.
+     *
+     * @param RequestContract $requestContract The request object
+     * @return $this
+     */
+    public function setRequest(RequestContract $requestContract)
+    {
+        $this->request = $requestContract;
         return $this;
     }
 
@@ -130,12 +141,17 @@ class BlueskyClient implements ClientContract
     {
         $curl = curl_init();
 
+        $headers = $request->getHeaders();
+        array_walk($headers, function (&$value, $key) {
+            $value = sprintf('%s: %s', $key, $value);
+        });
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->url . $request->getURI(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($request->getBody()),
-            CURLOPT_HTTPHEADER => $request->getHeaders(),
+            CURLOPT_POSTFIELDS => $request->getBody(),
+            CURLOPT_HTTPHEADER => $headers,
         ]);
 
         $response = curl_exec($curl);
