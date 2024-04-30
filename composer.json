@@ -1,0 +1,31 @@
+{
+  "name": "shahmal1yev/blueskysdk",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "shahmal1yev",
+      "email": "email@example.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Atproto\\": "src/",
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.34"
+  },
+  "require": {
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-fileinfo": "*"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
