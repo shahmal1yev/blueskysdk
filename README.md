@@ -35,7 +35,7 @@ $client->setStrategy(new PasswordAuthentication)
     ]);
 
 $client->getRequest()
-    ->setBlob('/path/to/file.png');
+    ->setBlob('/var/www/blueskysdk/assets/file.png');
 
 $response = $client->execute();
 
@@ -51,21 +51,63 @@ use Atproto\Auth\Strategies\PasswordAuthentication;
 $client = new BlueskyClient(new CreateRecordRequest);
 
 $client->setStrategy(new PasswordAuthentication)
-->authenticate([
-'identifier' => 'user@example.com',
-'password' => 'password'
-]);
+    ->authenticate([
+        'identifier' => 'user@example.com',
+        'password' => 'password'
+    ]);
 
 $client->getRequest()
-->setRecord([
-'text' => 'Hello World. This is a test record.',
-'author' => 'John Doe'
-]);
-
-$response = $client->execute();
+    ->setRecord([
+        'text' => 'I posted from Unit tests'
+    ]);
 
 echo "Record created successfully. URI: {$response->uri}";
 ```
+### Create Record (with blob)
+
+```php
+use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
+use Atproto\Auth\Strategies\PasswordAuthentication;
+use Atproto\Clients\BlueskyClient;
+use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
+
+$client = new BlueskyClient(new UploadBlobRequest);
+
+$client->setStrategy(new PasswordAuthentication)
+    ->authenticate([
+        'identifier' => 'user@example.com',
+        'password' => 'password'
+    ]);
+
+$client->getRequest()
+    ->setBlob('/var/www/blueskysdk/assets/file.png')
+    ->setHeaders([
+        'Content-Type' => $client->getRequest()
+            ->getBlob()
+            ->getMimeType()
+    ]);
+
+$image = $client->execute();
+
+$client->setRequest(new CreateRecordRequest);
+
+$client->getRequest()
+    ->setRecord([
+        'text' => 'Hello World. I posted from "test BlueskyClient execute method with both UploadBlob and CreateRecord"',
+        'embed' => [
+            '$type' => 'app.bsky.embed.images',
+            'images' => [
+                [
+                    'alt' => 'Image alt value',
+                    'image' => $image->blob
+                ]
+            ]
+        ]
+    ]);
+
+$response = $client->execute();
+```
+
 ## Contribution
 - If you find any bug or issue, please open an issue.
 - If you want to contribute to the code, feel free to submit a pull request.
