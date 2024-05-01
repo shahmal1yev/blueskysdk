@@ -1,6 +1,6 @@
 {
   "name": "shahmal1yev/blueskysdk",
-  "description": "description",
+  "description": "BlueskySDK is a PHP library for easy integration with the Bluesky API, enabling effortless file uploads, record creation, and authentication in PHP applications.",
   "minimum-stability": "stable",
   "license": "mit",
   "authors": [
@@ -21,7 +21,8 @@
   "require": {
     "ext-json": "*",
     "ext-curl": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "php": ">=5.6"
   },
   "config": {
     "allow-plugins": {
