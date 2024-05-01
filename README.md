@@ -11,9 +11,9 @@ BlueskySDK is a PHP library used to interact with the Bluesky API. This library 
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/user/BlueskySDK.git`
-2. Navigate to the project directory: `cd BlueskySDK`
-3. Install dependencies: `composer install`
+```shell
+composer require shahmal1yev/blueskysdk
+```
 
 ## Usage
 
