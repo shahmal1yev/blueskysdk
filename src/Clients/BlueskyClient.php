@@ -152,7 +152,6 @@ class BlueskyClient implements ClientContract
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->url . $request->getURI(),
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => $request->getBody(),
             CURLOPT_HTTPHEADER => $headers,
         ]);
 

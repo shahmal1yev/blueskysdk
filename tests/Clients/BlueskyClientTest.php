@@ -2,6 +2,7 @@
 
 namespace Clients;
 
+use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
 use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
 use Atproto\Auth\Strategies\PasswordAuthentication;
@@ -146,6 +147,33 @@ test('BlueskyClient execute method with UploadBlob', function () {
         ->toBeObject()
         ->not
         ->toBeEmpty();
+});
+
+// Test execute method with GetProfile
+test("BlueskyClient execute method with GetProfile", function() {
+    $client = new BlueskyClient(new GetProfile);
+
+    $client->setStrategy(new PasswordAuthentication)
+        ->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
+
+    $client->getRequest()
+        ->setActor('shahmal1yev.bsky.social');
+
+    $response = $client->execute();
+
+    expect($response)
+        ->toBeObject()
+        ->not
+        ->toBeNull()
+        ->and($response->did)
+        ->toBeString()
+        ->and($response->displayName)
+        ->toBeString()
+        ->and($response->handle)
+        ->toBeString();
 });
 
 // Test execute method both UploadBlob and CreateRecord

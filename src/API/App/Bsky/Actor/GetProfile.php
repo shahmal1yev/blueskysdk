@@ -4,6 +4,7 @@ namespace Atproto\API\App\Bsky\Actor;
 
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
+use InvalidArgumentException;
 
 /**
  * The GetProfile class represents a request to retrieve a user's profile information from the Bluesky API.
@@ -26,33 +27,33 @@ class GetProfile implements RequestContract
     public function __construct()
     {
         $this->body = (object) [
-            'action' => '',
+            'actor' => '',
         ];
     }
 
     /**
-     * Sets the action to be performed.
+     * Sets the actor to be performed.
      *
-     * @param string $action The action to be set
+     * @param string $actor The 'actor' to be set
      *
-     * @throws \InvalidArgumentException if $action is not a string
+     * @throws InvalidArgumentException if $actor is not a string
      */
-    public function setAction($action)
+    public function setActor($actor)
     {
-        if (! is_string($action))
-            throw new \InvalidArgumentException("Action must be a string");
+        if (! is_string($actor))
+            throw new InvalidArgumentException("'actor' must be a string");
 
-        $this->body->action = $action;
+        $this->body->actor = $actor;
     }
 
     /**
-     * Retrieves the action that has been set.
+     * Retrieves the 'actor' that has been set.
      *
-     * @return string The action
+     * @return string The 'actor' field value
      */
-    public function getAction()
+    public function getActor()
     {
-        return $this->body->action;
+        return $this->body->actor;
     }
 
     /**
@@ -138,9 +139,9 @@ class GetProfile implements RequestContract
      */
     public function getBody()
     {
-        if (! isset($this->body->blob))
-            throw new RequestBodyHasMissingRequiredFields(implode(', ', ['blob']));
+        if (! isset($this->body->actor))
+            throw new RequestBodyHasMissingRequiredFields('actor');
 
-        return $this->body->action;
+        return ['actor' => $this->body->actor];
     }
 }
