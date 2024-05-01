@@ -10,6 +10,7 @@ use Atproto\Exceptions\cURLException;
 use Atproto\Exceptions\Http\InvalidRequestException;
 use Atproto\Exceptions\Http\Token\ExpiredTokenException;
 use Atproto\Exceptions\Http\Token\InvalidTokenException;
+use Atproto\Exceptions\Http\UnsupportedHTTPMethod;
 use RuntimeException;
 
 /**
@@ -106,6 +107,7 @@ class BlueskyClient implements ClientContract
      * @throws InvalidTokenException If the token used for authentication is invalid
      * @throws ExpiredTokenException If the token used for authentication has expired
      * @throws AuthRequired If authentication is required for the request but not provided
+     * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
      */
     public function execute()
     {
@@ -136,6 +138,7 @@ class BlueskyClient implements ClientContract
      * @throws InvalidTokenException If the token used for authentication is invalid
      * @throws InvalidRequestException If the API request is invalid
      * @throws ExpiredTokenException If the token used for authentication has expired
+     * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
      */
     private function sendRequest($request)
     {
@@ -149,10 +152,11 @@ class BlueskyClient implements ClientContract
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->url . $request->getURI(),
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $request->getBody(),
             CURLOPT_HTTPHEADER => $headers,
         ]);
+
+        $this->setRequestMethod($curl, $request);
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -182,5 +186,42 @@ class BlueskyClient implements ClientContract
             }
 
         return $response;
+    }
+
+    /**
+     * Sets the request method for the cURL handle based on the HTTP method specified in the request object.
+     *
+     * @param resource $curl    The cURL handle
+     * @param RequestContract $request The request object
+     *
+     * @throws UnsupportedHTTPMethod if the HTTP method specified in the request is not supported
+     */
+    private function setRequestMethod(&$curl, $request)
+    {
+        switch ($request->getMethod())
+        {
+            case "POST":
+                curl_setopt_array($curl, [
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => $request->getBody(),
+                ]);
+            break;
+            case "GET":
+                curl_setopt(
+                    $curl,
+                    CURLOPT_URL,
+                    sprintf(
+                        '%s%s?%s',
+                        $this->url,
+                        $request->getUri(),
+                        http_build_query($request->getBody())
+                    )
+                );
+            break;
+            default:
+                throw new UnsupportedHTTPMethod(
+                    "The package does not support this method: " . $request->getMethod()
+                );
+        }
     }
 }
