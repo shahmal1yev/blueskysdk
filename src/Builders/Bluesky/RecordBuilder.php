@@ -46,18 +46,23 @@ class RecordBuilder implements RecordBuilderContract
         if (! is_string($text))
             throw new InvalidArgumentException("'text' must be string");
 
+        $this->record->text = (string) $this->record->text . "$text\n";
+
         preg_match_all(
             $this->urlRegex,
-            $text,
+            (string) $this->record->text,
             $urlMatches,
             PREG_OFFSET_CAPTURE
         );
+
+        if (! empty($urlMatches))
+            $this->record->facets = [];
 
         foreach($urlMatches[0] as $match)
         {
             $url = $match[0];
             $startPos = $match[1];
-            $endPos = $startPos + strlen($url) - 1;
+            $endPos = $startPos + strlen($url);
 
             $this->record->facets[] = [
                 "index" => [
@@ -72,8 +77,6 @@ class RecordBuilder implements RecordBuilderContract
                 ]
             ];
         }
-
-        $this->record->text = $text;
 
         return $this;
     }

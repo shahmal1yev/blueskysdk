@@ -201,8 +201,15 @@ test('BlueskyClient execute method with both UploadBlob and CreateRecord', funct
     $image = $client->execute();
 
     $recordBuilder = (new RecordBuilder())
-        ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
+        ->addText("Hello World!")
+        ->addText("")
+        ->addText("I was sent to test the inclusion of these URLs in this post:")
+        ->addText("")
+        ->addText("1. https://www.fs-poster.com")
+        ->addText("2. https://github.com/shahmal1yev/blueskysdk")
+        ->addText("3. https://www.wordpress.php")
         ->addType()
+        ->addImage($image->blob)
         ->addImage($image->blob)
         ->addCreatedAt();
 

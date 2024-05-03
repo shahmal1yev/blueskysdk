@@ -2,6 +2,8 @@
 
 namespace Atproto\Contracts;
 
+use InvalidArgumentException;
+
 /**
  * Interface RecordBuilderContract
  *
@@ -35,6 +37,16 @@ interface RecordBuilderContract
      * @return $this
      */
     public function addCreatedAt($createdAt = null);
+
+    /**
+     * Adds image to the record.
+     *
+     * @param string $blob The image blob.
+     * @param string $alt The alternative text for the image.
+     *
+     * @return $this
+     */
+    public function addImage($blob, $alt);
 
     /**
      * Builds the record.
