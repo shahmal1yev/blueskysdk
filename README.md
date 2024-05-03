@@ -55,11 +55,17 @@ $client->setStrategy(new PasswordAuthentication)
         'identifier' => 'user@example.com',
         'password' => 'password'
     ]);
+    
+$record = new \Atproto\Builders\Bluesky\RecordBuilder();
+
+$record->addText("Hello World!")
+    ->addText("")
+    ->addText("I was sent via BlueskySDK: https://github.com/shahmal1yev/blueskysdk")
+    ->addCreatedAt(date_format(date_create_from_format("d/m/Y", "08/11/2020"), "c"))
+    ->addType();
 
 $client->getRequest()
-    ->setRecord([
-        'text' => 'I posted from Unit tests'
-    ]);
+    ->setRecord($record);
 
 echo "Record created successfully. URI: {$response->uri}";
 ```
@@ -91,19 +97,19 @@ $image = $client->execute();
 
 $client->setRequest(new CreateRecordRequest);
 
+$record = (new \Atproto\Builders\Bluesky\RecordBuilder)
+    ->addText("Hello World!")
+    ->addText("")
+    ->addText("I was sent from 'test BlueskyClient execute method with both UploadBlob and CreateRecord'")
+    ->addText("")
+    ->addText("Here are the pictures: ")
+    ->addImage($image->blob, "Image 1: Alt text")
+    ->addImage($image->blob, "Image 2: Alt text")
+    ->addType()
+    ->addCreatedAt();
+
 $client->getRequest()
-    ->setRecord([
-        'text' => 'Hello World. I posted from "test BlueskyClient execute method with both UploadBlob and CreateRecord"',
-        'embed' => [
-            '$type' => 'app.bsky.embed.images',
-            'images' => [
-                [
-                    'alt' => 'Image alt value',
-                    'image' => $image->blob
-                ]
-            ]
-        ]
-    ]);
+    ->setRecord($record);
 
 $response = $client->execute();
 ```
