@@ -6,6 +6,7 @@ use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
 use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
 use Atproto\Auth\Strategies\PasswordAuthentication;
+use Atproto\Builders\Bluesky\RecordBuilder;
 use Atproto\Clients\BlueskyClient;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\HTTP\RequestContract;
@@ -111,10 +112,13 @@ test('BlueskyClient execute method with CreateRecord', function () {
             'password' => 'ucvlqcq8'
         ]);
 
+    $recordBuilder = (new RecordBuilder())
+        ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
+        ->addType()
+        ->addCreatedAt();
+
     $client->getRequest()
-        ->setRecord([
-            'text' => 'I posted from Unit tests'
-        ]);
+        ->setRecord($recordBuilder);
 
     $response = $client->execute();
 
@@ -196,21 +200,16 @@ test('BlueskyClient execute method with both UploadBlob and CreateRecord', funct
 
     $image = $client->execute();
 
+    $recordBuilder = (new RecordBuilder())
+        ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
+        ->addType()
+        ->addImage($image->blob)
+        ->addCreatedAt();
+
     $client->setRequest(new CreateRecordRequest);
 
     $client->getRequest()
-        ->setRecord([
-            'text' => 'Hello World. I posted from "test BlueskyClient execute method with both UploadBlob and CreateRecord"',
-            'embed' => [
-                '$type' => 'app.bsky.embed.images',
-                'images' => [
-                    [
-                        'alt' => 'Image alt value',
-                        'image' => $image->blob
-                    ]
-                ]
-            ]
-        ]);
+        ->setRecord($recordBuilder);
 
     $response = $client->execute();
 

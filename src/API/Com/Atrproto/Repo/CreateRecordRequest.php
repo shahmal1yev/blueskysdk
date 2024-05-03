@@ -3,6 +3,7 @@
 namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Contracts\RecordBuilderContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use InvalidArgumentException;
 
@@ -116,24 +117,13 @@ class CreateRecordRequest implements RequestContract
     /**
      * Set the record data.
      *
-     * @param array $record The record data
+     * @param RecordBuilderContract $record The record data
      * @return $this
      * @throws InvalidArgumentException If the record data is invalid
      */
-    public function setRecord(array $record)
+    public function setRecord(RecordBuilderContract $record)
     {
-        if (! isset($record['text']))
-            throw new InvalidArgumentException("'record' must contain 'text' key");
-
-        if (! is_string($record['text']))
-            throw new InvalidArgumentException("'text' must be a string");
-
-        if (! isset($record['createdAt']))
-            $record['createdAt'] = date('c');
-        else if (date_create_from_format('c', $record['createdAt']) === false)
-            throw new InvalidArgumentException("'createdAt' must be a valid date format. Use 'c' format instead.");
-
-        $this->body->record = $record;
+        $this->body->record = $record->buildRecord();
 
         return $this;
     }
