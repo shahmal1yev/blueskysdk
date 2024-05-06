@@ -28,7 +28,8 @@ class RecordBuilder implements RecordBuilderContract
      */
     public function __construct()
     {
-        $this->record = new stdClass();
+	$this->record = new stdClass();
+	$this->record->text = "";
 
         return $this;
     }
