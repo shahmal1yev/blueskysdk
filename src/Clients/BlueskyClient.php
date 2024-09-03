@@ -2,9 +2,11 @@
 
 namespace Atproto\Clients;
 
+use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\ClientContract;
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Exceptions\Auth\AuthFailed;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\cURLException;
 use Atproto\Exceptions\Http\InvalidRequestException;
@@ -48,12 +50,12 @@ class BlueskyClient implements ClientContract
      */
     public function __construct(
         RequestContract $requestContract,
-                        $url = 'https://bsky.social/xrpc'
-    )
-    {
+        $url = 'https://bsky.social/xrpc'
+    ) {
         $this->url = $url;
         $this->request = $requestContract;
         $this->authenticated = (object) [];
+        $this->authStrategy = new PasswordAuthentication;
     }
 
     /**
@@ -61,6 +63,9 @@ class BlueskyClient implements ClientContract
      *
      * @param AuthStrategyContract $strategyContract The authentication strategy
      * @return $this
+     *
+     * @deprecated This method is deprecated and will be removed in a future version.
+     * Authentication should be handled directly via `authenticate()` with credentials.
      */
     public function setStrategy(AuthStrategyContract $strategyContract)
     {
@@ -85,12 +90,14 @@ class BlueskyClient implements ClientContract
      *
      * @param array $credentials The authentication credentials
      * @return mixed The authentication result
-     * @throws \RuntimeException If $authStrategy is not set
+     * @throws RuntimeException If $authStrategy is not set
+     * @throws AuthFailed If authentication failed
      */
     public function authenticate($credentials)
     {
-        if (! $this->authStrategy)
+        if (! $this->authStrategy) {
             throw new RuntimeException("You must set an authentication strategy first");
+        }
 
         $this->authenticated = $this->authStrategy
             ->authenticate($credentials);
@@ -101,18 +108,22 @@ class BlueskyClient implements ClientContract
     /**
      * Execute the request.
      *
-     * @return mixed The response from the API
+     * @return object The response from the API
      * @throws cURLException If cURL request fails
      * @throws InvalidRequestException If the API request is invalid
      * @throws InvalidTokenException If the token used for authentication is invalid
      * @throws ExpiredTokenException If the token used for authentication has expired
      * @throws AuthRequired If authentication is required for the request but not provided
      * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
+     *
+     * @deprecated This method will be renamed in the future for simplicity and to shorten method names. Use 'send()'
+     * instead.
      */
     public function execute()
     {
-        if ($this->request->authRequired() && empty($this->authenticated))
+        if ($this->request->authRequired() && empty($this->authenticated)) {
             throw new AuthRequired("You must be authenticated to use this method");
+        }
 
         $this->request->boot($this->authenticated);
 
@@ -120,11 +131,39 @@ class BlueskyClient implements ClientContract
     }
 
     /**
+     * Send the request.
+     *
+     * @return object The response from the API
+     * @throws cURLException If cURL request fails
+     * @throws InvalidRequestException If the API request is invalid
+     * @throws InvalidTokenException If the token used for authentication is invalid
+     * @throws ExpiredTokenException If the token used for authentication has expired
+     * @throws AuthRequired If authentication is required for the request but not provided
+     * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
+     */
+    public function send()
+    {
+        return $this->execute();
+    }
+
+    /**
      * Get the request object associated with this client.
      *
      * @return RequestContract The request object
+     *
+     * @deprecated This method will be renamed in the future for simplicity and to shorten method names. Use 'request()' instead.
      */
     public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the request object associated with this client.
+     *
+     * @return RequestContract $request
+     */
+    public function request()
     {
         return $this->request;
     }
@@ -133,7 +172,7 @@ class BlueskyClient implements ClientContract
      * Send the API request.
      *
      * @param RequestContract $request The request object
-     * @return mixed The response from the API
+     * @return object The response from the API
      * @throws cURLException If cURL request fails
      * @throws InvalidTokenException If the token used for authentication is invalid
      * @throws InvalidRequestException If the API request is invalid
@@ -160,14 +199,14 @@ class BlueskyClient implements ClientContract
         $response = curl_exec($curl);
         curl_close($curl);
 
-        if (curl_errno($curl))
+        if (curl_errno($curl)) {
             throw new cURLException(curl_error($curl));
+        }
 
         $response = json_decode($response);
 
-        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) != 200)
-            switch ($response->error)
-            {
+        if (curl_getinfo($curl, CURLINFO_HTTP_CODE) != 200) {
+            switch ($response->error) {
                 case "InvalidToken":
                     throw new InvalidTokenException(
                         $response->message
@@ -183,6 +222,7 @@ class BlueskyClient implements ClientContract
                         $response->message
                     );
             }
+        }
 
         return $response;
     }
@@ -195,16 +235,15 @@ class BlueskyClient implements ClientContract
      *
      * @throws UnsupportedHTTPMethod if the HTTP method specified in the request is not supported
      */
-    private function setRequestMethod(&$curl, $request)
+    private function setRequestMethod($curl, $request)
     {
-        switch ($request->getMethod())
-        {
+        switch ($request->getMethod()) {
             case "POST":
                 curl_setopt_array($curl, [
                     CURLOPT_POST => true,
                     CURLOPT_POSTFIELDS => $request->getBody(),
                 ]);
-            break;
+                break;
             case "GET":
                 curl_setopt(
                     $curl,
@@ -216,7 +255,7 @@ class BlueskyClient implements ClientContract
                         http_build_query($request->getBody())
                     )
                 );
-            break;
+                break;
             default:
                 throw new UnsupportedHTTPMethod(
                     "The package does not support this method: " . $request->getMethod()
