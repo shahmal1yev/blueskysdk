@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/phpstorm+all,composer
-# Edit at https://www.toptal.com/developers/gitignore?templates=phpstorm+all,composer
+# Created by https://www.toptal.com/developers/gitignore/api/phpstorm+all,composer,phpunit
+# Edit at https://www.toptal.com/developers/gitignore?templates=phpstorm+all,composer,phpunit
 
 ### Composer ###
 composer.phar
@@ -97,4 +97,19 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
-# End of https://www.toptal.com/developers/gitignore/api/phpstorm+all,composer
+### PHPUnit ###
+# Covers PHPUnit
+# Reference: https://phpunit.de/
+
+# Generated files
+.phpunit.result.cache
+.phpunit.cache
+
+# PHPUnit
+/app/phpunit.xml
+/phpunit.xml
+
+# Build data
+/build/
+
+# End of https://www.toptal.com/developers/gitignore/api/phpstorm+all,composer,phpunit
