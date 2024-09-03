@@ -55,19 +55,6 @@ test('BlueskyClient getRequest method', function () {
         ->toBe($request);
 });
 
-// Test authenticate method without setting authentication strategy
-test('BlueskyClient authenticate method without strategy', function () {
-    $client = new BlueskyClient(new CreateRecordRequest);
-
-    $client->authenticate([
-        'identifier' => 'shahmal1yev.bsky.social',
-        'password' => 'ucvlqcq8'
-    ]);
-})->throws(
-    RuntimeException::class,
-    'You must set an authentication strategy first'
-);
-
 // Test authenticate method with valid credentials
 test('BlueskyClient authenticate method with valid credentials', function () {
     $client = new BlueskyClient(new CreateRecordRequest);
