@@ -13,7 +13,10 @@
     "psr-4": {
       "Atproto\\": "src/",
       "Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "require-dev": {
     "pestphp/pest": "^2.34"
