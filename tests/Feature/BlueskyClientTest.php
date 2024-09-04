@@ -3,14 +3,18 @@
 namespace Tests\Feature;
 
 use Atproto\API\App\Bsky\Actor\GetProfile;
-use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
-use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
+use Atproto\API\Com\Atrproto\Repo\CreateRecord;
+use Atproto\API\Com\Atrproto\Repo\UploadBlob;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Builders\Bluesky\RecordBuilder;
 use Atproto\Clients\BlueskyClient;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Auth\AuthFailed;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Resources\Assets\NonPrimitive\AssociatedAsset;
+use Atproto\Resources\Assets\NonPrimitive\ChatAsset;
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class BlueskyClientTest extends TestCase
@@ -18,7 +22,7 @@ class BlueskyClientTest extends TestCase
     // Test constructor with default URL
     public function testConstructorWithDefaultURL()
     {
-        $client = new BlueskyClient(new CreateRecordRequest());
+        $client = new BlueskyClient(new CreateRecord());
 
         $reflection = new \ReflectionClass(BlueskyClient::class);
         $property = $reflection->getProperty('url');
@@ -34,7 +38,7 @@ class BlueskyClientTest extends TestCase
     public function testConstructorWithCustomURL()
     {
         $expected = "https://shahmal1yev.com/api";
-        $client = new BlueskyClient(new CreateRecordRequest(), $expected);
+        $client = new BlueskyClient(new CreateRecord(), $expected);
 
         $reflection = new \ReflectionClass(BlueskyClient::class);
         $property = $reflection->getProperty('url');
@@ -49,18 +53,18 @@ class BlueskyClientTest extends TestCase
     // Test getRequest method
     public function testGetRequestMethod()
     {
-        $request = new CreateRecordRequest;
+        $request = new CreateRecord;
         $client = new BlueskyClient($request);
 
         $this->assertInstanceOf(RequestContract::class, $client->getRequest());
-        $this->assertInstanceOf(CreateRecordRequest::class, $client->getRequest());
+        $this->assertInstanceOf(CreateRecord::class, $client->getRequest());
         $this->assertSame($request, $client->getRequest());
     }
 
     // Test authenticate method with valid credentials
     public function testAuthenticateWithValidCredentials()
     {
-        $client = new BlueskyClient(new CreateRecordRequest);
+        $client = new BlueskyClient(new CreateRecord);
         $client->setStrategy(new PasswordAuthentication);
 
         $authenticated = $client->authenticate([
@@ -80,7 +84,7 @@ class BlueskyClientTest extends TestCase
         $this->expectException(AuthFailed::class);
         $this->expectExceptionMessage("Authentication failed: ");
 
-        $client = new BlueskyClient(new CreateRecordRequest);
+        $client = new BlueskyClient(new CreateRecord);
         $client->setStrategy(new PasswordAuthentication);
 
         $client->authenticate([
@@ -92,7 +96,7 @@ class BlueskyClientTest extends TestCase
     // Test execute method with CreateRecord
     public function testExecuteWithCreateRecord()
     {
-        $client = new BlueskyClient(new CreateRecordRequest);
+        $client = new BlueskyClient(new CreateRecord);
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
@@ -118,7 +122,7 @@ class BlueskyClientTest extends TestCase
     // Test execute method with UploadBlob
     public function testExecuteWithUploadBlob()
     {
-        $client = new BlueskyClient(new UploadBlobRequest);
+        $client = new BlueskyClient(new UploadBlob);
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
@@ -139,11 +143,10 @@ class BlueskyClientTest extends TestCase
     {
         $client = new BlueskyClient(new GetProfile);
 
-        $client->setStrategy(new PasswordAuthentication)
-            ->authenticate([
-                'identifier' => 'shahmal1yev.bsky.social',
-                'password' => 'ucvlqcq8'
-            ]);
+        $client->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
 
         $client->getRequest()->setActor('shahmal1yev.bsky.social');
 
@@ -151,15 +154,46 @@ class BlueskyClientTest extends TestCase
 
         $this->assertIsObject($response);
         $this->assertNotNull($response);
-        $this->assertIsString($response->did);
-        $this->assertIsString($response->displayName);
-        $this->assertIsString($response->handle);
+        $this->assertIsString($response->did());
+        $this->assertIsString($response->displayName());
+        $this->assertIsString($response->handle());
+    }
+
+    // Test send method with GetProfile
+    public function testSendWithGetProfile()
+    {
+        $request = new GetProfile;
+
+        $request->setActor('shahmal1yev.bsky.social');
+
+        $client = new BlueskyClient($request);
+
+        $client->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
+
+        /** @var GetProfileResource $response */
+        $response = $client->send();
+
+        $this->assertIsObject($response);
+        $this->assertNotNull($response);
+        $this->assertIsString($response->did());
+        $this->assertIsString($response->displayName());
+        $this->assertIsString($response->handle());
+        $this->assertInstanceOf(Carbon::class, $response->indexedAt());
+        $this->assertInstanceOf(Carbon::class, $response->createdAt());
+
+        $associated = $response->associated();
+
+        $this->assertIsInt($associated->lists());
+        $this->assertInstanceOf(AssociatedAsset::class, $associated);
     }
 
     // Test execute method with both UploadBlob and CreateRecord
     public function testExecuteWithUploadBlobAndCreateRecord()
     {
-        $client = new BlueskyClient(new UploadBlobRequest);
+        $client = new BlueskyClient(new UploadBlob);
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
@@ -190,7 +224,7 @@ class BlueskyClientTest extends TestCase
             ->addImage($image->blob)
             ->addCreatedAt();
 
-        $client->setRequest(new CreateRecordRequest);
+        $client->setRequest(new CreateRecord);
 
         $client->getRequest()->setRecord($recordBuilder);
 
@@ -206,7 +240,7 @@ class BlueskyClientTest extends TestCase
     public function testSetStrategyMethod()
     {
         $authStrategy = new PasswordAuthentication;
-        $client = new BlueskyClient(new CreateRecordRequest);
+        $client = new BlueskyClient(new CreateRecord);
 
         $client->setStrategy($authStrategy);
 

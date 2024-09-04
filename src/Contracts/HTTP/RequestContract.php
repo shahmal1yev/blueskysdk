@@ -2,6 +2,8 @@
 
 namespace Atproto\Contracts\HTTP;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
+
 /**
  * Interface RequestContract
  *
@@ -50,4 +52,10 @@ interface RequestContract
      * @param mixed $authResponse The authentication response
      */
     public function boot($authResponse);
+
+    /**
+     * @param array $response
+     * @return ResourceContract
+     */
+    public function resource(array $response): ResourceContract;
 }

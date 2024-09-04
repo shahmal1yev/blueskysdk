@@ -6,6 +6,7 @@ use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\ClientContract;
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\Auth\AuthFailed;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\cURLException;
@@ -37,9 +38,7 @@ class BlueskyClient implements ClientContract
      */
     private $authenticated;
 
-    /**
-     * @var RequestContract The request object
-     */
+    /** @var RequestContract $request The request object */
     private $request;
 
     /**
@@ -51,7 +50,8 @@ class BlueskyClient implements ClientContract
     public function __construct(
         RequestContract $requestContract,
         $url = 'https://bsky.social/xrpc'
-    ) {
+    )
+    {
         $this->url = $url;
         $this->request = $requestContract;
         $this->authenticated = (object) [];
@@ -119,7 +119,7 @@ class BlueskyClient implements ClientContract
      * @deprecated This method will be renamed in the future for simplicity and to shorten method names. Use 'send()'
      * instead.
      */
-    public function execute()
+    public function execute(): object
     {
         if ($this->request->authRequired() && empty($this->authenticated)) {
             throw new AuthRequired("You must be authenticated to use this method");
@@ -131,19 +131,27 @@ class BlueskyClient implements ClientContract
     }
 
     /**
-     * Send the request.
-     *
-     * @return object The response from the API
-     * @throws cURLException If cURL request fails
-     * @throws InvalidRequestException If the API request is invalid
-     * @throws InvalidTokenException If the token used for authentication is invalid
-     * @throws ExpiredTokenException If the token used for authentication has expired
-     * @throws AuthRequired If authentication is required for the request but not provided
-     * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
+     * @throws UnsupportedHTTPMethod
+     * @throws cURLException
+     * @throws AuthRequired
+     * @throws InvalidRequestException
+     * @throws InvalidTokenException
+     * @throws ExpiredTokenException
      */
-    public function send()
+    public function send(): ResourceContract
     {
-        return $this->execute();
+        if ($this->request->authRequired() && empty($this->authenticated)) {
+            throw new AuthRequired("You must be authenticated to use this method");
+        }
+
+        $this->request->boot($this->authenticated);
+
+        $response = json_decode(
+            json_encode($this->sendRequest($this->request)),
+            true
+        );
+
+        return $this->request->resource($response);
     }
 
     /**
@@ -179,7 +187,7 @@ class BlueskyClient implements ClientContract
      * @throws ExpiredTokenException If the token used for authentication has expired
      * @throws UnsupportedHTTPMethod If the HTTP method specified in the request is not supported
      */
-    private function sendRequest($request)
+    private function sendRequest($request): object
     {
         $curl = curl_init();
 

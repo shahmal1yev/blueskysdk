@@ -1,0 +1,29 @@
+<?php
+
+namespace Atproto\Resources\Assets\NonPrimitive;
+
+use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Resources\Assets\Primitive\DatetimeAsset;
+
+/**
+ * @method string did()
+ * @method string handle()
+ * @method string displayName()
+ * @method string description()
+ * @method string avatar()
+ * @method string banner()
+ * @method int followersCount()
+ * @method int followsCount()
+ * @method int postsCount()
+ * @method AssociatedAsset associated()
+ * @method JoinedViaStarterPackAsset joinedViaStarterPack()
+ * @method DatetimeAsset indexedAt()
+ * @method DatetimeAsset createdAt()
+ * @method ViewerAsset viewer()
+ * @method LabelsAsset labels()
+ */
+class CreatorAsset implements ResourceContract, AssetContract
+{
+    use UserAsset;
+}

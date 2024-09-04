@@ -22,11 +22,11 @@ After including the library in your project, you can refer to the following exam
 ### File Upload
 
 ```php
-use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
+use Atproto\API\Com\Atrproto\Repo\UploadBlob;
 use Atproto\Clients\BlueskyClient;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 
-$client = new BlueskyClient(new UploadBlobRequest);
+$client = new BlueskyClient(new UploadBlob);
 
 $client->setStrategy(new PasswordAuthentication)
     ->authenticate([
@@ -43,12 +43,13 @@ echo "Blob uploaded successfully. CID: {$response->cid}";
 ```
 
 ### Record Creation
+
 ```php
-use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
+use Atproto\API\Com\Atrproto\Repo\CreateRecord;
 use Atproto\Clients\BlueskyClient;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 
-$client = new BlueskyClient(new CreateRecordRequest);
+$client = new BlueskyClient(new CreateRecord);
 
 $client->setStrategy(new PasswordAuthentication)
     ->authenticate([
@@ -72,12 +73,12 @@ echo "Record created successfully. URI: {$response->uri}";
 ### Create Record (with blob)
 
 ```php
-use Atproto\API\Com\Atrproto\Repo\UploadBlobRequest;
+use Atproto\API\Com\Atrproto\Repo\UploadBlob;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Clients\BlueskyClient;
-use Atproto\API\Com\Atrproto\Repo\CreateRecordRequest;
+use Atproto\API\Com\Atrproto\Repo\CreateRecord;
 
-$client = new BlueskyClient(new UploadBlobRequest);
+$client = new BlueskyClient(new UploadBlob);
 
 $client->setStrategy(new PasswordAuthentication)
     ->authenticate([
@@ -95,7 +96,7 @@ $client->getRequest()
 
 $image = $client->execute();
 
-$client->setRequest(new CreateRecordRequest);
+$client->setRequest(new CreateRecord);
 
 $record = (new \Atproto\Builders\Bluesky\RecordBuilder)
     ->addText("Hello World!")

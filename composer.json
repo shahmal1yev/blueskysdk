@@ -19,6 +19,8 @@
     "ext-json": "*",
     "ext-curl": "*",
     "ext-fileinfo": "*",
-    "php": ">=7.4"
+    "php": ">=7.4",
+    "nesbot/carbon": "2.x",
+    "shahmal1yev/gcollection": "^1.0"
   }
 }

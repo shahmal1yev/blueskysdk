@@ -3,11 +3,14 @@
 namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RecordBuilderContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 use InvalidArgumentException;
 
-class CreateRecordRequest implements RequestContract
+class CreateRecord implements RequestContract
 {
     /** @var object $body The request body */
     private $body;
@@ -305,5 +308,10 @@ class CreateRecordRequest implements RequestContract
         ]);
 
         $this->body->repo = $authResponse->did;
+    }
+
+    public function resource(array $response): ResourceContract
+    {
+        return new CreateRecordResource($response);
     }
 }
