@@ -5,6 +5,7 @@ namespace Atproto\API\Com\Atrproto\Repo;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use Atproto\Helpers\File;
+use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use InvalidArgumentException;
 
 /**
@@ -12,7 +13,7 @@ use InvalidArgumentException;
  *
  * Represents a request to upload a blob.
  */
-class UploadBlobRequest implements RequestContract
+class UploadBlob implements RequestContract
 {
     /** @var object $body The request body */
     private $body;

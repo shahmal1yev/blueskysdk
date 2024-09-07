@@ -19,6 +19,49 @@ composer require shahmal1yev/blueskysdk
 
 After including the library in your project, you can refer to the following examples:
 
+
+### Get Profile
+
+```php
+use Atproto\Clients\BlueskyClient;
+use Atproto\API\App\Bsky\Actor\GetProfile;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Resources\Assets\LabelsAsset;
+use Atproto\Resources\Assets\LabelAsset;
+use Atproto\Resources\Assets\FollowersAsset;
+use Atproto\Resources\Assets\FollowerAsset;
+
+$client = new BlueskyClient(new GetProfile());
+
+$client->authenticate([
+    'identifier' => 'user@example.com',
+    'password' => 'password'
+]);
+
+/** @var GetProfileResource $user */
+$user = $client->send();
+
+/** @var Carbon\Carbon $created */
+$created = $user->createdAt();
+
+/** @var LabelsAsset<LabelAsset> $labels */
+$labels = $user->labels();
+
+/** @var FollowersAsset $knownFollowers */
+$knownFollowers = $user->viewer()
+                    ->knownFollowers()
+                    ->followers();
+
+foreach($knownFollowers as $follower) {
+    /** @var FollowerAsset $follower */
+    
+    $name = $follower->displayName();
+    $createdAt = $follower->createdAt()->format(DATE_ATOM);
+    
+    echo "$name's account created at $createdAt";
+}
+```
+
 ### File Upload
 
 ```php

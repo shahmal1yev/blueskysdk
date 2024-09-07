@@ -3,12 +3,6 @@
   "description": "BlueskySDK is a PHP library for easy integration with the Bluesky API, enabling effortless file uploads, record creation, and authentication in PHP applications.",
   "minimum-stability": "stable",
   "license": "mit",
-  "authors": [
-    {
-      "name": "shahmal1yev",
-      "email": "email@example.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Atproto\\": "src/",
@@ -16,17 +10,22 @@
     }
   },
   "require-dev": {
-    "pestphp/pest": "^2.34"
+    "phpunit/phpunit": "9.6.20",
+    "fakerphp/faker": "^1.23",
+    "phpstan/phpstan": "^1.12"
   },
   "require": {
     "ext-json": "*",
     "ext-curl": "*",
     "ext-fileinfo": "*",
-    "php": ">=5.6"
+    "php": ">=7.4",
+    "nesbot/carbon": "2.x",
+    "shahmal1yev/gcollection": "^1.0"
   },
-  "config": {
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
-    }
+  "scripts": {
+    "test": "vendor/bin/phpunit tests",
+    "test-unit": "vendor/bin/phpunit tests/Unit",
+    "test-feature": "vendor/bin/phpunit tests/Feature",
+    "analyse": "vendor/bin/phpstan analyse ./src ./tests --error-format=github"
   }
 }

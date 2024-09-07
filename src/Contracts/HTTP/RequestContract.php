@@ -2,6 +2,8 @@
 
 namespace Atproto\Contracts\HTTP;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
+
 /**
  * Interface RequestContract
  *

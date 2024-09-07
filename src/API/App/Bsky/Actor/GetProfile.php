@@ -2,8 +2,11 @@
 
 namespace Atproto\API\App\Bsky\Actor;
 
+use Atproto\API\Traits\ResourceSupport;
 use Atproto\Contracts\HTTP\RequestContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use InvalidArgumentException;
 
 /**
@@ -13,6 +16,8 @@ use InvalidArgumentException;
  */
 class GetProfile implements RequestContract
 {
+    use ResourceSupport;
+
     /** @var object The request body */
     private $body;
 
@@ -143,5 +148,10 @@ class GetProfile implements RequestContract
             throw new RequestBodyHasMissingRequiredFields('actor');
 
         return ['actor' => $this->body->actor];
+    }
+
+    public function resource(array $response): ResourceContract
+    {
+        return new GetProfileResource($response);
     }
 }
