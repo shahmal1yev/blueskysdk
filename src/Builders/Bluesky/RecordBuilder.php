@@ -3,6 +3,7 @@
 namespace Atproto\Builders\Bluesky;
 
 use Atproto\Contracts\RecordBuilderContract;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use stdClass;
 
@@ -13,23 +14,20 @@ use stdClass;
  */
 class RecordBuilder implements RecordBuilderContract
 {
-    /**
-     * @var stdClass Holds the record being built.
-     */
     protected $record;
 
     /**
      * @var string Regular expression pattern for matching URLs.
      */
-    protected $urlRegex = '/\b(?:https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/i';
+    protected static string $urlRegex = '/\b(?:https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/i';
 
     /**
      * RecordBuilder constructor.
      */
     public function __construct()
     {
-	$this->record = new stdClass();
-	$this->record->text = "";
+        $this->record = new stdClass();
+        $this->record->text = "";
 
         return $this;
     }
@@ -41,16 +39,23 @@ class RecordBuilder implements RecordBuilderContract
      *
      * @return $this
      * @throws InvalidArgumentException
+     *
+     * @deprecated This method deprecated and will be removed in a future version. Use `text()` instead.
      */
     public function addText($text)
     {
+        trigger_error(
+            "This method deprecated and will be removed in a future version. Use `text()` instead.",
+            E_USER_DEPRECATED
+        );
+
         if (! is_string($text))
             throw new InvalidArgumentException("'text' must be string");
 
         $this->record->text = (string) $this->record->text . "$text\n";
 
         preg_match_all(
-            $this->urlRegex,
+            self::$urlRegex,
             (string) $this->record->text,
             $urlMatches,
             PREG_OFFSET_CAPTURE
@@ -82,6 +87,11 @@ class RecordBuilder implements RecordBuilderContract
         return $this;
     }
 
+    public function text($text)
+    {
+        return $this->addText($text);
+    }
+
     /**
      * Adds type to the record.
      *
@@ -89,9 +99,16 @@ class RecordBuilder implements RecordBuilderContract
      *
      * @return $this
      * @throws InvalidArgumentException
+     *
+     * @deprecated This method deprecated and will be removed in a future version. Use `type()` instead.
      */
     public function addType($type = 'app.bsky.feed.post')
     {
+        trigger_error(
+            "This method deprecated and will be removed in a future version. Use `type()` instead.",
+            E_USER_DEPRECATED
+        );
+
         if (! is_string($type))
             throw new InvalidArgumentException("'type' must be string");
 
@@ -107,20 +124,31 @@ class RecordBuilder implements RecordBuilderContract
         return $this;
     }
 
+    public function type($type = 'app.bsky.feed.post')
+    {
+        return $this->addType($type);
+    }
+
     /**
      * Adds creation date to the record.
      *
-     * @param string|null $createdAt The creation date to be added.
+     * @param DateTimeImmutable|null $createdAt The creation date to be added.
      *
      * @return $this
      * @throws InvalidArgumentException
+     *
+     * @deprecated This method deprecated and will be removed in a future version. Use `createdAt()` instead.
      */
     public function addCreatedAt($createdAt = null)
     {
+        trigger_error(
+            "This method deprecated and will be removed in a future version. Use `createdAt()` instead.",
+            E_USER_DEPRECATED
+        );
+
         if (! is_null($createdAt))
         {
-            if (date_create_from_format('c', $createdAt) !== false)
-                throw new InvalidArgumentException("'$createdAt' must be a valid date. Use 'c' format instead.");
+            $createdAt = $createdAt->format('c');
         }
         else
         {
@@ -132,6 +160,11 @@ class RecordBuilder implements RecordBuilderContract
         return $this;
     }
 
+    public function createdAt(DateTimeImmutable $createdAt = null)
+    {
+        return $this->addCreatedAt($createdAt);
+    }
+
     /**
      * Adds image to the record.
      *
@@ -140,9 +173,16 @@ class RecordBuilder implements RecordBuilderContract
      *
      * @return $this
      * @throws InvalidArgumentException
+     *
+     * @deprecated This method deprecated and will be removed in a future version. Use `image()` instead.
      */
     public function addImage($blob, $alt = "")
     {
+        trigger_error(
+            "This method deprecated and will be removed in a future version. Use `image()` instead.",
+            E_USER_DEPRECATED
+        );
+
         if (! is_string($alt))
             throw new InvalidArgumentException("'alt' must be a string");
 
@@ -160,13 +200,31 @@ class RecordBuilder implements RecordBuilderContract
         return $this;
     }
 
+    public function image($blob, $alt = "")
+    {
+        return $this->addImage($blob, $alt);
+    }
+
     /**
      * Builds the record.
      *
      * @return stdClass The built record.
+     *
+     * @deprecated This method deprecated and will be removed in a future version. Use `build()` instead.
      */
     public function buildRecord()
     {
+        trigger_error(
+            "This method deprecated and will be removed in a future version. Use `build()` instead.",
+            E_USER_DEPRECATED
+        );
+
         return $this->record;
+    }
+
+
+    public function build()
+    {
+        return $this->buildRecord();
     }
 }

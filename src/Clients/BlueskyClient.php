@@ -51,12 +51,11 @@ class BlueskyClient implements ClientContract
     public function __construct(
         RequestContract $requestContract,
         $url = 'https://bsky.social/xrpc'
-    )
-    {
+    ) {
         $this->url = $url;
         $this->request = $requestContract;
         $this->authenticated = (object) [];
-        $this->authStrategy = new PasswordAuthentication;
+        $this->authStrategy = new PasswordAuthentication();
     }
 
     /**
@@ -70,6 +69,11 @@ class BlueskyClient implements ClientContract
      */
     public function setStrategy(AuthStrategyContract $strategyContract)
     {
+        trigger_error(
+            "This method is deprecated and will be removed in a future version. Authentication should be handled directly via `authenticate()` with credentials.",
+            E_USER_DEPRECATED
+        );
+
         $this->authStrategy = $strategyContract;
         return $this;
     }
@@ -122,6 +126,11 @@ class BlueskyClient implements ClientContract
      */
     public function execute(): object
     {
+        trigger_error(
+            "This method will be renamed in the future for simplicity and to shorten method names. Use 'send()' instead.",
+            E_USER_DEPRECATED
+        );
+
         if ($this->request->authRequired() && empty($this->authenticated)) {
             throw new AuthRequired("You must be authenticated to use this method");
         }
@@ -160,20 +169,15 @@ class BlueskyClient implements ClientContract
      *
      * @return RequestContract The request object
      *
-     * @deprecated This method will be renamed in the future for simplicity and to shorten method names. Use 'request()' instead.
+     * @deprecated This method will be removed in a future version. Directly manipulate the request object before passing it to the client. Use the appropriate request methods for setting data instead of relying on this method.
      */
     public function getRequest()
     {
-        return $this->request;
-    }
+        trigger_error(
+            "The 'getRequest()' method is deprecated and will be removed in a future version. Instead of using this method, please manipulate the request object directly before passing it to the client. Use the request-specific methods to set or modify data as needed.",
+            E_USER_DEPRECATED
+        );
 
-    /**
-     * Get the request object associated with this client.
-     *
-     * @return RequestContract $request
-     */
-    public function request()
-    {
         return $this->request;
     }
 

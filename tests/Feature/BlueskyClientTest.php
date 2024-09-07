@@ -101,6 +101,15 @@ class BlueskyClientTest extends TestCase
     // Test execute method with CreateRecord
     public function testExecuteWithCreateRecord()
     {
+        $request = new CreateRecord;
+
+        $recordBuilder = (new RecordBuilder())
+            ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
+            ->addType()
+            ->addCreatedAt();
+
+        $request->setRecord($recordBuilder);
+
         $client = new BlueskyClient(new CreateRecord);
 
         $client->setStrategy(new PasswordAuthentication)
@@ -108,13 +117,6 @@ class BlueskyClientTest extends TestCase
                 'identifier' => 'shahmal1yevv.bsky.social',
                 'password' => 'ucvlqcq8'
             ]);
-
-        $recordBuilder = (new RecordBuilder())
-            ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
-            ->addType()
-            ->addCreatedAt();
-
-        $client->getRequest()->setRecord($recordBuilder);
 
         $response = $client->execute();
 
