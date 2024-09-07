@@ -3,12 +3,12 @@
 namespace Atproto\Resources\App\Bsky\Actor;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Resources\Assets\NonPrimitive\AssociatedAsset;
-use Atproto\Resources\Assets\NonPrimitive\JoinedViaStarterPackAsset;
-use Atproto\Resources\Assets\NonPrimitive\LabelsAsset;
-use Atproto\Resources\Assets\NonPrimitive\UserAsset;
-use Atproto\Resources\Assets\NonPrimitive\ViewerAsset;
-use Atproto\Resources\Assets\Primitive\DatetimeAsset;
+use Atproto\Resources\Assets\AssociatedAsset;
+use Atproto\Resources\Assets\DatetimeAsset;
+use Atproto\Resources\Assets\JoinedViaStarterPackAsset;
+use Atproto\Resources\Assets\LabelsAsset;
+use Atproto\Resources\Assets\UserAsset;
+use Atproto\Resources\Assets\ViewerAsset;
 
 /**
  * @method string did()

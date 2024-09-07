@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
@@ -17,7 +17,7 @@ use Carbon\Carbon;
  * @method ViewerAsset viewer()
  * @method Carbon indexedAt()
  */
-class MutedByListAsset implements ResourceContract, AssetContract
+class BlockingByListAsset implements ResourceContract, AssetContract
 {
     use ByListAsset;
 }

@@ -1,23 +1,23 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
-use Atproto\Resources\Assets\BaseAsset;
-use Atproto\Resources\Assets\Primitive\DatetimeAsset;
+use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Resources\BaseResource;
+use Carbon\Carbon;
 
 /**
  * @method string uri()
  * @method string cid()
- * @method string name()
- * @method object purpose()
- * @method string avatar()
+ * @method CreatorAsset creator()
  * @method int listItemCount()
+ * @method int joinedWeekCount()
+ * @method int joinedAllTimeCount()
  * @method LabelsAsset labels()
- * @method ViewerAsset viewer()
  * @method Carbon indexedAt()
  */
-trait ByListAsset
+class JoinedViaStarterPackAsset implements ResourceContract, AssetContract
 {
     use BaseResource, BaseAsset;
 
@@ -29,8 +29,8 @@ trait ByListAsset
     public function casts(): array
     {
         return [
+            'creator' => CreatorAsset::class,
             'labels' => LabelsAsset::class,
-            'viewer' => ViewerAsset::class,
             'indexedAt' => DatetimeAsset::class,
         ];
     }

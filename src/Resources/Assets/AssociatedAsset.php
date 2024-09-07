@@ -1,13 +1,9 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Resources\Assets\BaseAsset;
-use Atproto\Resources\Assets\Primitive\BoolAsset;
-use Atproto\Resources\Assets\Primitive\IntAsset;
-use Atproto\Resources\Assets\Primitive\ObjectAsset;
 use Atproto\Resources\BaseResource;
 
 /**
@@ -25,11 +21,6 @@ class AssociatedAsset implements ResourceContract, AssetContract
     public function __construct($content)
     {
         $this->content = $content;
-    }
-
-    public function cast(): ResourceContract
-    {
-        return $this;
     }
 
     protected function casts(): array

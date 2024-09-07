@@ -1,9 +1,8 @@
 <?php
 
-namespace Atproto\Resources\Assets\Primitive;
+namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
-use Atproto\Resources\Assets\BaseAsset;
 use Carbon\Carbon;
 
 class DatetimeAsset implements AssetContract

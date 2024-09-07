@@ -1,13 +1,12 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\BaseResource;
 
-class FollowersAsset implements ResourceContract, AssetContract
+class LabelAsset implements ResourceContract, AssetContract
 {
     use BaseResource, BaseAsset;
 
@@ -19,7 +18,8 @@ class FollowersAsset implements ResourceContract, AssetContract
     public function casts(): array
     {
         return [
-            'follower' => FollowerAsset::class
+            'cts' => DatetimeAsset::class,
+            'exp' => DatetimeAsset::class,
         ];
     }
 }

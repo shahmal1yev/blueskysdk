@@ -1,13 +1,15 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\BaseResource;
 
-class LabelsAsset implements ResourceContract, AssetContract
+/**
+ * @method string allowingIncoming()
+ */
+class ChatAsset implements ResourceContract, AssetContract
 {
     use BaseResource, BaseAsset;
 
@@ -16,10 +18,13 @@ class LabelsAsset implements ResourceContract, AssetContract
         $this->content = $content;
     }
 
-    public function casts(): array
+    public function cast(): self
     {
-        return [
-            'label' => LabelAsset::class
-        ];
+        return $this;
+    }
+
+    protected function casts(): array
+    {
+        return [];
     }
 }

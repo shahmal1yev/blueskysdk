@@ -1,9 +1,7 @@
 <?php
 
-namespace Atproto\Resources\Assets\NonPrimitive;
+namespace Atproto\Resources\Assets;
 
-use Atproto\Resources\Assets\BaseAsset;
-use Atproto\Resources\Assets\Primitive\DatetimeAsset;
 use Atproto\Resources\BaseResource;
 
 /**
