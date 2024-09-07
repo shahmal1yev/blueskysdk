@@ -12,8 +12,7 @@ use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Auth\AuthFailed;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
-use Atproto\Resources\Assets\NonPrimitive\AssociatedAsset;
-use Atproto\Resources\Assets\NonPrimitive\ChatAsset;
+use Atproto\Resources\Assets\AssociatedAsset;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
