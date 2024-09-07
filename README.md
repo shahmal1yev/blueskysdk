@@ -1,13 +1,33 @@
 # BlueskySDK
 
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/shahmal1yev/blueskysdk?label=latest&style=flat)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![GitHub last commit](https://img.shields.io/github/last-commit/shahmal1yev/blueskysdk)
+![GitHub issues](https://img.shields.io/github/issues/shahmal1yev/blueskysdk)
+![GitHub stars](https://img.shields.io/github/stars/shahmal1yev/blueskysdk)
+![GitHub forks](https://img.shields.io/github/forks/shahmal1yev/blueskysdk)
+![GitHub contributors](https://img.shields.io/github/contributors/shahmal1yev/blueskysdk)
+
 ## Project Description
 
-BlueskySDK is a PHP library used to interact with the Bluesky API. This library allows you to perform file uploads, create records, and other operations using the Bluesky API.
+Bluesky SDK is a PHP library used for interacting with the Bluesky API. This library allows you to perform various operations using the Bluesky API.
 
 ## Requirements
 
-- PHP 5.6 or newer
-- Composer
+```json
+"require-dev": {
+    "phpunit/phpunit": "9.6.20",
+    "fakerphp/faker": "^1.23"
+},
+"require": {
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-fileinfo": "*",
+    "php": ">=7.4",
+    "nesbot/carbon": "2.x",
+    "shahmal1yev/gcollection": "^1.0"
+}
+```
 
 ## Installation
 
@@ -19,100 +39,46 @@ composer require shahmal1yev/blueskysdk
 
 After including the library in your project, you can refer to the following examples:
 
-### File Upload
+### Get Profile
 
 ```php
-use Atproto\API\Com\Atrproto\Repo\UploadBlob;
 use Atproto\Clients\BlueskyClient;
-use Atproto\Auth\Strategies\PasswordAuthentication;
+use Atproto\API\App\Bsky\Actor\GetProfile;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Resources\Assets\LabelsAsset;
+use Atproto\Resources\Assets\LabelAsset;
+use Atproto\Resources\Assets\FollowersAsset;
+use Atproto\Resources\Assets\FollowerAsset;
 
-$client = new BlueskyClient(new UploadBlob);
+$client = new BlueskyClient(new GetProfile());
 
-$client->setStrategy(new PasswordAuthentication)
-    ->authenticate([
-        'identifier' => 'user@example.com',
-        'password' => 'password'
-    ]);
+$client->authenticate([
+    'identifier' => 'user@example.com',
+    'password' => 'password'
+]);
 
-$client->getRequest()
-    ->setBlob('/var/www/blueskysdk/assets/file.png');
+/** @var GetProfileResource $user */
+$user = $client->send();
 
-$response = $client->execute();
+/** @var Carbon\Carbon $created */
+$created = $user->createdAt();
 
-echo "Blob uploaded successfully. CID: {$response->cid}";
-```
+/** @var LabelsAsset<LabelAsset> $labels */
+$labels = $user->labels();
 
-### Record Creation
+/** @var FollowersAsset $knownFollowers */
+$knownFollowers = $user->viewer()
+                    ->knownFollowers()
+                    ->followers();
 
-```php
-use Atproto\API\Com\Atrproto\Repo\CreateRecord;
-use Atproto\Clients\BlueskyClient;
-use Atproto\Auth\Strategies\PasswordAuthentication;
-
-$client = new BlueskyClient(new CreateRecord);
-
-$client->setStrategy(new PasswordAuthentication)
-    ->authenticate([
-        'identifier' => 'user@example.com',
-        'password' => 'password'
-    ]);
+foreach($knownFollowers as $follower) {
+    /** @var FollowerAsset $follower */
     
-$record = new \Atproto\Builders\Bluesky\RecordBuilder();
-
-$record->addText("Hello World!")
-    ->addText("")
-    ->addText("I was sent via BlueskySDK: https://github.com/shahmal1yev/blueskysdk")
-    ->addCreatedAt(date_format(date_create_from_format("d/m/Y", "08/11/2020"), "c"))
-    ->addType();
-
-$client->getRequest()
-    ->setRecord($record);
-
-echo "Record created successfully. URI: {$response->uri}";
-```
-### Create Record (with blob)
-
-```php
-use Atproto\API\Com\Atrproto\Repo\UploadBlob;
-use Atproto\Auth\Strategies\PasswordAuthentication;
-use Atproto\Clients\BlueskyClient;
-use Atproto\API\Com\Atrproto\Repo\CreateRecord;
-
-$client = new BlueskyClient(new UploadBlob);
-
-$client->setStrategy(new PasswordAuthentication)
-    ->authenticate([
-        'identifier' => 'user@example.com',
-        'password' => 'password'
-    ]);
-
-$client->getRequest()
-    ->setBlob('/var/www/blueskysdk/assets/file.png')
-    ->setHeaders([
-        'Content-Type' => $client->getRequest()
-            ->getBlob()
-            ->getMimeType()
-    ]);
-
-$image = $client->execute();
-
-$client->setRequest(new CreateRecord);
-
-$record = (new \Atproto\Builders\Bluesky\RecordBuilder)
-    ->addText("Hello World!")
-    ->addText("")
-    ->addText("I was sent from 'test BlueskyClient execute method with both UploadBlob and CreateRecord'")
-    ->addText("")
-    ->addText("Here are the pictures: ")
-    ->addImage($image->blob, "Image 1: Alt text")
-    ->addImage($image->blob, "Image 2: Alt text")
-    ->addType()
-    ->addCreatedAt();
-
-$client->getRequest()
-    ->setRecord($record);
-
-$response = $client->execute();
+    $name = $follower->displayName();
+    $createdAt = $follower->createdAt()->format(DATE_ATOM);
+    
+    echo "$name's account created at $createdAt";
+}
 ```
 
 ## Contribution
