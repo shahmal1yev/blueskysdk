@@ -21,6 +21,7 @@ class UserAssetTest extends TestCase
     }
 
     private TestUserAsset $userAsset;
+    private array $data;
 
     /**
      * @throws InvalidArgumentException
