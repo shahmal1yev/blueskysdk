@@ -3,7 +3,6 @@
 namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use Atproto\Helpers\File;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
@@ -161,10 +160,5 @@ class UploadBlob implements RequestContract
         $this->headers = array_merge($this->headers, [
             'Authorization' => "Bearer $authResponse->accessJwt"
         ]);
-    }
-
-    public function resource(array $response): ResourceContract
-    {
-        return new UploadBlobResource($response);
     }
 }

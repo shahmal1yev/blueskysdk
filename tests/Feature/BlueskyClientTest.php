@@ -11,6 +11,12 @@ use Atproto\Clients\BlueskyClient;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Auth\AuthFailed;
+use Atproto\Exceptions\Auth\AuthRequired;
+use Atproto\Exceptions\cURLException;
+use Atproto\Exceptions\Http\InvalidRequestException;
+use Atproto\Exceptions\Http\Token\ExpiredTokenException;
+use Atproto\Exceptions\Http\Token\InvalidTokenException;
+use Atproto\Exceptions\Http\UnsupportedHTTPMethod;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Carbon\Carbon;
@@ -187,6 +193,32 @@ class BlueskyClientTest extends TestCase
 
         $this->assertIsInt($associated->lists());
         $this->assertInstanceOf(AssociatedAsset::class, $associated);
+    }
+
+    /**
+     * @throws UnsupportedHTTPMethod
+     * @throws cURLException
+     * @throws AuthFailed
+     * @throws AuthRequired
+     * @throws InvalidRequestException
+     * @throws ExpiredTokenException
+     * @throws InvalidTokenException
+     */
+    public function testSendWithRequestWhichHasNotResourceSupport()
+    {
+        $request = (new UploadBlob())->setBlob('/var/www/blueskysdk/assets/file.png');
+
+        $client = new BlueskyClient($request);
+
+        $client->authenticate([
+            'identifier' => 'shahmal1yev.bsky.social',
+            'password' => 'ucvlqcq8'
+        ]);
+
+        $response = $client->send();
+
+        $this->assertIsObject($response);
+        $this->assertNotEmpty($response);
     }
 
     // Test execute method with both UploadBlob and CreateRecord

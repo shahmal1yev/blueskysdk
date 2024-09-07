@@ -2,6 +2,7 @@
 
 namespace Atproto\Clients;
 
+use Atproto\API\Traits\ResourceSupport;
 use Atproto\Auth\Strategies\PasswordAuthentication;
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Contracts\ClientContract;
@@ -137,17 +138,17 @@ class BlueskyClient implements ClientContract
      * @throws InvalidRequestException
      * @throws InvalidTokenException
      * @throws ExpiredTokenException
+     *
+     * @return ResourceContract|object
      */
-    public function send(): ResourceContract
+    public function send(): object
     {
-        if ($this->request->authRequired() && empty($this->authenticated)) {
-            throw new AuthRequired("You must be authenticated to use this method");
+        if (! in_array(ResourceSupport::class, class_uses($this->request))) {
+            return $this->execute();
         }
 
-        $this->request->boot($this->authenticated);
-
         $response = json_decode(
-            json_encode($this->sendRequest($this->request)),
+            json_encode($this->execute()),
             true
         );
 
