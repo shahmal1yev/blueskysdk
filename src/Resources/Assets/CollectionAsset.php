@@ -15,8 +15,8 @@ trait CollectionAsset
 
         parent::__construct(
             $this->type(),
-            array_map(function (array $follower) {
-                return $this->item($follower)->cast();
+            array_map(function (array $data) {
+                return $this->item($data)->cast();
             }, $this->value)
         );
     }
