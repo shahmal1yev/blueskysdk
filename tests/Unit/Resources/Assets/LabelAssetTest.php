@@ -1,7 +1,8 @@
 <?php
 
-namespace Atproto\Resources\Assets;
+namespace Tests\Unit\Resources\Assets;
 
+use Atproto\Resources\Assets\LabelAsset;
 use Carbon\Carbon;
 use Faker\Generator;
 use GenericCollection\Exceptions\InvalidArgumentException;
@@ -14,6 +15,8 @@ class LabelAssetTest extends TestCase
     use PrimitiveAssetTest, NonPrimitiveAssetTest;
 
     /**
+     * @param  array  $data
+     * @return LabelAsset
      * @throws InvalidArgumentException
      */
     protected function resource(array $data): LabelAsset

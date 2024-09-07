@@ -153,9 +153,9 @@ class BlueskyClientTest extends TestCase
 
         $this->assertIsObject($response);
         $this->assertNotNull($response);
-        $this->assertIsString($response->did());
-        $this->assertIsString($response->displayName());
-        $this->assertIsString($response->handle());
+        $this->assertIsString($response->did);
+        $this->assertIsString($response->displayName);
+        $this->assertIsString($response->handle);
     }
 
     // Test send method with GetProfile
