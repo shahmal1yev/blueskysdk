@@ -34,10 +34,13 @@ trait NonPrimitiveAssetTest
         $this->assertInstanceOf($expectedAsset, $actualAsset);
 
         try {
-            $actualContent = (new ReflectionClass($actualAsset))->getProperty('content')->getValue($actualAsset);
+            $property = (new ReflectionClass($actualAsset))->getProperty('content');
         } catch (ReflectionException $e) {
-            $actualContent = (new ReflectionClass($actualAsset))->getProperty('value')->getValue($actualAsset);
+            $property = (new ReflectionClass($actualAsset))->getProperty('value');
         }
+
+        $property->setAccessible(true);
+        $actualContent = $property->getValue($actualAsset);
 
         $this->assertEquals($actualContent, $value);
     }

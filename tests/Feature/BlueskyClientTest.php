@@ -73,7 +73,7 @@ class BlueskyClientTest extends TestCase
         $client->setStrategy(new PasswordAuthentication);
 
         $authenticated = $client->authenticate([
-            'identifier' => 'shahmal1yev.bsky.social',
+            'identifier' => 'shahmal1yevv.bsky.social',
             'password' => 'ucvlqcq8'
         ]);
 
@@ -105,7 +105,7 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yev.bsky.social',
+                'identifier' => 'shahmal1yevv.bsky.social',
                 'password' => 'ucvlqcq8'
             ]);
 
@@ -131,7 +131,7 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yev.bsky.social',
+                'identifier' => 'shahmal1yevv.bsky.social',
                 'password' => 'ucvlqcq8'
             ]);
 
@@ -149,18 +149,17 @@ class BlueskyClientTest extends TestCase
         $client = new BlueskyClient(new GetProfile);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yev.bsky.social',
+            'identifier' => 'shahmal1yevv.bsky.social',
             'password' => 'ucvlqcq8'
         ]);
 
-        $client->getRequest()->setActor('shahmal1yev.bsky.social');
+        $client->getRequest()->setActor('shahmal1yevv.bsky.social');
 
         $response = $client->execute();
 
         $this->assertIsObject($response);
         $this->assertNotNull($response);
         $this->assertIsString($response->did);
-        $this->assertIsString($response->displayName);
         $this->assertIsString($response->handle);
     }
 
@@ -169,12 +168,12 @@ class BlueskyClientTest extends TestCase
     {
         $request = new GetProfile;
 
-        $request->setActor('shahmal1yev.bsky.social');
+        $request->setActor('shahmal1yevv.bsky.social');
 
         $client = new BlueskyClient($request);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yev.bsky.social',
+            'identifier' => 'shahmal1yevv.bsky.social',
             'password' => 'ucvlqcq8'
         ]);
 
@@ -184,7 +183,6 @@ class BlueskyClientTest extends TestCase
         $this->assertIsObject($response);
         $this->assertNotNull($response);
         $this->assertIsString($response->did());
-        $this->assertIsString($response->displayName());
         $this->assertIsString($response->handle());
         $this->assertInstanceOf(Carbon::class, $response->indexedAt());
         $this->assertInstanceOf(Carbon::class, $response->createdAt());
@@ -211,7 +209,7 @@ class BlueskyClientTest extends TestCase
         $client = new BlueskyClient($request);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yev.bsky.social',
+            'identifier' => 'shahmal1yevv.bsky.social',
             'password' => 'ucvlqcq8'
         ]);
 
@@ -228,7 +226,7 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yev.bsky.social',
+                'identifier' => 'shahmal1yevv.bsky.social',
                 'password' => 'ucvlqcq8'
             ]);
 

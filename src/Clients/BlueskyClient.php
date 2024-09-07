@@ -206,7 +206,6 @@ class BlueskyClient implements ClientContract
         $this->setRequestMethod($curl, $request);
 
         $response = curl_exec($curl);
-        curl_close($curl);
 
         if (curl_errno($curl)) {
             throw new cURLException(curl_error($curl));
@@ -232,6 +231,8 @@ class BlueskyClient implements ClientContract
                     );
             }
         }
+
+        curl_close($curl);
 
         return $response;
     }
