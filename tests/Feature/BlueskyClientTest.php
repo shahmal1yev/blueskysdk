@@ -135,7 +135,7 @@ class BlueskyClientTest extends TestCase
                 'password' => 'ucvlqcq8'
             ]);
 
-        $client->getRequest()->setBlob('/var/www/blueskysdk/assets/file.png');
+        $client->getRequest()->setBlob('assets/file.png');
 
         $response = $client->execute();
 
@@ -204,7 +204,7 @@ class BlueskyClientTest extends TestCase
      */
     public function testSendWithRequestWhichHasNotResourceSupport()
     {
-        $request = (new UploadBlob())->setBlob('/var/www/blueskysdk/assets/file.png');
+        $request = (new UploadBlob())->setBlob('assets/file.png');
 
         $client = new BlueskyClient($request);
 
@@ -231,7 +231,7 @@ class BlueskyClientTest extends TestCase
             ]);
 
         $client->getRequest()
-            ->setBlob('/var/www/blueskysdk/assets/file.png')
+            ->setBlob('assets/file.png')
             ->setHeaders([
                 'Content-Type' => $client->getRequest()
                     ->getBlob()

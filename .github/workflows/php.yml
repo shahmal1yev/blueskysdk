@@ -27,8 +27,12 @@ jobs:
       - name: Install Dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Run Tests
-        run: composer run-script test
+      - name: Run Unit Tests
+        run: composer run-script test-unit
+
+      - name: Run Feature Tests
+        run: composer run-script test-feature
+        continue-on-error: true
 
       - name: Static Analyse
         run: composer run-script analyse

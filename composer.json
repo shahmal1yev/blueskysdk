@@ -24,6 +24,8 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit tests",
+    "test-unit": "vendor/bin/phpunit tests/Unit",
+    "test-feature": "vendor/bin/phpunit tests/Feature",
     "analyse": "vendor/bin/phpstan analyse ./src ./tests --error-format=github"
   }
 }
