@@ -16,7 +16,10 @@ trait BaseResource
     }
 
     /**
-     * @param string $name
+     * @param  string  $name
+     * @param  array  $arguments
+     *
+     * @return mixed
      *
      * @throws BadAssetCallException If the asset is not available on the resource
      */
@@ -26,20 +29,22 @@ trait BaseResource
     }
 
     /**
-     * @param string $name
+     * @param  string  $name
      *
-     * @throws BadAssetCallException If the asset is not available on the resource
+     * @return mixed
+     *
+     * @throws BadAssetCallException
      */
-    private function get(string $name)
+    public function get(string $name)
     {
-        throw_if(! $this->exists($name), new BadAssetCallException($name));
+        if (! $this->exist($name)) {
+            throw new BadAssetCallException($name);
+        }
 
-        $asset = $this->parse($name);
-
-        return $asset;
+        return $this->parse($name);
     }
 
-    private function exists(string $name): bool
+    public function exist(string $name): bool
     {
         return Arr::has($this->content, $name);
     }
