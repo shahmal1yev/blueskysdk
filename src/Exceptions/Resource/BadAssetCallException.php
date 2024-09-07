@@ -7,7 +7,7 @@ use Throwable;
 
 class BadAssetCallException extends BlueskyException
 {
-    protected $message = "asset does not exists on resource.";
+    protected $message = "asset does not exist on resource.";
 
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
