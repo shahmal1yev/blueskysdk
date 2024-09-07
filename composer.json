@@ -24,6 +24,6 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit tests",
-    "analyse": "vendor/bin/phpstan analyse ./src ./tests"
+    "analyse": "vendor/bin/phpstan analyse ./src ./tests --error-format=github"
   }
 }
