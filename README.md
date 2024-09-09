@@ -6,8 +6,21 @@ BlueskySDK is a PHP library used to interact with the Bluesky API. This library 
 
 ## Requirements
 
-- PHP 5.6 or newer
-- Composer
+```json
+"require-dev": {
+    "phpunit/phpunit": "9.6.20",
+    "fakerphp/faker": "^1.23",
+    "phpstan/phpstan": "^1.12"
+},
+"require": {
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-fileinfo": "*",
+    "php": ">=7.4",
+    "nesbot/carbon": "2.x",
+    "shahmal1yev/gcollection": "^1.0"
+},
+```
 
 ## Installation
 
