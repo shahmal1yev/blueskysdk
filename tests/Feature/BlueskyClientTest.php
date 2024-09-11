@@ -110,7 +110,7 @@ class BlueskyClientTest extends TestCase
 
         $request->setRecord($recordBuilder);
 
-        $client = new BlueskyClient(new CreateRecord);
+        $client = new BlueskyClient($request);
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
