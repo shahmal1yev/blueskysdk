@@ -2,7 +2,9 @@
 
 namespace Atproto\HTTP;
 
-class Request
+use Atproto\Contracts\RequestContract;
+
+class Request implements RequestContract
 {
     protected string $url = '';
     protected string $path = '';

@@ -3,6 +3,7 @@
 namespace Tests\Unit\HTTP;
 
 use ArgumentCountError;
+use Atproto\Contracts\RequestContract;
 use Atproto\HTTP\Request;
 use Faker\Factory;
 use Faker\Generator;
@@ -89,6 +90,7 @@ class RequestTest extends TestCase
             $actual = $this->request->$method($this->faker->word, $this->faker->word);
         }
 
+        $this->assertInstanceOf(RequestContract::class, $actual);
         $this->assertInstanceOf(Request::class, $actual);
         $this->assertSame($this->request, $actual);
     }
