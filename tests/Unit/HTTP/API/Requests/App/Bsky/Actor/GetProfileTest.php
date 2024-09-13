@@ -77,6 +77,7 @@ class GetProfileTest extends TestCase
     public function testBuildReturnsSameInterface(): void
     {
         $this->request->actor($this->faker->word);
+        $this->request->token($this->faker->word);
 
         $actual = $this->request->build();
 
@@ -89,7 +90,7 @@ class GetProfileTest extends TestCase
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
         $this->expectException(MissingProvidedFieldException::class);
-        $this->expectExceptionMessage("Missing provided fields: actor");
+        $this->expectExceptionMessage("Missing provided fields: actor, token");
 
         $this->request->build();
     }

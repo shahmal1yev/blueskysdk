@@ -10,6 +10,7 @@ use Exception;
 class GetProfile extends APIRequest
 {
     protected ?string $actor = null;
+    protected ?string $token = null;
 
     public function __construct()
     {
@@ -28,6 +29,24 @@ class GetProfile extends APIRequest
 
         $this->actor = $actor;
 
+        $this->queryParameter('actor', $this->actor);
+
+        return $this;
+    }
+
+    /**
+     * @return RequestContract|string
+     */
+    public function token(string $token = null)
+    {
+        if (is_null($token)) {
+            return $this->token;
+        }
+
+        $this->token = $token;
+
+        $this->header('Authorization', "Bearer $this->token");
+
         return $this;
     }
 
@@ -36,15 +55,16 @@ class GetProfile extends APIRequest
      */
     public function build(): RequestContract
     {
-        $field = 'actor';
+        $fields = ['actor', 'token'];
+        $missing = array_filter($fields, function ($field) {
+            if (is_null($this->$field)) {
+                return true;
+            }
+        });
 
-        if (! $this->actor()) {
-            throw new MissingProvidedFieldException($field);
+        if (! empty($missing)) {
+            throw new MissingProvidedFieldException(implode(", ", $missing));
         }
-
-        $this->queryParameters([
-            $field => $this->actor()
-        ]);
 
         return $this;
     }
