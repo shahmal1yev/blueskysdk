@@ -8,12 +8,13 @@ use Atproto\HTTP\Request;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionProperty;
+use Tests\Supports\Reflection;
 use TypeError;
 
 class RequestTest extends TestCase
 {
+    use Reflection;
+
     protected Request $request;
     protected Generator $faker;
 
@@ -30,7 +31,7 @@ class RequestTest extends TestCase
         $expected = $this->faker->word;
 
         try {
-            $reflectedProperty = $this->getPropertyValue($property);
+            $reflectedProperty = $this->getPropertyValue($property, $this->request);
 
             $value = (is_array($reflectedProperty))
                 ? [$key => $expected]
@@ -41,7 +42,7 @@ class RequestTest extends TestCase
             $this->request->$method($key, $expected);
         }
 
-        $actual = $this->getPropertyValue($property);
+        $actual = $this->getPropertyValue($property, $this->request);
 
         if (is_array($actual)) {
             $this->assertArrayHasKey($key, $actual);
@@ -57,13 +58,13 @@ class RequestTest extends TestCase
         $key = $this->faker->word;
         $expected = $this->faker->word;
 
-        $propertyValue = $this->getPropertyValue($property);
+        $propertyValue = $this->getPropertyValue($property, $this->request);
 
         if (is_array($propertyValue)) {
             $expected = [$key => $expected];
         }
 
-        $this->setPropertyValue($property, $expected);
+        $this->setPropertyValue($property, $expected, $this->request);
 
         try {
             $actual = $this->request->$method();
@@ -78,7 +79,7 @@ class RequestTest extends TestCase
     /** @dataProvider methodProvider */
     public function testMethodReturnsSameInstanceWhenSettingValue(string $method, string $property): void
     {
-        $propertyValue = $this->getPropertyValue($property);
+        $propertyValue = $this->getPropertyValue($property, $this->request);
 
         $value = is_array($propertyValue)
             ? [$this->faker->word]
@@ -100,12 +101,28 @@ class RequestTest extends TestCase
     {
         $content = $this->randomArray();
 
-        $this->setPropertyValue($property, $content);
+        $this->setPropertyValue($property, $content, $this->request);
 
         $expected = $content;
         $actual = $this->request->$method(true);
 
         $this->$verifier($expected, $actual);
+    }
+
+    public function testUrlReturnsCorrectlyAddress(): void
+    {
+        $origin = "https://example.com";
+        $path = "path/for/example/url";
+        $queryParameters = ['foo' => 'bar', 'baz' => 'qux'];
+
+        $this->request->origin($origin)
+            ->path($path)
+            ->queryParameters($queryParameters);
+
+        $actual = $this->request->url();
+        $expected = "$origin/$path?" . http_build_query($queryParameters);
+
+        $this->assertSame($expected, $actual);
     }
 
     public function encodableProvider(): array
@@ -122,8 +139,8 @@ class RequestTest extends TestCase
         # [method, property]
 
         return [
-            ['url', 'url'],
             ['path', 'path'],
+            ['origin', 'origin'],
             ['method', 'method'],
             ['header', 'headers'],
             ['headers', 'headers'],
@@ -174,24 +191,5 @@ class RequestTest extends TestCase
             $keys,
             $values
         );
-    }
-
-    protected function property(string $name): ReflectionProperty
-    {
-        $reflection = new ReflectionClass($this->request);
-        $property = $reflection->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property;
-    }
-
-    protected function getPropertyValue(string $propertyName)
-    {
-        return $this->property($propertyName)->getValue($this->request);
-    }
-
-    protected function setPropertyValue(string $propertyName, $value): void
-    {
-        $this->property($propertyName)->setValue($this->request, $value);
     }
 }

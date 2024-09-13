@@ -10,12 +10,19 @@ namespace Atproto\Contracts;
 interface RequestContract
 {
     /**
-     * Get or set the URL of the request.
+     * Get the URL of the request.
      *
-     * @param string|null $url The URL to set, or null to get the current URL.
-     * @return mixed|string The request URL or instance for chaining
+     * @return string The URL of the request
      */
-    public function url(string $url = null);
+    public function url(): string;
+
+    /**
+     * Get or set the host of the request.
+     *
+     * @param string|null $origin The host to set, or null to get the current host.
+     * @return mixed|string The request host or instance for chaining
+     */
+    public function origin(string $origin = null);
 
     /**
      * Get or set the path of the request.

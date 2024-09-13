@@ -6,20 +6,33 @@ use Atproto\Contracts\RequestContract;
 
 class Request implements RequestContract
 {
-    protected string $url = '';
+    protected string $origin = '';
     protected string $path = '';
     protected string $method = 'GET';
     protected array $headers = [];
     protected array $parameters = [];
     protected array $queryParameters = [];
 
-    public function url(string $url = null)
+    public function url(): string
     {
-        if (is_null($url)) {
-            return $this->url;
+        $parts = array_map(fn ($part) => trim($part, "/"), [
+            'origin' => $this->origin(),
+            'path' => $this->path(),
+            'query' => $this->queryParameters(true),
+        ]);
+
+        $url = sprintf("%s/%s?%s", $parts['origin'], $parts['path'], $parts['query']);
+
+        return $url;
+    }
+
+    public function origin(string $origin = null)
+    {
+        if (is_null($origin)) {
+            return $this->origin;
         }
 
-        $this->url = $url;
+        $this->origin = $origin;
 
         return $this;
     }
