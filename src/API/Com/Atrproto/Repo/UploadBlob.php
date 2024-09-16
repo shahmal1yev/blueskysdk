@@ -12,6 +12,8 @@ use InvalidArgumentException;
  * Class UploadBlobRequest
  *
  * Represents a request to upload a blob.
+ *
+ * @deprecated This class deprecated and will be removed in a future version.
  */
 class UploadBlob implements RequestContract
 {
@@ -24,7 +26,7 @@ class UploadBlob implements RequestContract
     /** @var array The headers for the request. */
     private $headers = [
         'Content-Type' => '*/*',
-        'Accept' => 'application/json',
+        'Accept' => 'application/json',s
     ];
 
     /**
@@ -34,6 +36,11 @@ class UploadBlob implements RequestContract
      */
     public function __construct()
     {
+        trigger_error(
+            "This class deprecated and will be removed in a future version.",
+            E_USER_DEPRECATED
+        );
+
         $this->body = (object) [];
     }
 

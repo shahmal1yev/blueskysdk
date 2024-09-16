@@ -70,7 +70,7 @@ class Request implements RequestContract
         return $this;
     }
 
-    public function parameter(string $name, string $value = null)
+    public function parameter(string $name, $value = null)
     {
         if (is_null($value)) {
             return $this->parameters[$name] ?? null;
@@ -94,12 +94,16 @@ class Request implements RequestContract
 
     public function headers($headers = null)
     {
-        if (is_bool($headers) && $headers) {
-            return array_map(
-                fn ($name, $value) => "$name: $value",
-                array_keys($this->headers),
-                array_values($this->headers)
-            );
+        if (is_bool($headers)) {
+            if ($headers) {
+                return array_map(
+                    fn ($name, $value) => "$name: $value",
+                    array_keys($this->headers),
+                    array_values($this->headers)
+                );
+            }
+
+            return $this->headers;
         }
 
         if (is_null($headers)) {
@@ -113,8 +117,12 @@ class Request implements RequestContract
 
     public function parameters($parameters = null)
     {
-        if (is_bool($parameters) && $parameters) {
-            return json_encode($this->parameters);
+        if (is_bool($parameters)) {
+            if ($parameters) {
+                return json_encode($this->parameters);
+            }
+
+            return $this->parameters;
         }
 
         if (is_null($parameters)) {

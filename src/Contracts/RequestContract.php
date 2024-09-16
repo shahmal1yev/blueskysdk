@@ -53,10 +53,10 @@ interface RequestContract
      * Get or set a parameter in the request.
      *
      * @param string $name The parameter name
-     * @param string|null $value The parameter value to set, or null to get the current value.
+     * @param null $value The parameter value to set, or null to get the current value.
      * @return mixed|string|null The parameter value or instance for chaining
      */
-    public function parameter(string $name, string $value = null);
+    public function parameter(string $name, $value = null);
 
     /**
      * Get or set a query parameter in the request.
