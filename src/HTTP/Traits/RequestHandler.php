@@ -43,9 +43,8 @@ trait RequestHandler
      */
     private function handleResponse(): void
     {
-        $this->handleResponseError();
-
         $this->content = json_decode($this->content, true);
+        $this->handleResponseError();
     }
 
     /**

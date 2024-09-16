@@ -4,10 +4,23 @@ namespace Tests\Supports;
 
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 use ReflectionProperty;
 
 trait Reflection
 {
+    /**
+     * @throws ReflectionException
+     */
+    protected function method(string $name, object $object): ReflectionMethod
+    {
+        $reflection = new ReflectionClass($object);
+        $method = $reflection->getMethod($name);
+        $method->setAccessible(true);
+
+        return $method;
+    }
+
     /**
      * @throws ReflectionException
      */

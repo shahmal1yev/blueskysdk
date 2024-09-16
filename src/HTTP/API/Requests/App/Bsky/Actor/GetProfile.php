@@ -15,7 +15,7 @@ class GetProfile extends APIRequest
     public function __construct()
     {
         parent::__construct();
-        $this->path('/xrpc/app.bsky.actor.getProfile');
+        $this->path('/app.bsky.actor.getProfile');
     }
 
     /**
