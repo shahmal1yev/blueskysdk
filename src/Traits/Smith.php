@@ -26,7 +26,7 @@ trait Smith
     /**
      * @throws RequestNotFoundException
      */
-    public function forge(): RequestContract
+    public function forge(array $arguments = []): RequestContract
     {
         $namespace = $this->namespace();
 
@@ -34,7 +34,9 @@ trait Smith
             throw new RequestNotFoundException("$namespace class does not exist.");
         }
 
-        return new $namespace;
+        array_unshift($arguments, self::$prefix);
+
+        return new $namespace(...$arguments);
     }
 
     protected function namespace(): string
