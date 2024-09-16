@@ -2,6 +2,7 @@
 
 namespace Atproto\Exceptions;
 
+
 use Exception;
 
 /**
@@ -9,7 +10,7 @@ use Exception;
  *
  * Exception thrown when a cURL request encounters an error.
  */
-class cURLException extends Exception
+class cURLException extends BlueskyException
 {
     /**
      * Construct the exception.

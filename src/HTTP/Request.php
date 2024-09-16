@@ -3,9 +3,12 @@
 namespace Atproto\HTTP;
 
 use Atproto\Contracts\RequestContract;
+use Atproto\HTTP\Traits\RequestHandler;
 
 class Request implements RequestContract
 {
+    use RequestHandler;
+
     protected string $origin = '';
     protected string $path = '';
     protected string $method = 'GET';

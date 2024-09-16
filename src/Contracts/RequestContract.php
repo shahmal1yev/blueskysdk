@@ -90,4 +90,6 @@ interface RequestContract
      * @return array|mixed The query parameters or instance for chaining
      */
     public function queryParameters($queryParameters = null);
+
+    public function send();
 }
