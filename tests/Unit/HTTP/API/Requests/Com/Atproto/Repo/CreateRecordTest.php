@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Repo\CreateRecord;
 use Faker\Factory;
 use Faker\Generator;
@@ -78,7 +78,7 @@ class CreateRecordTest extends TestCase
     }
 
     /**
-     * @throws MissingProvidedFieldException
+     * @throws MissingFieldProvidedException
      */
     public function testBuildWithAllRequiredFields()
     {
@@ -93,7 +93,7 @@ class CreateRecordTest extends TestCase
 
     public function testBuildWithMissingRequiredFields()
     {
-        $this->expectException(MissingProvidedFieldException::class);
+        $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage("record");
 
         $this->createRecord->repo($this->faker->word)

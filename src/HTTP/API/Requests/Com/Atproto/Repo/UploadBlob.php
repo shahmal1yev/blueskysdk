@@ -3,7 +3,7 @@
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
 
 use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
 
 class UploadBlob extends APIRequest
@@ -41,7 +41,7 @@ class UploadBlob extends APIRequest
     }
 
     /**
-     * @throws MissingProvidedFieldException
+     * @throws MissingFieldProvidedException
      */
     public function build(): RequestContract
     {
@@ -52,7 +52,7 @@ class UploadBlob extends APIRequest
         );
 
         if (count($missing)) {
-            throw new MissingProvidedFieldException(implode(", ", $missing));
+            throw new MissingFieldProvidedException(implode(", ", $missing));
         }
 
         return $this;

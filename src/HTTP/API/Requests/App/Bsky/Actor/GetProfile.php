@@ -3,7 +3,7 @@
 namespace Atproto\HTTP\API\Requests\App\Bsky\Actor;
 
 use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
 use Exception;
 
@@ -63,7 +63,7 @@ class GetProfile extends APIRequest
         });
 
         if (! empty($missing)) {
-            throw new MissingProvidedFieldException(implode(", ", $missing));
+            throw new MissingFieldProvidedException(implode(", ", $missing));
         }
 
         return $this;

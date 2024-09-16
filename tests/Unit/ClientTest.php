@@ -55,7 +55,7 @@ class ClientTest extends TestCase
         $this->expectException(RequestNotFoundException::class);
         $this->expectExceptionMessage("\\Atproto\\HTTP\\API\\Requests\\NonExistentMethod class does not exist.");
 
-        $this->client->build();
+        $this->client->forge();
     }
 
 
@@ -66,7 +66,7 @@ class ClientTest extends TestCase
     {
         $this->client->app()->bsky()->actor()->getProfile();
 
-        $request = $this->client->build();
+        $request = $this->client->forge();
 
         $this->assertInstanceOf(RequestContract::class, $request);
     }

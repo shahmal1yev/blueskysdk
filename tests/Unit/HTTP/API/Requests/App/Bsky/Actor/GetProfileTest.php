@@ -12,7 +12,7 @@ use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Tests\Supports\Reflection;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 
 class GetProfileTest extends TestCase
 {
@@ -89,7 +89,7 @@ class GetProfileTest extends TestCase
 
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
-        $this->expectException(MissingProvidedFieldException::class);
+        $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage("Missing provided fields: actor, token");
 
         $this->request->build();

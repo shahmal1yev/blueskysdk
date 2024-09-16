@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Repo\UploadBlob;
 use Faker\Factory;
 use Faker\Generator;
@@ -57,7 +57,7 @@ class UploadBlobTest extends TestCase
 
     public function testBuildThrowsExceptionWhenBlobIsMissing(): void
     {
-        $this->expectException(MissingProvidedFieldException::class);
+        $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage('blob');
 
         $this->uploadBlob->token($this->faker->word)->build();
@@ -65,14 +65,14 @@ class UploadBlobTest extends TestCase
 
     public function testBuildThrowsExceptionWhenTokenIsMissing(): void
     {
-        $this->expectException(MissingProvidedFieldException::class);
+        $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage('token');
 
         $this->uploadBlob->blob($this->faker->word)->build();
     }
 
     /**
-     * @throws MissingProvidedFieldException
+     * @throws MissingFieldProvidedException
      */
     public function testBuildReturnsInstanceWhenAllFieldsAreSet(): void
     {
