@@ -4,6 +4,8 @@ namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
 use Atproto\Exceptions\Http\MissingProvidedFieldException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Repo\UploadBlob;
+use Faker\Factory;
+use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use Tests\Supports\Reflection;
 
@@ -12,16 +14,18 @@ class UploadBlobTest extends TestCase
     use Reflection;
 
     private UploadBlob $uploadBlob;
+    private Generator $faker;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->uploadBlob = new UploadBlob();
+        $this->faker = Factory::create();
     }
 
     public function testBlobMethodSetsAndReturnsValue(): void
     {
-        $blobData = 'test blob data';
+        $blobData = $this->faker->word;
 
         $result = $this->uploadBlob->blob($blobData);
 
@@ -31,7 +35,7 @@ class UploadBlobTest extends TestCase
 
     public function testTokenMethodSetsAndReturnsValue(): void
     {
-        $token = 'test_token';
+        $token = $this->faker->word;
 
         $result = $this->uploadBlob->token($token);
 
@@ -41,7 +45,7 @@ class UploadBlobTest extends TestCase
 
     public function testTokenMethodSetsAuthorizationHeader(): void
     {
-        $token = 'test_token';
+        $token = $this->faker->word;
 
         $this->uploadBlob->token($token);
 
@@ -56,7 +60,7 @@ class UploadBlobTest extends TestCase
         $this->expectException(MissingProvidedFieldException::class);
         $this->expectExceptionMessage('blob');
 
-        $this->uploadBlob->token('test_token')->build();
+        $this->uploadBlob->token($this->faker->word)->build();
     }
 
     public function testBuildThrowsExceptionWhenTokenIsMissing(): void
@@ -64,14 +68,17 @@ class UploadBlobTest extends TestCase
         $this->expectException(MissingProvidedFieldException::class);
         $this->expectExceptionMessage('token');
 
-        $this->uploadBlob->blob('test_blob_data')->build();
+        $this->uploadBlob->blob($this->faker->word)->build();
     }
 
+    /**
+     * @throws MissingProvidedFieldException
+     */
     public function testBuildReturnsInstanceWhenAllFieldsAreSet(): void
     {
         $result = $this->uploadBlob
-            ->blob('test_blob_data')
-            ->token('test_token')
+            ->blob($this->faker->word)
+            ->token($this->faker->word)
             ->build();
 
         $this->assertInstanceOf(UploadBlob::class, $result);
