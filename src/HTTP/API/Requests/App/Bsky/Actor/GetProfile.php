@@ -12,12 +12,6 @@ class GetProfile extends APIRequest
     protected ?string $actor = null;
     protected ?string $token = null;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->path('/app.bsky.actor.getProfile');
-    }
-
     /**
      * @return RequestContract|string
      */

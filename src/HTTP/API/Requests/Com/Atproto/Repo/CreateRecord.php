@@ -14,13 +14,6 @@ class CreateRecord extends APIRequest
         'record'
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->path('/com.atproto.repo.createRecord');
-    }
-
     public function repo(string $repo = null)
     {
         if (is_null($repo)) {

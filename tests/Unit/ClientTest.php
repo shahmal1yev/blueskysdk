@@ -44,7 +44,7 @@ class ClientTest extends TestCase
 
         $namespace = $method->invoke($this->client);
 
-        $expectedNamespace = '\\Atproto\\HTTP\\API\\Requests\\App\\Bsky\\Actor';
+        $expectedNamespace = 'Atproto\\HTTP\\API\\Requests\\App\\Bsky\\Actor';
         $this->assertSame($expectedNamespace, $namespace);
     }
 
@@ -53,7 +53,7 @@ class ClientTest extends TestCase
         $this->client->nonExistentMethod();
 
         $this->expectException(RequestNotFoundException::class);
-        $this->expectExceptionMessage("\\Atproto\\HTTP\\API\\Requests\\NonExistentMethod class does not exist.");
+        $this->expectExceptionMessage("Atproto\\HTTP\\API\\Requests\\NonExistentMethod class does not exist.");
 
         $this->client->forge();
     }

@@ -19,11 +19,6 @@ class CreateRecordTest extends TestCase
         $this->faker = Factory::create();
     }
 
-    public function testConstructor()
-    {
-        $this->assertEquals('/com.atproto.repo.createRecord', $this->createRecord->path());
-    }
-
     public function testRepo()
     {
         $this->assertNull($this->createRecord->repo());

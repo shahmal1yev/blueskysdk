@@ -11,11 +11,6 @@ class UploadBlob extends APIRequest
     protected ?string $blob = null;
     protected ?string $token = null;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function blob(string $blob = null)
     {
         if (is_null($blob)) {
