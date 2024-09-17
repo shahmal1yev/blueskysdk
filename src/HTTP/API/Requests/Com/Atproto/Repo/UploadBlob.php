@@ -2,9 +2,11 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 
 class UploadBlob extends APIRequest
 {
@@ -51,5 +53,10 @@ class UploadBlob extends APIRequest
         }
 
         return $this;
+    }
+
+    public function resource(array $data): ResourceContract
+    {
+        return new UploadBlobResource($data);
     }
 }

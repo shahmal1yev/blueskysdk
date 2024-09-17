@@ -30,7 +30,7 @@ trait RequestBuilder
             return $this->origin;
         }
 
-        $this->origin = $origin;
+        $this->origin = rtrim($origin, "/");
 
         return $this;
     }
@@ -41,7 +41,7 @@ trait RequestBuilder
             return $this->path;
         }
 
-        $this->path = $path;
+        $this->path = trim($path, "/");
 
         return $this;
     }

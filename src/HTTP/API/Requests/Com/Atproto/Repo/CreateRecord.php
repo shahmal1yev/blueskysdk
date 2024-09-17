@@ -2,9 +2,11 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
 class CreateRecord extends APIRequest
 {
@@ -89,7 +91,6 @@ class CreateRecord extends APIRequest
         $missing = array_diff(
             $this->required,
             $parameters
-
         );
 
         if (count($missing)) {
@@ -97,5 +98,10 @@ class CreateRecord extends APIRequest
         }
 
         return $this;
+    }
+
+    public function resource(array $data): ResourceContract
+    {
+        return new CreateRecordResource($data);
     }
 }

@@ -21,7 +21,7 @@ trait RequestHandler
     /**
      * @throws BlueskyException
      */
-    public function send(): array
+    public function send()
     {
         $this->request();
         $this->handle();
@@ -55,7 +55,7 @@ trait RequestHandler
         $statusCode = curl_getinfo($this->resource, CURLINFO_HTTP_CODE);
 
         if ($statusCode < 200 || $statusCode > 299) {
-            $exception = "\\Atproto\\Exceptions\\Http\\Response\\$this->content[error]";
+            $exception = "\\Atproto\\Exceptions\\Http\\Response\\{$this->content['error']}Exception";
 
             if (class_exists($exception)) {
                 throw new $exception($this->content['message'], $statusCode);
@@ -103,9 +103,6 @@ trait RequestHandler
             CURLOPT_CUSTOMREQUEST  => $this->method(),
             CURLOPT_POSTFIELDS     => $this->parameters(true),
             CURLOPT_URL            => $this->url(),
-            CURLOPT_PROXY          => 'localhost:9091',
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $this->content = curl_exec($this->resource);

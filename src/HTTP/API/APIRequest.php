@@ -3,6 +3,7 @@
 namespace Atproto\HTTP\API;
 
 use Atproto\Contracts\HTTP\APIRequestContract;
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\HTTP\Request;
 
 abstract class APIRequest extends Request implements APIRequestContract
@@ -15,6 +16,12 @@ abstract class APIRequest extends Request implements APIRequestContract
         if ($prefix) {
             $this->path($this->routePath($prefix));
         }
+    }
+
+    public function send(): ResourceContract
+    {
+        $response = parent::send();
+        return $this->resource($response);
     }
 
     private function routePath(string $prefix): string
@@ -35,4 +42,6 @@ abstract class APIRequest extends Request implements APIRequestContract
 
         return "/xrpc/" . trim($routePath, '.');
     }
+
+    abstract public function resource(array $data): ResourceContract;
 }

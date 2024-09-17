@@ -5,7 +5,11 @@ namespace Tests\Feature;
 use Atproto\Client;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\BlueskyException;
+use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
+use Atproto\Exceptions\Http\Response\AuthMissingException;
+use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Tests\Supports\Reflection;
@@ -45,7 +49,51 @@ class ClientTest extends TestCase
 
         $this->assertInstanceOf(ResourceContract::class, $authenticated);
 
-        $this->assertIsString($authenticated->handle());;
+        $this->assertIsString($authenticated->handle());
+        ;
         $this->assertSame($username, $authenticated->handle());
+
+        $profile = $this->client
+            ->app()
+            ->bsky()
+            ->actor()
+            ->getProfile()
+            ->forge()
+            ->send();
+
+        $this->assertInstanceOf(ResourceContract::class, $profile);
+        $this->assertInstanceOf(GetProfileResource::class, $profile);
+
+        $this->assertInstanceOf(Carbon::class, $profile->createdAt());
+    }
+
+    /**
+     * @throws BlueskyException
+     */
+    public function testClientThrowsExceptionWhenAuthenticationFails(): void
+    {
+        $this->expectException(AuthenticationRequiredException::class);
+        $this->expectExceptionCode("Invalid identifier or password");
+        $this->expectExceptionCode(401);
+
+        $this->client->authenticate(
+            'invalid',
+            'credentials'
+        );
+    }
+
+    public function testClientThrowsExceptionWhenAuthenticationRequired(): void
+    {
+        $this->expectException(AuthMissingException::class);
+        $this->expectExceptionCode("Authentication Required");
+        $this->expectExceptionCode(401);
+
+        $this->client
+            ->app()
+            ->bsky()
+            ->actor()
+            ->getProfile()
+            ->forge()
+            ->send();
     }
 }

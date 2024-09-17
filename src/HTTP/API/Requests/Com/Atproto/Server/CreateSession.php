@@ -2,8 +2,10 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Server;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
 class CreateSession extends APIRequest
 {
@@ -20,5 +22,10 @@ class CreateSession extends APIRequest
     public function build(): RequestContract
     {
         return $this;
+    }
+
+    public function resource(array $data): ResourceContract
+    {
+        return new CreateSessionResource($data);
     }
 }

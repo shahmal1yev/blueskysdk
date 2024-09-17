@@ -35,7 +35,7 @@ class APIRequestTest extends TestCase
 
     public function testPath(): void
     {
-        $expected = "/xrpc/com.atproto.server.createSession";
+        $expected = "xrpc/com.atproto.server.createSession";
         $actual = $this->request->path();
 
         $this->assertSame($expected, $actual);
@@ -51,7 +51,7 @@ class APIRequestTest extends TestCase
 
     public function testOrigin(): void
     {
-        $expected = 'https://public.api.bsky.app';
+        $expected = 'https://bsky.social';
         $actual = $this->request->origin();
 
         $this->assertSame($expected, $actual);
