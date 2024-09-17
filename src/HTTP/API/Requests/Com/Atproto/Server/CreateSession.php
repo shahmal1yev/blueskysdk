@@ -11,7 +11,7 @@ class CreateSession extends APIRequest
     {
         parent::__construct($prefix);
 
-        $this->method('POST')->parameters([
+        $this->method('POST')->origin('https://bsky.social/')->parameters([
             'identifier' => $username,
             'password'   => $password,
         ]);

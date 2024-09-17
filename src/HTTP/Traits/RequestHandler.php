@@ -21,12 +21,12 @@ trait RequestHandler
     /**
      * @throws BlueskyException
      */
-    public function send(): ResourceContract
+    public function send(): array
     {
         $this->request();
         $this->handle();
 
-        return $this->resource;
+        return $this->content;
     }
 
     /**
@@ -61,7 +61,7 @@ trait RequestHandler
                 throw new $exception($this->content['message'], $statusCode);
             }
 
-            throw new BlueskyException($this->content['message'], $statusCode);
+            throw new BlueskyException($this->content['message'] ?? "Unknown error.", $statusCode);
         }
     }
 
@@ -103,6 +103,9 @@ trait RequestHandler
             CURLOPT_CUSTOMREQUEST  => $this->method(),
             CURLOPT_POSTFIELDS     => $this->parameters(true),
             CURLOPT_URL            => $this->url(),
+            CURLOPT_PROXY          => 'localhost:9091',
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $this->content = curl_exec($this->resource);

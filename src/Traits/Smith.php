@@ -9,7 +9,6 @@ use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 trait Smith
 {
     protected array $path = [];
-    protected static string $prefix = "Atproto\\HTTP\\API\\Requests\\";
 
     public function __call(string $name, array $arguments): Client
     {
