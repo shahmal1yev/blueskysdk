@@ -13,6 +13,8 @@ use InvalidArgumentException;
  * The GetProfile class represents a request to retrieve a user's profile information from the Bluesky API.
  *
  * This class implements the RequestContract interface, providing methods to construct and handle the request.
+ *
+ * @deprecated This class deprecated and will be removed in a future version.
  */
 class GetProfile implements RequestContract
 {
