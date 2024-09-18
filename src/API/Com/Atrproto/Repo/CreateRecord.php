@@ -8,6 +8,9 @@ use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 use InvalidArgumentException;
 
+/**
+ * @deprecated This class deprecated and will be removed in a future version.
+ */
 class CreateRecord implements RequestContract
 {
     /** @var object $body The request body */
@@ -21,6 +24,11 @@ class CreateRecord implements RequestContract
 
     public function __construct()
     {
+        trigger_error(
+            "This class deprecated and will be removed in a future version.",
+            E_USER_DEPRECATED
+        );
+
         $this->body = (object) [
             'repo' => '',
             'rkey' => '',

@@ -7,6 +7,7 @@ use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\BaseResource;
+use Atproto\Traits\Castable;
 use PHPUnit\Framework\TestCase;
 
 class BaseResourceTest extends TestCase
@@ -54,6 +55,7 @@ class BaseResourceTest extends TestCase
 class TestableResource implements ResourceContract
 {
     use BaseResource;
+    use Castable;
 
     protected function casts(): array
     {

@@ -3,6 +3,7 @@
 namespace Atproto\Resources\Assets;
 
 use Atproto\Resources\BaseResource;
+use Atproto\Traits\Castable;
 use Carbon\Carbon;
 
 /**
@@ -18,7 +19,9 @@ use Carbon\Carbon;
  */
 trait ByListAsset
 {
-    use BaseResource, BaseAsset;
+    use BaseResource;
+    use BaseAsset;
+    use Castable;
 
     public function __construct($content)
     {

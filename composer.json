@@ -1,13 +1,31 @@
 {
   "name": "shahmal1yev/blueskysdk",
-  "description": "BlueskySDK is a PHP library for easy integration with the Bluesky API, enabling effortless file uploads, record creation, and authentication in PHP applications.",
+  "description": "BlueSky SDK is a PHP library used for interacting with the BlueSky API. This library allows you to perform various operations using the BlueSky API.",
+  "keywords": [
+    "bluesky",
+    "sdk",
+    "api",
+    "social-network",
+    "atproto",
+    "decentralized",
+    "php",
+    "client",
+    "library",
+    "wrapper",
+    "federation",
+    "microblogs",
+    "web3"
+  ],
   "minimum-stability": "stable",
   "license": "mit",
   "autoload": {
     "psr-4": {
       "Atproto\\": "src/",
       "Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "require-dev": {
     "phpunit/phpunit": "9.6.20",
