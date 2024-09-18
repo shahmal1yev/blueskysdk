@@ -137,7 +137,7 @@ class BlueskyClientTest extends TestCase
                 'password' => $_ENV["BLUESKY_PASSWORD"]
             ]);
 
-        $client->getRequest()->setBlob('assets/file.png');
+        $client->getRequest()->setBlob('art/file.png');
 
         $response = $client->execute();
 
@@ -206,7 +206,7 @@ class BlueskyClientTest extends TestCase
      */
     public function testSendWithRequestWhichHasNotResourceSupport()
     {
-        $request = (new UploadBlob())->setBlob('assets/file.png');
+        $request = (new UploadBlob())->setBlob('art/file.png');
 
         $client = new BlueskyClient($request);
 
@@ -233,7 +233,7 @@ class BlueskyClientTest extends TestCase
             ]);
 
         $client->getRequest()
-            ->setBlob('assets/file.png')
+            ->setBlob('art/file.png')
             ->setHeaders([
                 'Content-Type' => $client->getRequest()
                     ->getBlob()
