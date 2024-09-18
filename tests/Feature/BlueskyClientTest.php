@@ -73,8 +73,8 @@ class BlueskyClientTest extends TestCase
         $client->setStrategy(new PasswordAuthentication);
 
         $authenticated = $client->authenticate([
-            'identifier' => 'shahmal1yevv.bsky.social',
-            'password' => 'ucvlqcq8'
+            'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+            'password' => $_ENV["BLUESKY_PASSWORD"]
         ]);
 
         $this->assertIsObject($authenticated);
@@ -114,8 +114,8 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yevv.bsky.social',
-                'password' => 'ucvlqcq8'
+                'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+                'password' => $_ENV["BLUESKY_PASSWORD"]
             ]);
 
         $response = $client->execute();
@@ -133,8 +133,8 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yevv.bsky.social',
-                'password' => 'ucvlqcq8'
+                'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+                'password' => $_ENV["BLUESKY_PASSWORD"]
             ]);
 
         $client->getRequest()->setBlob('assets/file.png');
@@ -151,8 +151,8 @@ class BlueskyClientTest extends TestCase
         $client = new BlueskyClient(new GetProfile);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yevv.bsky.social',
-            'password' => 'ucvlqcq8'
+            'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+            'password' => $_ENV["BLUESKY_PASSWORD"]
         ]);
 
         $client->getRequest()->setActor('shahmal1yevv.bsky.social');
@@ -175,8 +175,8 @@ class BlueskyClientTest extends TestCase
         $client = new BlueskyClient($request);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yevv.bsky.social',
-            'password' => 'ucvlqcq8'
+            'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+            'password' => $_ENV["BLUESKY_PASSWORD"]
         ]);
 
         /** @var GetProfileResource $response */
@@ -211,8 +211,8 @@ class BlueskyClientTest extends TestCase
         $client = new BlueskyClient($request);
 
         $client->authenticate([
-            'identifier' => 'shahmal1yevv.bsky.social',
-            'password' => 'ucvlqcq8'
+            'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+            'password' => $_ENV["BLUESKY_PASSWORD"]
         ]);
 
         $response = $client->send();
@@ -228,8 +228,8 @@ class BlueskyClientTest extends TestCase
 
         $client->setStrategy(new PasswordAuthentication)
             ->authenticate([
-                'identifier' => 'shahmal1yevv.bsky.social',
-                'password' => 'ucvlqcq8'
+                'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
+                'password' => $_ENV["BLUESKY_PASSWORD"]
             ]);
 
         $client->getRequest()
