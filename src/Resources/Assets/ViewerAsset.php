@@ -5,6 +5,7 @@ namespace Atproto\Resources\Assets;
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Resources\BaseResource;
+use Atproto\Traits\Castable;
 
 /**
  * @method bool muted
@@ -19,7 +20,9 @@ use Atproto\Resources\BaseResource;
  */
 class ViewerAsset implements ResourceContract, AssetContract
 {
-    use BaseResource, BaseAsset;
+    use BaseResource;
+    use BaseAsset;
+    use Castable;
 
     public function __construct($content)
     {

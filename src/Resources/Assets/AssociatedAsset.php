@@ -5,6 +5,7 @@ namespace Atproto\Resources\Assets;
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Resources\BaseResource;
+use Atproto\Traits\Castable;
 
 /**
  * @method int lists()
@@ -17,6 +18,7 @@ class AssociatedAsset implements ResourceContract, AssetContract
 {
     use BaseResource;
     use BaseAsset;
+    use Castable;
 
     public function __construct($content)
     {

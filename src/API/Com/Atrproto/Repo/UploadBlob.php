@@ -26,7 +26,7 @@ class UploadBlob implements RequestContract
     /** @var array The headers for the request. */
     private $headers = [
         'Content-Type' => '*/*',
-        'Accept' => 'application/json',s
+        'Accept' => 'application/json',
     ];
 
     /**

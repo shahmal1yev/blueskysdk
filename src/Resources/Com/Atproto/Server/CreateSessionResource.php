@@ -20,11 +20,4 @@ use Atproto\Resources\BaseResource;
 class CreateSessionResource implements ResourceContract
 {
     use BaseResource;
-
-    protected function casts(): array
-    {
-        return [
-
-        ];
-    }
 }

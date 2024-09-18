@@ -22,6 +22,6 @@ class LabelsAsset extends GenericCollection implements AssetContract
 
     protected function type(): TypeInterface
     {
-        return new LabelAssetType;
+        return new LabelAssetType();
     }
 }

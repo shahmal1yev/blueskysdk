@@ -4,12 +4,13 @@ namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Resources\BaseResource;
-use GenericCollection\GenericCollection;
-use GenericCollection\Interfaces\TypeInterface;
+use Atproto\Traits\Castable;
 
 class KnownFollowersAsset implements AssetContract
 {
-    use BaseResource, BaseAsset;
+    use BaseResource;
+    use BaseAsset;
+    use Castable;
 
     public function __construct(array $content)
     {

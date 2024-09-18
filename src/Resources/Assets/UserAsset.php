@@ -3,6 +3,7 @@
 namespace Atproto\Resources\Assets;
 
 use Atproto\Resources\BaseResource;
+use Atproto\Traits\Castable;
 
 /**
  * @method string did()
@@ -23,7 +24,9 @@ use Atproto\Resources\BaseResource;
  */
 trait UserAsset
 {
-    use BaseResource, BaseAsset;
+    use BaseResource;
+    use BaseAsset;
+    use Castable;
 
     public function __construct(array $content)
     {
