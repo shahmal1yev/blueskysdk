@@ -2,9 +2,11 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
 class CreateRecord extends APIRequest
 {
@@ -13,13 +15,6 @@ class CreateRecord extends APIRequest
         'collection',
         'record'
     ];
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->path('/com.atproto.repo.createRecord');
-    }
 
     public function repo(string $repo = null)
     {
@@ -88,7 +83,7 @@ class CreateRecord extends APIRequest
     }
 
     /**
-     * @throws MissingProvidedFieldException
+     * @throws MissingFieldProvidedException
      */
     public function build(): RequestContract
     {
@@ -96,13 +91,17 @@ class CreateRecord extends APIRequest
         $missing = array_diff(
             $this->required,
             $parameters
-
         );
 
         if (count($missing)) {
-            throw new MissingProvidedFieldException(implode(", ", $missing));
+            throw new MissingFieldProvidedException(implode(", ", $missing));
         }
 
         return $this;
+    }
+
+    public function resource(array $data): ResourceContract
+    {
+        return new CreateRecordResource($data);
     }
 }

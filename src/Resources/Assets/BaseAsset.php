@@ -3,7 +3,6 @@
 namespace Atproto\Resources\Assets;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
-use GenericCollection\Exceptions\InvalidArgumentException;
 
 trait BaseAsset
 {

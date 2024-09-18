@@ -4,7 +4,7 @@ namespace Atproto\Exceptions\Http;
 
 use Atproto\Exceptions\BlueskyException;
 
-class MissingProvidedFieldException extends BlueskyException
+class MissingFieldProvidedException extends BlueskyException
 {
     public function __construct($message = "", $code = 0, $previous = null)
     {

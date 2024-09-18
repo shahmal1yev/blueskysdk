@@ -2,19 +2,16 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 
 class UploadBlob extends APIRequest
 {
     protected ?string $blob = null;
     protected ?string $token = null;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function blob(string $blob = null)
     {
@@ -41,7 +38,7 @@ class UploadBlob extends APIRequest
     }
 
     /**
-     * @throws MissingProvidedFieldException
+     * @throws MissingFieldProvidedException
      */
     public function build(): RequestContract
     {
@@ -52,9 +49,14 @@ class UploadBlob extends APIRequest
         );
 
         if (count($missing)) {
-            throw new MissingProvidedFieldException(implode(", ", $missing));
+            throw new MissingFieldProvidedException(implode(", ", $missing));
         }
 
         return $this;
+    }
+
+    public function resource(array $data): ResourceContract
+    {
+        return new UploadBlobResource($data);
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Unit\HTTP\API\Requests\App\Bsky\Actor;
 
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\RequestContract;
+use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\APIRequest;
 use Atproto\HTTP\API\Requests\App\Bsky\Actor\GetProfile;
 use Atproto\HTTP\Request;
@@ -12,7 +13,6 @@ use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Tests\Supports\Reflection;
-use Atproto\Exceptions\Http\MissingProvidedFieldException;
 
 class GetProfileTest extends TestCase
 {
@@ -38,7 +38,7 @@ class GetProfileTest extends TestCase
 
         // Act
         $this->request->actor($expected);
-        $actual = $this->getPropertyValue('actor', $this->request);
+        $actual = $this->request->queryParameter('actor');
 
         // Assert
         $this->assertSame($expected, $actual, 'Actor should be set correctly.');
@@ -52,7 +52,7 @@ class GetProfileTest extends TestCase
     {
         // Arrange
         $expected = $this->faker->word;
-        $this->setPropertyValue('actor', $expected, $this->request);
+        $this->request->queryParameter('actor', $expected);
 
         // Act
         $actual = $this->request->actor();
@@ -89,7 +89,7 @@ class GetProfileTest extends TestCase
 
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
-        $this->expectException(MissingProvidedFieldException::class);
+        $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage("Missing provided fields: actor, token");
 
         $this->request->build();

@@ -11,7 +11,8 @@ use Atproto\Resources\BaseResource;
  */
 class ChatAsset implements ResourceContract, AssetContract
 {
-    use BaseResource, BaseAsset;
+    use BaseResource;
+    use BaseAsset;
 
     public function __construct(array $content)
     {
@@ -21,10 +22,5 @@ class ChatAsset implements ResourceContract, AssetContract
     public function cast(): self
     {
         return $this;
-    }
-
-    protected function casts(): array
-    {
-        return [];
     }
 }

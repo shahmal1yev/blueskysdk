@@ -5,6 +5,7 @@ namespace Atproto\Resources;
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Helpers\Arr;
+use Atproto\Traits\Castable;
 
 trait BaseResource
 {
@@ -53,15 +54,15 @@ trait BaseResource
     {
         $value = Arr::get($this->content, $name);
 
-        /** @var ?AssetContract $cast */
-        $asset = Arr::get($this->casts(), $name);
+        if (in_array(Castable::class, class_uses_recursive(static::class))) {
+            /** @var ?AssetContract $cast */
+            $asset = Arr::get($this->casts(), $name);
 
-        if ($asset) {
-            $value = (new $asset($value))->cast();
+            if ($asset) {
+                $value = (new $asset($value))->cast();
+            }
         }
 
         return $value;
     }
-
-    abstract protected function casts(): array;
 }
