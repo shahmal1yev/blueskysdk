@@ -73,7 +73,7 @@ class ClientTest extends TestCase
     public function testClientThrowsExceptionWhenAuthenticationFails(): void
     {
         $this->expectException(AuthenticationRequiredException::class);
-        $this->expectExceptionCode("Invalid identifier or password");
+        $this->expectExceptionMessage("Invalid identifier or password");
         $this->expectExceptionCode(401);
 
         $this->client->authenticate(
@@ -85,7 +85,7 @@ class ClientTest extends TestCase
     public function testClientThrowsExceptionWhenAuthenticationRequired(): void
     {
         $this->expectException(AuthMissingException::class);
-        $this->expectExceptionCode("Authentication Required");
+        $this->expectExceptionMessage("Authentication Required");
         $this->expectExceptionCode(401);
 
         $this->client

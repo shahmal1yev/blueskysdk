@@ -86,4 +86,9 @@ class ClientTest extends TestCase
 
         $this->assertEmpty($path);
     }
+
+    public function testAuthenticatedReturnsNullWhenNotAuthenticated(): void
+    {
+        $this->assertNull($this->client->authenticated());
+    }
 }

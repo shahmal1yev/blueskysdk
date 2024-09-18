@@ -2,8 +2,7 @@
 
 namespace Atproto\Traits;
 
-use Atproto\Exceptions\BlueskyException as BlueskyExceptionAlias;
-use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
+use Atproto\Exceptions\BlueskyException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
@@ -12,7 +11,7 @@ trait Authentication
     private ?CreateSessionResource $authenticated = null;
 
     /**
-     * @throws BlueskyExceptionAlias
+     * @throws BlueskyException
      */
     public function authenticate(string $identifier, string $password): void
     {
@@ -24,9 +23,6 @@ trait Authentication
         $this->authenticated = $response;
     }
 
-    /**
-     * @throws AuthenticationRequiredException
-     */
     public function authenticated(): ?CreateSessionResource
     {
         return $this->authenticated;
