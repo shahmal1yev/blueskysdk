@@ -118,10 +118,7 @@ use Atproto\Client;
 use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 
-$client->authenticate([
-    'identifier' => 'user@example.com',
-    'password' => 'password'
-]);
+$client->authenticate('user@example.com', 'password');
 
 $client->app()
        ->bsky()
