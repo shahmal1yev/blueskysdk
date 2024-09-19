@@ -9,10 +9,4 @@ class Client
 {
     use Smith;
     use Authentication;
-    protected static string $prefix = "Atproto\\HTTP\\API\\Requests\\";
-
-    public function prefix(): string
-    {
-        return self::$prefix;
-    }
 }

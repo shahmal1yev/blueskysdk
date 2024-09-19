@@ -50,7 +50,6 @@ class ClientTest extends TestCase
         $this->assertInstanceOf(ResourceContract::class, $authenticated);
 
         $this->assertIsString($authenticated->handle());
-        ;
         $this->assertSame($username, $authenticated->handle());
 
         $profile = $this->client
@@ -59,6 +58,7 @@ class ClientTest extends TestCase
             ->actor()
             ->getProfile()
             ->forge()
+            ->actor($this->client->authenticated()->did())
             ->send();
 
         $this->assertInstanceOf(ResourceContract::class, $profile);

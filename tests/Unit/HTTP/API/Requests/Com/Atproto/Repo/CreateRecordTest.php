@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Client;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Repo\CreateRecord;
 use Faker\Factory;
@@ -15,7 +16,7 @@ class CreateRecordTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->createRecord = new CreateRecord();
+        $this->createRecord = new CreateRecord($this->createMock(Client::class));
         $this->faker = Factory::create();
     }
 
