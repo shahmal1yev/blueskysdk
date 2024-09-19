@@ -33,7 +33,8 @@ abstract class APIRequest extends Request implements APIRequestContract
     {
         $endpointParts = explode("\\", $this->client->path());
 
-        $endpoint = array_reduce($endpointParts,
+        $endpoint = array_reduce(
+            $endpointParts,
             fn ($carry, $part) => $carry .= "." . lcfirst($part)
         );
 

@@ -4,7 +4,7 @@ namespace Atproto\Auth\Strategies;
 
 use Atproto\Contracts\AuthStrategyContract;
 use Atproto\Exceptions\Auth\AuthFailed;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * Class PasswordAuthentication
@@ -85,8 +85,9 @@ class PasswordAuthentication implements AuthStrategyContract
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($statusCode !== 200)
+        if ($statusCode !== 200) {
             throw new AuthFailed("Authentication failed: " . ($response ? json_decode($response)->message : "Unknown error"));
+        }
 
         return json_decode($response);
     }

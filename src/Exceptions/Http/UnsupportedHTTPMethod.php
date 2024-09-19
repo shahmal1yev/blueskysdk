@@ -7,5 +7,4 @@ namespace Atproto\Exceptions\Http;
  */
 class UnsupportedHTTPMethod extends \Exception
 {
-
 }

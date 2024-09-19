@@ -49,8 +49,9 @@ class RecordBuilder implements RecordBuilderContract
             E_USER_DEPRECATED
         );
 
-        if (! is_string($text))
+        if (! is_string($text)) {
             throw new InvalidArgumentException("'text' must be string");
+        }
 
         $this->record->text = (string) $this->record->text . "$text\n";
 
@@ -61,11 +62,11 @@ class RecordBuilder implements RecordBuilderContract
             PREG_OFFSET_CAPTURE
         );
 
-        if (! empty($urlMatches))
+        if (! empty($urlMatches)) {
             $this->record->facets = [];
+        }
 
-        foreach($urlMatches[0] as $match)
-        {
+        foreach($urlMatches[0] as $match) {
             $url = $match[0];
             $startPos = $match[1];
             $endPos = $startPos + strlen($url);
@@ -109,15 +110,17 @@ class RecordBuilder implements RecordBuilderContract
             E_USER_DEPRECATED
         );
 
-        if (! is_string($type))
+        if (! is_string($type)) {
             throw new InvalidArgumentException("'type' must be string");
+        }
 
         $acceptedTypes = ['app.bsky.feed.post'];
 
-        if (! in_array($type, $acceptedTypes))
+        if (! in_array($type, $acceptedTypes)) {
             throw new InvalidArgumentException(
                 "'$type' is not a valid for 'type' value. It can only be one of the following: " . implode(', ', $acceptedTypes)
             );
+        }
 
         $this->record->type = $type;
 
@@ -146,12 +149,9 @@ class RecordBuilder implements RecordBuilderContract
             E_USER_DEPRECATED
         );
 
-        if (! is_null($createdAt))
-        {
+        if (! is_null($createdAt)) {
             $createdAt = $createdAt->format('c');
-        }
-        else
-        {
+        } else {
             $createdAt = date('c');
         }
 
@@ -183,14 +183,16 @@ class RecordBuilder implements RecordBuilderContract
             E_USER_DEPRECATED
         );
 
-        if (! is_string($alt))
+        if (! is_string($alt)) {
             throw new InvalidArgumentException("'alt' must be a string");
+        }
 
-        if (! isset($this->record->embed))
+        if (! isset($this->record->embed)) {
             $this->record->embed = (object) [
                 "\$type" => "app.bsky.embed.images",
                 "images" => []
             ];
+        }
 
         $this->record->embed->images[] = [
             "image" => $blob,
