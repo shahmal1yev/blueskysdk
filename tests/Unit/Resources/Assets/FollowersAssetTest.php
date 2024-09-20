@@ -97,7 +97,7 @@ class FollowersAssetTest extends TestCase
         $range = range(1, $this->faker->numberBetween(1, 20));
 
         return array_map(function () {
-            list(,,$schema) = static::getData();
+            list(, , $schema) = static::getData();
 
             return array_combine(
                 array_keys($schema),
@@ -126,7 +126,7 @@ class FollowersAssetTest extends TestCase
 
     protected function assertFollowerMatchesComplexData(FollowerAsset $follower): void
     {
-        list(,,$schema) = self::getData();
+        list(, , $schema) = self::getData();
 
         foreach ($schema as $key => $datum) {
             $expected = $datum['casted'];

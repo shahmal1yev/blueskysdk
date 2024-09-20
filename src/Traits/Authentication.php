@@ -3,7 +3,6 @@
 namespace Atproto\Traits;
 
 use Atproto\Exceptions\BlueskyException;
-use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
 trait Authentication
@@ -15,7 +14,7 @@ trait Authentication
      */
     public function authenticate(string $identifier, string $password): void
     {
-        $request = new CreateSession(self::$prefix, $identifier, $password);
+        $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password);
 
         /** @var CreateSessionResource $response */
         $response = $request->send();

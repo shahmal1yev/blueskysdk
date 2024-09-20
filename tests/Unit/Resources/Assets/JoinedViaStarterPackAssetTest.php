@@ -13,7 +13,8 @@ use Tests\Supports\PrimitiveAssetTest;
 
 class JoinedViaStarterPackAssetTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     /**
      * @throws InvalidArgumentException
@@ -41,9 +42,9 @@ class JoinedViaStarterPackAssetTest extends TestCase
         return [
             ['uri', $this->faker->word, 'assertIsString'],
             ['cid', $this->faker->word, 'assertIsString'],
-            ['listItemCount', $this->faker->numberBetween(1,10), 'assertIsInt'],
-            ['joinedWeekCount', $this->faker->numberBetween(1,10), 'assertIsInt'],
-            ['joinedAllCount', $this->faker->numberBetween(1,10), 'assertIsInt'],
+            ['listItemCount', $this->faker->numberBetween(1, 10), 'assertIsInt'],
+            ['joinedWeekCount', $this->faker->numberBetween(1, 10), 'assertIsInt'],
+            ['joinedAllCount', $this->faker->numberBetween(1, 10), 'assertIsInt'],
         ];
     }
 }

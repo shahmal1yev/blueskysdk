@@ -38,7 +38,7 @@ trait PrimitiveAssetTest
     {
         list(, static::$falsyValues) = self::getData();
 
-        return array_map(fn($value) => [$value], static::$falsyValues);
+        return array_map(fn ($value) => [$value], static::$falsyValues);
     }
 
     abstract public function primitiveAssetsProvider(): array;

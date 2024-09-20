@@ -9,7 +9,8 @@ use GenericCollection\Interfaces\GenericCollectionInterface;
 
 trait UserAssetTest
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     public function primitiveAssetsProvider(): array
     {
@@ -20,11 +21,11 @@ trait UserAssetTest
             ['handle', $this->faker->userName, 'assertIsString'],
             ['displayName', $this->faker->name, 'assertIsString'],
             ['description', $this->faker->text, 'assertIsString'],
-            ['avatar', $this->faker->imageUrl(10,10), 'assertIsString'],
-            ['banner', $this->faker->imageUrl(10,10), 'assertIsString'],
-            ['followersCount', $this->faker->numberBetween(1,100), 'assertIsInt'],
-            ['followsCount', $this->faker->numberBetween(1,100), 'assertIsInt'],
-            ['postsCount', $this->faker->numberBetween(1,100), 'assertIsInt'],
+            ['avatar', $this->faker->imageUrl(10, 10), 'assertIsString'],
+            ['banner', $this->faker->imageUrl(10, 10), 'assertIsString'],
+            ['followersCount', $this->faker->numberBetween(1, 100), 'assertIsInt'],
+            ['followsCount', $this->faker->numberBetween(1, 100), 'assertIsInt'],
+            ['postsCount', $this->faker->numberBetween(1, 100), 'assertIsInt'],
         ];
     }
 

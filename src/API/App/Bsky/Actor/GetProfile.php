@@ -47,8 +47,9 @@ class GetProfile implements RequestContract
      */
     public function setActor($actor)
     {
-        if (! is_string($actor))
+        if (! is_string($actor)) {
             throw new InvalidArgumentException("'actor' must be a string");
+        }
 
         $this->body->actor = $actor;
     }
@@ -146,8 +147,9 @@ class GetProfile implements RequestContract
      */
     public function getBody()
     {
-        if (! isset($this->body->actor))
+        if (! isset($this->body->actor)) {
             throw new RequestBodyHasMissingRequiredFields('actor');
+        }
 
         return ['actor' => $this->body->actor];
     }

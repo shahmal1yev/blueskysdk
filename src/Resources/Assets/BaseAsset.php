@@ -14,7 +14,7 @@ trait BaseAsset
         $this->value = $value;
         $this->cast();
     }
-    
+
     public function cast(): AssetContract
     {
         return $this;

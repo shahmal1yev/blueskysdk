@@ -8,7 +8,8 @@ use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 
 trait Smith
 {
-    protected array $path = [];
+    private string $prefix = "Atproto\\HTTP\\API\\Requests\\";
+    private array $path = [];
 
     public function __call(string $name, array $arguments): Client
     {
@@ -17,35 +18,41 @@ trait Smith
         return $this;
     }
 
-    protected function refresh(): void
+    /**
+     * @throws RequestNotFoundException
+     */
+    public function forge(...$arguments): RequestContract
+    {
+        $arguments = array_merge([$this], array_values($arguments));
+
+        $request = $this->request();
+
+        if (! class_exists($request)) {
+            throw new RequestNotFoundException("$request class does not exist.");
+        }
+
+        $request = new $request(...$arguments);
+
+        $this->refresh();
+
+        return $request;
+    }
+
+    public function path(): string
+    {
+        return implode('\\', array_map(
+            'ucfirst',
+            $this->path
+        ));
+    }
+
+    private function refresh(): void
     {
         $this->path = [];
     }
 
-    /**
-     * @throws RequestNotFoundException
-     */
-    public function forge(): RequestContract
+    private function request(): string
     {
-        $namespace = $this->namespace();
-
-        if (! class_exists($namespace)) {
-            throw new RequestNotFoundException("$namespace class does not exist.");
-        }
-
-        return new $namespace($this);
+        return $this->prefix . $this->path();
     }
-
-    protected function namespace(): string
-    {
-        $namespace = $this->prefix() . implode('\\', array_map(
-            'ucfirst',
-            $this->path
-        ));
-
-        $this->refresh();
-
-        return $namespace;
-    }
-    abstract public function prefix(): string;
 }

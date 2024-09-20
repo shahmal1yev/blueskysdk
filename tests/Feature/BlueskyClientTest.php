@@ -58,7 +58,7 @@ class BlueskyClientTest extends TestCase
     // Test getRequest method
     public function testGetRequestMethod()
     {
-        $request = new CreateRecord;
+        $request = new CreateRecord();
         $client = new BlueskyClient($request);
 
         $this->assertInstanceOf(RequestContract::class, $client->getRequest());
@@ -69,8 +69,8 @@ class BlueskyClientTest extends TestCase
     // Test authenticate method with valid credentials
     public function testAuthenticateWithValidCredentials()
     {
-        $client = new BlueskyClient(new CreateRecord);
-        $client->setStrategy(new PasswordAuthentication);
+        $client = new BlueskyClient(new CreateRecord());
+        $client->setStrategy(new PasswordAuthentication());
 
         $authenticated = $client->authenticate([
             'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
@@ -89,8 +89,8 @@ class BlueskyClientTest extends TestCase
         $this->expectException(AuthFailed::class);
         $this->expectExceptionMessage("Authentication failed: ");
 
-        $client = new BlueskyClient(new CreateRecord);
-        $client->setStrategy(new PasswordAuthentication);
+        $client = new BlueskyClient(new CreateRecord());
+        $client->setStrategy(new PasswordAuthentication());
 
         $client->authenticate([
             'identifier' => 'invalid identifier',
@@ -101,7 +101,7 @@ class BlueskyClientTest extends TestCase
     // Test execute method with CreateRecord
     public function testExecuteWithCreateRecord()
     {
-        $request = new CreateRecord;
+        $request = new CreateRecord();
 
         $recordBuilder = (new RecordBuilder())
             ->addText("Hello World! I am posted from PHP Unit tests for testing this URL adding to this post: \n1. https://www.fs-poster.com \n2. https://github.com/shahmal1yev/blueskysdk \n3. https://github.com/easypay/php-yigim")
@@ -112,7 +112,7 @@ class BlueskyClientTest extends TestCase
 
         $client = new BlueskyClient($request);
 
-        $client->setStrategy(new PasswordAuthentication)
+        $client->setStrategy(new PasswordAuthentication())
             ->authenticate([
                 'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
                 'password' => $_ENV["BLUESKY_PASSWORD"]
@@ -129,9 +129,9 @@ class BlueskyClientTest extends TestCase
     // Test execute method with UploadBlob
     public function testExecuteWithUploadBlob()
     {
-        $client = new BlueskyClient(new UploadBlob);
+        $client = new BlueskyClient(new UploadBlob());
 
-        $client->setStrategy(new PasswordAuthentication)
+        $client->setStrategy(new PasswordAuthentication())
             ->authenticate([
                 'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
                 'password' => $_ENV["BLUESKY_PASSWORD"]
@@ -148,7 +148,7 @@ class BlueskyClientTest extends TestCase
     // Test execute method with GetProfile
     public function testExecuteWithGetProfile()
     {
-        $client = new BlueskyClient(new GetProfile);
+        $client = new BlueskyClient(new GetProfile());
 
         $client->authenticate([
             'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
@@ -168,7 +168,7 @@ class BlueskyClientTest extends TestCase
     // Test send method with GetProfile
     public function testSendWithGetProfile()
     {
-        $request = new GetProfile;
+        $request = new GetProfile();
 
         $request->setActor('shahmal1yevv.bsky.social');
 
@@ -224,9 +224,9 @@ class BlueskyClientTest extends TestCase
     // Test execute method with both UploadBlob and CreateRecord
     public function testExecuteWithUploadBlobAndCreateRecord()
     {
-        $client = new BlueskyClient(new UploadBlob);
+        $client = new BlueskyClient(new UploadBlob());
 
-        $client->setStrategy(new PasswordAuthentication)
+        $client->setStrategy(new PasswordAuthentication())
             ->authenticate([
                 'identifier' => $_ENV["BLUESKY_IDENTIFIER"],
                 'password' => $_ENV["BLUESKY_PASSWORD"]
@@ -255,7 +255,7 @@ class BlueskyClientTest extends TestCase
             ->addImage($image->blob)
             ->addCreatedAt();
 
-        $client->setRequest(new CreateRecord);
+        $client->setRequest(new CreateRecord());
 
         $client->getRequest()->setRecord($recordBuilder);
 
@@ -270,8 +270,8 @@ class BlueskyClientTest extends TestCase
     // Test setStrategy method
     public function testSetStrategyMethod()
     {
-        $authStrategy = new PasswordAuthentication;
-        $client = new BlueskyClient(new CreateRecord);
+        $authStrategy = new PasswordAuthentication();
+        $client = new BlueskyClient(new CreateRecord());
 
         $client->setStrategy($authStrategy);
 
