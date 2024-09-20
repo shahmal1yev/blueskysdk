@@ -22,7 +22,7 @@ class BaseAssetTest extends TestCase
     {
         $this->assetTestSetUp();
 
-        list(,,$this->asset) = self::getData();
+        list(, , $this->asset) = self::getData();
     }
 
     protected static function getData(): array

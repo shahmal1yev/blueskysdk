@@ -40,7 +40,7 @@ class ClientTest extends TestCase
     {
         $this->client->app()->bsky()->actor();
 
-        $method = $this->method('namespace', $this->client);
+        $method = $this->method('request', $this->client);
 
         $namespace = $method->invoke($this->client);
 
@@ -57,7 +57,6 @@ class ClientTest extends TestCase
 
         $this->client->forge();
     }
-
 
     /**
      * @throws RequestNotFoundException

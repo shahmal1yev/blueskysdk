@@ -22,6 +22,6 @@ class FollowersAsset extends GenericCollection implements AssetContract
 
     protected function type(): TypeInterface
     {
-        return new FollowerAssetType;
+        return new FollowerAssetType();
     }
 }

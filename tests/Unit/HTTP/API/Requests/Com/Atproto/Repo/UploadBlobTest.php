@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
+use Atproto\Client;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\HTTP\API\Requests\Com\Atproto\Repo\UploadBlob;
 use Faker\Factory;
@@ -19,7 +20,7 @@ class UploadBlobTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->uploadBlob = new UploadBlob();
+        $this->uploadBlob = new UploadBlob($this->createMock(Client::class));
         $this->faker = Factory::create();
     }
 

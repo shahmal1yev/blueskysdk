@@ -11,7 +11,8 @@ use Tests\Supports\PrimitiveAssetTest;
 
 class KnownFollowersAssetTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     /**
      * @throws InvalidArgumentException
@@ -25,12 +26,12 @@ class KnownFollowersAssetTest extends TestCase
     {
         list($faker) = self::getData();
 
-        $count = $faker->numberBetween(1,20);
+        $count = $faker->numberBetween(1, 20);
 
         return [
             ['followers', FollowersAsset::class, [array_map(fn () => [
                 'displayName' => $faker->name,
-            ], range(1,$count))]],
+            ], range(1, $count))]],
         ];
     }
 

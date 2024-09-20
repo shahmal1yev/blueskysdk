@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\HTTP\API;
 
+use Atproto\Client;
 use Atproto\HTTP\API\APIRequest;
 use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
 use Faker\Factory;
-use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use Tests\Supports\Reflection;
 
@@ -14,20 +14,27 @@ class APIRequestTest extends TestCase
     use Reflection;
 
     private APIRequest $request;
-    private Generator $faker;
     private array $parameters = [];
 
     public function setUp(): void
     {
-        $this->faker = Factory::create();
+        $faker = Factory::create();
+
+        $clientMock = $this->createMock(Client::class);
+
+        $clientMock->method('path')->willReturn(str_replace(
+            'Atproto\\HTTP\\API\\Requests\\',
+            '',
+            CreateSession::class
+        ));
 
         $this->parameters = [
-            'identifier' => $this->faker->userName,
-            'password' => $this->faker->password,
+            'identifier' => $faker->userName,
+            'password' => $faker->password,
         ];
 
         $this->request = new CreateSession(
-            'Atproto\\HTTP\\API\\Requests\\',
+            $clientMock,
             $this->parameters['identifier'],
             $this->parameters['password']
         );
