@@ -2,10 +2,11 @@
 
 namespace Atproto\HTTP\API\Requests\App\Bsky\Actor;
 
-use Atproto\Client;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
+use Atproto\Exceptions\Http\Response\AuthMissingException;
+use Atproto\Helpers\Arr;
 use Atproto\HTTP\API\APIRequest;
 use Atproto\HTTP\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
@@ -48,6 +49,10 @@ class GetProfile extends APIRequest
      */
     public function build(): RequestContract
     {
+        if (! Arr::exists($this->headers(), 'Authorization')) {
+            throw new AuthMissingException();
+        }
+
         $missing = [];
 
         if (! $this->queryParameter('actor')) {

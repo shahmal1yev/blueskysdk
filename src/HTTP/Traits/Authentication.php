@@ -3,6 +3,7 @@
 namespace Atproto\HTTP\Traits;
 
 use Atproto\Client;
+use Atproto\Contracts\RequestContract;
 use Atproto\HTTP\API\APIRequest;
 
 trait Authentication
@@ -18,5 +19,16 @@ trait Authentication
         if ($authenticated = $client->authenticated()) {
             $this->header("Authorization", "Bearer " . $authenticated->accessJwt());
         }
+    }
+
+    public function token(string $token = null)
+    {
+        if (is_null($token)) {
+            return $this->header('Authorization');
+        }
+
+        $this->header('Authorization', "Bearer " . $token);
+
+        return $this;
     }
 }
