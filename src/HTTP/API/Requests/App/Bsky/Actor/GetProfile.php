@@ -49,22 +49,12 @@ class GetProfile extends APIRequest
      */
     public function build(): RequestContract
     {
-        if (! Arr::exists($this->headers(), 'Authorization')) {
+        if (! $this->header('Authorization')) {
             throw new AuthMissingException();
         }
 
-        $missing = [];
-
         if (! $this->queryParameter('actor')) {
-            $missing[] = 'actor';
-        }
-
-        if (! $this->header('Authorization')) {
-            $missing[] = 'token';
-        }
-
-        if (! empty($missing)) {
-            throw new MissingFieldProvidedException(implode(", ", $missing));
+            throw new MissingFieldProvidedException('actor');
         }
 
         return $this;

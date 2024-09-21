@@ -80,7 +80,7 @@ class GetFollowersTest extends TestCase
     public function testBuildThrowsExceptionWhenActorParameterMissing()
     {
         $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing provided fields: actor");
+        $this->expectExceptionMessage("Missing fields provided: actor");
 
         // Set 'Authorization' header
         $this->request->token('Bearer token');
