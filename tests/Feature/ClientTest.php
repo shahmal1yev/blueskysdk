@@ -96,4 +96,28 @@ class ClientTest extends TestCase
             ->forge()
             ->send();
     }
+
+    /**
+     * @throws BlueskyException
+     */
+    public function testObserverNotificationOnAuthentication(): void
+    {
+        $request = $this->client->app()
+            ->bsky()
+            ->actor()
+            ->getProfile()
+            ->forge();
+
+        $this->client->authenticate(
+            $_ENV['BLUESKY_IDENTIFIER'],
+            $_ENV['BLUESKY_PASSWORD']
+        );
+
+        $response = $request->actor($this->client->authenticated()->did())
+            ->build()
+            ->send();
+
+        $this->assertInstanceOf(ResourceContract::class, $response);
+        $this->assertInstanceOf(GetProfileResource::class, $response);
+    }
 }

@@ -6,10 +6,11 @@ use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\HTTP\Request;
+use SplSubject;
 
 abstract class APIRequest extends Request implements APIRequestContract
 {
-    private Client $client;
+    protected Client $client;
 
     public function __construct(Client $client)
     {
@@ -22,7 +23,7 @@ abstract class APIRequest extends Request implements APIRequestContract
         return $this->resource(parent::send());
     }
 
-    private function initialize(): void
+    protected function initialize(): void
     {
         $this->origin(self::API_BASE_URL)
             ->path($this->endpoint())
@@ -42,4 +43,10 @@ abstract class APIRequest extends Request implements APIRequestContract
     }
 
     abstract public function resource(array $data): ResourceContract;
+
+    public function update(SplSubject $subject): void
+    {
+        /** @var Client $subject */
+        $this->client = $subject;
+    }
 }
