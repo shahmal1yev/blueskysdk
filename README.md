@@ -5,6 +5,7 @@
 # BlueSky SDK
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/shahmal1yev/blueskysdk?label=latest&style=flat)
+![Packagist Downloads](https://img.shields.io/packagist/dt/shahmal1yev/blueskysdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![GitHub last commit](https://img.shields.io/github/last-commit/shahmal1yev/blueskysdk)
 ![GitHub issues](https://img.shields.io/github/issues/shahmal1yev/blueskysdk)
@@ -113,16 +114,18 @@ foreach ($followers as $follower) {
 Here is a more complete example of fetching and displaying profile information, including created dates and labels:
 
 ```php
-use Atproto\Clients\BlueskyClient;
+use Atproto\Client;
 use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 
-$client = new BlueskyClient(new GetProfile());
+$client->authenticate('user@example.com', 'password');
 
-$client->authenticate([
-    'identifier' => 'user@example.com',
-    'password' => 'password'
-]);
+$client->app()
+       ->bsky()
+       ->actor()
+       ->getProfile()
+       ->forge();
+       // ->actor($client->authenticated()->did());
 
 /** @var GetProfileResource $user */
 $user = $client->send();
@@ -130,7 +133,6 @@ $user = $client->send();
 // Output profile details
 echo "Display Name: " . $user->displayName() . "\n";
 echo "Created At: " . $user->createdAt()->toDateTimeString() . "\n";
-echo "Labels: " . implode(', ', $user->labels()->pluck('name')->toArray()) . "\n";
 
 // Accessing and iterating over followers
 $followers = $user->viewer()->knownFollowers()->followers();

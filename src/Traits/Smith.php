@@ -3,6 +3,8 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
+use Atproto\Contracts\HTTP\APIRequestContract;
+use Atproto\Contracts\Observer;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 
@@ -31,8 +33,10 @@ trait Smith
             throw new RequestNotFoundException("$request class does not exist.");
         }
 
+        /** @var APIRequestContract $request */
         $request = new $request(...$arguments);
 
+        $this->attach($request);
         $this->refresh();
 
         return $request;
@@ -55,4 +59,6 @@ trait Smith
     {
         return $this->prefix . $this->path();
     }
+
+
 }
