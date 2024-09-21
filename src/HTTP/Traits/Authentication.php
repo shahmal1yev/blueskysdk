@@ -3,7 +3,6 @@
 namespace Atproto\HTTP\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\RequestContract;
 use Atproto\HTTP\API\APIRequest;
 use SplSubject;
 
@@ -35,7 +34,7 @@ trait Authentication
             return $this->header('Authorization');
         }
 
-        $this->header('Authorization', "Bearer " . $token);
+        $this->header('Authorization', "Bearer $token");
 
         return $this;
     }

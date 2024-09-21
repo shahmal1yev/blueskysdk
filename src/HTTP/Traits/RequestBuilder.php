@@ -79,7 +79,7 @@ trait RequestBuilder
         return $this;
     }
 
-    public function queryParameter(string $name, string $value = null)
+    public function queryParameter(string $name, $value = null)
     {
         if (is_null($value)) {
             return $this->queryParameters[$name] ?? null;

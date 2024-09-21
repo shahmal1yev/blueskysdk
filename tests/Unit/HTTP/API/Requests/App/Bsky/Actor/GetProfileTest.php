@@ -91,7 +91,7 @@ class GetProfileTest extends TestCase
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
         $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing provided fields: actor, token");
+        $this->expectExceptionMessage("Missing fields provided: actor, token");
 
         $this->request->build();
     }

@@ -8,6 +8,6 @@ class MissingFieldProvidedException extends BlueskyException
 {
     public function __construct($message = "", $code = 0, $previous = null)
     {
-        parent::__construct("Missing provided fields: $message", $code, $previous);
+        parent::__construct("Missing fields provided: $message", $code, $previous);
     }
 }

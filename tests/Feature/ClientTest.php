@@ -97,9 +97,6 @@ class ClientTest extends TestCase
             ->send();
     }
 
-    /**
-     * @throws BlueskyException
-     */
     public function testObserverNotificationOnAuthentication(): void
     {
         $request = $this->client->app()
