@@ -14,7 +14,7 @@ class BadAssetCallException extends BlueskyException
         parent::__construct($this->message($message), $code, $previous);
     }
 
-    private function message(string $asset) : string
+    private function message(string $asset): string
     {
         if ($asset) {
             return "'$asset' $this->message";

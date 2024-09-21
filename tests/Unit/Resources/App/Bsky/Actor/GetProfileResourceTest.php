@@ -22,7 +22,8 @@ use Tests\Supports\NonPrimitiveAssetTest;
 
 class GetProfileResourceTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     public function primitiveAssetsProvider(): array
     {

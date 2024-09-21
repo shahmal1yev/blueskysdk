@@ -2,6 +2,7 @@
 
 namespace Atproto\HTTP\API\Requests\Com\Atproto\Server;
 
+use Atproto\Client;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\HTTP\API\APIRequest;
@@ -9,12 +10,12 @@ use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
 class CreateSession extends APIRequest
 {
-    public function __construct(string $prefix, string $username, string $password)
+    public function __construct(Client $client, string $identifier, string $password)
     {
-        parent::__construct($prefix);
+        parent::__construct($client);
 
         $this->method('POST')->origin('https://bsky.social/')->parameters([
-            'identifier' => $username,
+            'identifier' => $identifier,
             'password'   => $password,
         ]);
     }

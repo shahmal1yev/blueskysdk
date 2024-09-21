@@ -8,7 +8,8 @@ use Carbon\Carbon;
 
 trait ByListAssetTest
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     public function primitiveAssetsProvider(): array
     {

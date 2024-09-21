@@ -40,7 +40,7 @@ class LabelsAssetTest extends TestCase
 
     protected function assertLabelMatchesComplexData(LabelAsset $label): void
     {
-        list(,,$schema) = self::getData();
+        list(, , $schema) = self::getData();
 
         foreach ($schema as $key => $datum) {
             $expected = $datum['casted'];

@@ -11,16 +11,17 @@ use Tests\Supports\NonPrimitiveAssetTest;
 
 class AssociatedAssetTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     public function primitiveAssetsProvider(): array
     {
         list($this->faker) = self::getData();
 
         return [
-            ['lists', $this->faker->numberBetween(1,10), 'assertIsInt'],
-            ['feedgens', $this->faker->numberBetween(1,10), 'assertIsInt'],
-            ['starterPacks', $this->faker->numberBetween(1,10), 'assertIsInt'],
+            ['lists', $this->faker->numberBetween(1, 10), 'assertIsInt'],
+            ['feedgens', $this->faker->numberBetween(1, 10), 'assertIsInt'],
+            ['starterPacks', $this->faker->numberBetween(1, 10), 'assertIsInt'],
             ['labeler', $this->faker->boolean, 'assertIsBool'],
         ];
     }

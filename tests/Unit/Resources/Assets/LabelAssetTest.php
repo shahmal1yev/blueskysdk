@@ -12,7 +12,8 @@ use Tests\Supports\PrimitiveAssetTest;
 
 class LabelAssetTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     /**
      * @param  array  $data

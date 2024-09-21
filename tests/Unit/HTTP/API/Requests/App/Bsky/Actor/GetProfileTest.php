@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\App\Bsky\Actor;
 
+use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
@@ -25,7 +26,7 @@ class GetProfileTest extends TestCase
     {
         parent::setUp();
         $this->faker = Factory::create();
-        $this->request = new GetProfile();
+        $this->request = new GetProfile($this->createMock(Client::class));
     }
 
     /**
