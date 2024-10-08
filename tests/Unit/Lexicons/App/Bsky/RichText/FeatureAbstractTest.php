@@ -2,48 +2,52 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\RichText;
 
-use Atproto\Lexicons\App\Bsky\RichText\Link;
-use Atproto\Lexicons\App\Bsky\RichText\Mention;
-use Atproto\Lexicons\App\Bsky\RichText\Tag;
-use Faker\Factory;
+use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Tests\Supports\Reflection;
 
 class FeatureAbstractTest extends TestCase
 {
     use Reflection;
 
-    public function setUp(): void
+    /**
+     * @throws ReflectionException
+     */
+    public function testConstructorAssignsReferenceAndLabel()
     {
-        $this->faker = Factory::create();
+        $mock = $this->getMockBuilder(FeatureAbstract::class)
+            ->setConstructorArgs(['reference', 'label'])
+            ->onlyMethods(['schema'])
+            ->getMockForAbstractClass();
+
+        $reference = $this->getPropertyValue('reference', $mock);
+        $label = $this->getPropertyValue('label', $mock);
+
+        $this->assertSame('reference', $reference);
+        $this->assertSame('label', $label);
     }
 
-    /** @dataProvider featureProvider */
-    public function testFeatureSerializationIsCorrect(string $class, string $input, array $expectedSchema): void
+    public function testJsonSerializeReturnsCorrectArray()
     {
-        $instance = new $class($input);
+        $mock = $this->getMockBuilder(FeatureAbstract::class)
+            ->setConstructorArgs(['reference', 'label'])
+            ->onlyMethods(['schema', 'type'])
+            ->getMockForAbstractClass();
 
-        $this->assertSame($this->buildExpectedJson($expectedSchema), json_encode($instance));
-        $this->assertSame($this->buildExpectedJson($expectedSchema), (string)$instance);
-    }
+        $schema = ['key' => 'value'];
 
-    public function featureProvider(): array
-    {
-        $faker = Factory::create();
+        $mock->expects($this->once())
+            ->method('schema')
+            ->willReturn($schema);
 
-        $url = $faker->url;
-        $did = $faker->uuid;
-        $tag = $faker->word;
+        $mock->expects($this->once())
+            ->method('type')
+            ->willReturn('feature');
 
-        return [
-            [Link::class, $url, ['type' => 'link', 'uri' => $url]],
-            [Mention::class, $did, ['type' => 'mention', 'did' => $did]],
-            [Tag::class, $tag, ['type' => 'tag', 'tag' => $tag]],
-        ];
-    }
-
-    private function buildExpectedJson(array $schema): string
-    {
-        return json_encode($schema);
+        $this->assertSame(
+            ['type' => 'feature'] + $schema,
+            $mock->jsonSerialize()
+        );
     }
 }

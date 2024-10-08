@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\GenericCollection\Types\NonPrimitive;
+namespace Atproto\Collections\Types\NonPrimitive;
 
 use Atproto\Resources\Assets\FollowerAsset;
 use GenericCollection\Interfaces\TypeInterface;

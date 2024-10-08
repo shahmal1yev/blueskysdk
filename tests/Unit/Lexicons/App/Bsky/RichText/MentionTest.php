@@ -3,18 +3,13 @@
 namespace Tests\Unit\Lexicons\App\Bsky\RichText;
 
 use Atproto\Lexicons\App\Bsky\RichText\Mention;
-use ReflectionException;
 
 class MentionTest extends FeatureAbstractTest
 {
-    /**
-     * @throws ReflectionException
-     */
-    public function testConstructorWorksCorrectly(): void
-    {
-        $expected = $this->faker->word;
-        $mention = new Mention($expected);
+    use FeatureTests;
 
-        $this->assertSame($expected, $this->getPropertyValue('did', $mention));
-    }
+    private string $namespace = Mention::class;
+    private string $type = 'mention';
+    private string $key = 'did';
+    private string $prefix = '@';
 }

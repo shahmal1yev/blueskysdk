@@ -7,7 +7,7 @@ use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Helpers\Arr;
+use Atproto\Support\Arr;
 use Atproto\HTTP\API\APIRequest;
 use Atproto\HTTP\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Graph\GetFollowersResource;

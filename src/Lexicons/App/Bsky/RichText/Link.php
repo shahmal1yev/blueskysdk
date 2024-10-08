@@ -7,28 +7,20 @@ use Atproto\Exceptions\InvalidArgumentException;
 
 class Link extends FeatureAbstract
 {
-    private string $url;
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function __construct(string $url)
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException("Invalid URI: $url");
-        }
-
-        $this->url = $url;
-    }
-
-    public function schema(): array
+    protected function schema(): array
     {
         return [
-            "uri" => $this->url,
+            "label" => $this->label,
+            "uri" => $this->reference,
         ];
     }
 
-    public function type(): string
+    public function __toString(): string
+    {
+        return $this->label;
+    }
+
+    protected function type(): string
     {
         return "link";
     }

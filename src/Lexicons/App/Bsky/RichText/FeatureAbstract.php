@@ -3,23 +3,29 @@
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
 use Atproto\Contracts\LexiconBuilder;
-use Atproto\Contracts\Lexicons\App\Bsky\RichText\FeatureContract;
+use Atproto\Contracts\Stringable;
 
-abstract class FeatureAbstract implements LexiconBuilder
+abstract class FeatureAbstract implements LexiconBuilder, Stringable
 {
-    public function jsonSerialize(): array
+    protected string $reference;
+    protected string $label;
+
+    public function __construct(string $reference, string $label = null)
     {
-        return array_merge(
-            ['type' => $this->type(),],
-            $this->schema()
-        );
+        if (is_null($label)) {
+            $label = $reference;
+        }
+
+        $this->reference = $reference;
+        $this->label = $label;
     }
 
-    public function __toString(): string
+    final public function jsonSerialize(): array
     {
-        return json_encode($this);
+        return ['type' => $this->type()] + $this->schema();
     }
 
-    abstract public function schema(): array;
-    abstract public function type(): string;
+    abstract protected function type(): string;
+
+    abstract protected function schema(): array;
 }

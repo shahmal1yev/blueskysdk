@@ -2,33 +2,23 @@
 
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
-use Atproto\Exceptions\InvalidArgumentException;
-
 class Tag extends FeatureAbstract
 {
-    private string $tag;
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function __construct(string $tag)
-    {
-        if (mb_strlen($tag, "UTF-8") > 640) {
-            throw new InvalidArgumentException("Tag cannot be longer than 640 characters.");
-        }
-
-        $this->tag = $tag;
-    }
-
-    public function schema(): array
+    protected function schema(): array
     {
         return [
-            "tag" => $this->tag
+            "label" => "#$this->label",
+            "tag" => $this->reference,
         ];
     }
 
-    public function type(): string
+    public function __toString(): string
     {
-        return "tag";
+        return "#$this->label";
+    }
+
+    protected function type(): string
+    {
+        return 'tag';
     }
 }

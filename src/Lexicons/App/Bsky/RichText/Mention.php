@@ -4,22 +4,23 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class Mention extends FeatureAbstract
 {
-    private string $did;
+    protected ?string $type = 'mention';
 
-    public function __construct(string $did)
-    {
-        $this->did = $did;
-    }
-
-    public function schema(): array
+    protected function schema(): array
     {
         return [
-            "did" => $this->did,
+            'label' => "@$this->label",
+            'did' => $this->reference,
         ];
     }
 
-    public function type(): string
+    public function __toString(): string
     {
-        return "mention";
+        return "@$this->label";
+    }
+
+    protected function type(): string
+    {
+        return 'mention';
     }
 }
