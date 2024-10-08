@@ -27,4 +27,15 @@ trait Authentication
             $this->header("Authorization", "Bearer " . $authenticated->accessJwt());
         }
     }
+
+    public function token(string $token = null)
+    {
+        if (is_null($token)) {
+            return $this->header('Authorization');
+        }
+
+        $this->header('Authorization', "Bearer $token");
+
+        return $this;
+    }
 }
