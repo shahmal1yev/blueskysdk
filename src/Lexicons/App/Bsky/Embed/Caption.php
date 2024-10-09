@@ -2,10 +2,11 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\InvalidArgumentException;
 use JsonSerializable;
 
-class Caption implements JsonSerializable
+class Caption implements JsonSerializable, Stringable
 {
     private const MAX_SIZE = 20000;
 
@@ -21,7 +22,7 @@ class Caption implements JsonSerializable
         $this->file($file);
     }
 
-    public function lang(string $lang = null): string
+    public function lang(string $lang = null)
     {
         if (is_null($lang)) {
             return $this->lang;
@@ -29,7 +30,7 @@ class Caption implements JsonSerializable
 
         $this->lang = $lang;
 
-        return $this->lang;
+        return $this;
     }
 
     /**
@@ -42,11 +43,11 @@ class Caption implements JsonSerializable
         }
 
         if ($file->size() > self::MAX_SIZE) {
-            throw new InvalidArgumentException($file->path().' is too large.');
+            throw new InvalidArgumentException($file->path().' is too large. Max size: '.self::MAX_SIZE);
         }
 
         if ($file->type() !== 'text/vtt') {
-            throw new InvalidArgumentException($file->path().' is not a text vtt.');
+            throw new InvalidArgumentException($file->path().' is not a text/vtt file.');
         }
 
         $this->file = $file;
@@ -63,5 +64,10 @@ class Caption implements JsonSerializable
             'lang' => $this->lang(),
             'file'  => $this->file()->blob(),
         ];
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
     }
 }

@@ -24,7 +24,6 @@ trait BlobHandler
     {
         $this->isFile();
         $this->isReadable();
-        $this->isValid();
     }
 
     /**

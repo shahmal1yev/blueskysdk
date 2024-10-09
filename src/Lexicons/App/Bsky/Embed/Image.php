@@ -45,7 +45,7 @@ class Image implements ImageInterface
         }
 
         if ($width < 1 || $height < 1) {
-            throw new InvalidArgumentException("Width and height must be at least 1");
+            throw new InvalidArgumentException("'\$width' and '\$height' must be greater than 0");
         }
 
         $this->aspectRatio = [
@@ -66,5 +66,10 @@ class Image implements ImageInterface
             'image' => $this->file->blob(),
             'aspectRatio' => $this->aspectRatio() ?: null,
         ]);
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
     }
 }

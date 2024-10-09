@@ -4,7 +4,7 @@ namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Stringable;
 
-class File
+class File implements Stringable
 {
     use BlobHandler;
 
