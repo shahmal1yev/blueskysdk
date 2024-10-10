@@ -2,7 +2,7 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
-use Atproto\Lexicons\App\Bsky\Embed\Caption;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use JsonSerializable;
@@ -13,7 +13,7 @@ class CaptionCollection extends GenericCollection implements JsonSerializable
 
     public function __construct(iterable $collection = [])
     {
-        parent::__construct(fn ($item) => $item instanceof Caption, $collection);
+        parent::__construct(fn ($item) => $item instanceof CaptionInterface, $collection);
     }
 
     public function validate($value): bool

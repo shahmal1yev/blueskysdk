@@ -2,11 +2,11 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
 use Atproto\Exceptions\InvalidArgumentException;
 use JsonSerializable;
 
-class Caption implements JsonSerializable, Stringable
+class Caption implements CaptionInterface
 {
     private const MAX_SIZE = 20000;
 

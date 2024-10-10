@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\App\Bsky\Embed\Caption;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
 use Atproto\Lexicons\App\Bsky\Embed\File;
 use Atproto\Lexicons\App\Bsky\Embed\Video;
@@ -107,6 +109,17 @@ class VideoTest extends TestCase
      */
     private function createCaptionsMock(): CaptionCollection
     {
+        $caption = $this->getMockBuilder(CaptionInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $caption->expects($this->any())
+            ->method('jsonSerialize')
+            ->willReturn([
+                'lang' => 'lang',
+                'file' => $this->file->blob(),
+            ]);
+
         $captions = $this->getMockBuilder(CaptionCollection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['toArray'])
@@ -114,9 +127,7 @@ class VideoTest extends TestCase
 
         $captions->expects($this->any())
             ->method('toArray')
-            ->willReturn([
-                ['lang' => 'lang', 'file' => $this->blob]
-            ]);
+            ->willReturn($caption->jsonSerialize());
 
         return $captions;
     }
