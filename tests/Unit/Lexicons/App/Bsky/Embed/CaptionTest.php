@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Lexicons\App\Bsky\Embed;
+namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Caption;

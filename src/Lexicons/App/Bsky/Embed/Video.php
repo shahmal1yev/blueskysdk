@@ -3,10 +3,11 @@
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
+use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
 
-class Video implements VideoInterface
+class Video implements VideoInterface, Stringable
 {
     private File $file;
     private ?string $alt = null;
@@ -32,12 +33,14 @@ class Video implements VideoInterface
      */
     public function jsonSerialize(): array
     {
-        return array_filter([
+        $result = array_filter([
             'alt' => $this->alt() ?: null,
             'video' => $this->file->blob(),
             'aspectRatio' => $this->aspectRatio() ?: null,
             'captions' => $this->captions()->toArray() ?: null,
         ]);
+
+        return $result;
     }
 
     public function alt(string $alt = null)
@@ -81,5 +84,11 @@ class Video implements VideoInterface
         $this->captions = $captions;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        $result = json_encode($this);
+        return $result;
     }
 }
