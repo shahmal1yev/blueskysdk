@@ -22,7 +22,7 @@ class ImageCollection extends GenericCollection implements JsonSerializable
             }
 
             if ($image->size() > self::MAX_SIZE) {
-                throw new InvalidArgumentException(self::class.' collection only accepts images with size less than '. self::MAX_LENGTH);
+                throw new InvalidArgumentException(self::class.' collection only accepts images with size less than '. self::MAX_SIZE);
             }
 
             return true;
