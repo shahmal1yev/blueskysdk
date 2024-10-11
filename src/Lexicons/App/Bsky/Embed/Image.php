@@ -68,6 +68,11 @@ class Image implements ImageInterface
         ]);
     }
 
+    public function size(): int
+    {
+        return $this->file->size();
+    }
+
     public function __toString(): string
     {
         return json_encode($this);

@@ -140,4 +140,9 @@ class ImageTest extends TestCase
 
         $this->assertSame($this->image, $result);
     }
+
+    public function testSize(): void
+    {
+        $this->assertSame($this->size, $this->image->size());
+    }
 }

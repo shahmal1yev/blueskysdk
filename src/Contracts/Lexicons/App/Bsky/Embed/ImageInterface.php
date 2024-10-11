@@ -10,4 +10,5 @@ interface ImageInterface extends JsonSerializable, Stringable
     public function jsonSerialize(): array;
     public function alt(string $alt = null);
     public function aspectRatio();
+    public function size(): int;
 }
