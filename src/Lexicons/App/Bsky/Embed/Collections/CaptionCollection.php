@@ -3,40 +3,23 @@
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
-use GenericCollection\Exceptions\InvalidArgumentException;
+use Atproto\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use JsonSerializable;
 
 class CaptionCollection extends GenericCollection implements JsonSerializable
 {
+    use EmbedCollection;
     private const MAX_SIZE = 20;
 
-    public function __construct(iterable $collection = [])
+    protected function validator(): \Closure
     {
-        parent::__construct(fn ($item) => $item instanceof CaptionInterface, $collection);
-    }
+        return function (CaptionInterface $caption) {
+            if ($this->count() > self::MAX_SIZE) {
+                throw new InvalidArgumentException(self::class.' collection exceeds maximum size: ' .self::MAX_SIZE);
+            }
 
-    public function validate($value): bool
-    {
-        return parent::validate($value) && $this->validateLength();
-    }
-
-    private function validateLength(): bool
-    {
-        return $this->count() <= self::MAX_SIZE;
-    }
-
-    public function validateWithException($value): void
-    {
-        parent::validateWithException($value);
-
-        if (! $this->validateLength()) {
-            throw new InvalidArgumentException("Caption length must be less than or equal " . self::MAX_SIZE);
-        }
-    }
-
-    public function jsonSerialize()
-    {
-        return $this->toArray();
+            return true;
+        };
     }
 }

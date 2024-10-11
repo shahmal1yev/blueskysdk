@@ -9,49 +9,23 @@ use JsonSerializable;
 
 class ImageCollection extends GenericCollection implements JsonSerializable
 {
-    private const MAX_ITEM = 4;
+    use EmbedCollection;
+
+    private const MAX_LENGTH = 4;
     private const MAX_SIZE  = 1000000;
 
-    public function __construct(iterable $collection = [])
+    protected function validator(): \Closure
     {
-        parent::__construct(fn ($item) => $item instanceof ImageInterface, $collection);
-    }
+        return function (ImageInterface $image) {
+            if ($this->count() > self::MAX_LENGTH) {
+                throw new InvalidArgumentException(self::class.' collection exceeds maximum size: ' .self::MAX_LENGTH);
+            }
 
-    private function validateLength(): bool
-    {
-        return ($this->count() <= self::MAX_ITEM);
-    }
+            if ($image->size() > self::MAX_SIZE) {
+                throw new InvalidArgumentException(self::class.' collection only accepts images with size less than '. self::MAX_LENGTH);
+            }
 
-    private function validateSize(ImageInterface $image): bool
-    {
-        return $image->size() <= self::MAX_SIZE;
-    }
-
-    public function validate($value): bool
-    {
-        return parent::validate($value)
-            && $this->validateSize($value)
-            && $this->validateLength();
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function validateWithException($value): void
-    {
-        parent::validateWithException($value);
-
-        if (! $this->validateLength()) {
-            throw new InvalidArgumentException("Image limit exceeded. Maximum allowed images: ".self::MAX_ITEM);
-        }
-
-        if (! $this->validateSize($value)) {
-            throw new InvalidArgumentException("Image size exceeded. Maximum allowed size: ".self::MAX_SIZE);
-        }
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
+            return true;
+        };
     }
 }
