@@ -2,11 +2,10 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
-use JsonSerializable;
 
-class Record implements JsonSerializable, Stringable
+class Record implements EmbedInterface
 {
     private StrongRef $ref;
 

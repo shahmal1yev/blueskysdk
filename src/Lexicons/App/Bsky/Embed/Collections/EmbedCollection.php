@@ -42,4 +42,9 @@ trait EmbedCollection
     {
         return $this->toArray();
     }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
+    }
 }

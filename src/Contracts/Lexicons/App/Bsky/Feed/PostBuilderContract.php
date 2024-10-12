@@ -3,10 +3,8 @@
 namespace Atproto\Contracts\Lexicons\App\Bsky\Feed;
 
 use Atproto\Contracts\LexiconBuilder;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Stringable;
-use Atproto\Lexicons\App\Bsky\RichText\Link;
-use Atproto\Lexicons\App\Bsky\RichText\Mention;
-use Atproto\Lexicons\App\Bsky\RichText\Tag;
 use DateTimeImmutable;
 
 interface PostBuilderContract extends LexiconBuilder, Stringable
@@ -21,5 +19,5 @@ interface PostBuilderContract extends LexiconBuilder, Stringable
 
     public function createdAt(DateTimeImmutable $dateTime): PostBuilderContract;
 
-    public function embed(...$embeds): PostBuilderContract;
+    public function embed(EmbedInterface $embed): PostBuilderContract;
 }

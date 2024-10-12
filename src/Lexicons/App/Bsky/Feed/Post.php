@@ -4,6 +4,7 @@ namespace Atproto\Lexicons\App\Bsky\Feed;
 
 use Atproto\Collections\FacetCollection;
 use Atproto\Collections\FeatureCollection;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Feed\PostBuilderContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\RichText\ByteSlice;
@@ -21,6 +22,7 @@ class Post implements PostBuilderContract
     private string $text = '';
     private ?DateTimeImmutable $createdAt = null;
     private FacetCollection $facets;
+    private ?EmbedInterface $embed = null;
 
     public function __construct()
     {
@@ -70,8 +72,10 @@ class Post implements PostBuilderContract
         return $this->addFeatureItem('mention', $reference, $label);
     }
 
-    public function embed(...$embeds): PostBuilderContract
+    public function embed(EmbedInterface $embed = null): PostBuilderContract
     {
+        $this->embed = $embed;
+
         return $this;
     }
 
@@ -84,12 +88,13 @@ class Post implements PostBuilderContract
 
     public function jsonSerialize(): array
     {
-        return [
+        return array_filter([
             '$type' => self::TYPE_NAME,
             'createdAt' => $this->getFormattedCreatedAt(),
             'text' => $this->text,
             'facets' => $this->facets->toArray(),
-        ];
+            'embed' => ($e = $this->embed) ? $e : null,
+        ]);
     }
 
     public function __toString(): string
@@ -181,11 +186,10 @@ class Post implements PostBuilderContract
         $this->text .= $label;
 
         try {
-            $facet = new Facet(
+            $this->facets[] = new Facet(
                 new FeatureCollection([$feature]),
                 new ByteSlice($this->text, $label)
             );
-            $this->facets[] = $facet;
         } catch (\GenericCollection\Exceptions\InvalidArgumentException $e) {
             throw new InvalidArgumentException(
                 sprintf('Feature must be an instance of %s.', FeatureAbstract::class)
