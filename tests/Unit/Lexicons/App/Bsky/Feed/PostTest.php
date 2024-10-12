@@ -5,8 +5,6 @@ namespace Tests\Unit\Lexicons\App\Bsky\Feed;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Embed\Blob;
-use Atproto\Lexicons\App\Bsky\Embed\Video;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\Mention;
@@ -142,7 +140,7 @@ class PostTest extends TestCase
             "Argument at index 4 is invalid: must be a string or an instance of " . FeatureAbstract::class
         );
 
-        $this->post->text(1, true, 'string', new Post);
+        $this->post->text(1, true, 'string', new Post());
     }
 
     public function testCreatedAtField()

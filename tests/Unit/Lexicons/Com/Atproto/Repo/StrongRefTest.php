@@ -1,7 +1,8 @@
 <?php
 
-namespace Atproto\Lexicons\Com\Atproto\Repo;
+namespace Tests\Unit\Lexicons\Com\Atproto\Repo;
 
+use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use PHPUnit\Framework\TestCase;
 
 class StrongRefTest extends TestCase

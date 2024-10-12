@@ -23,19 +23,19 @@ trait FileMocking
 
         $file->expects($this->any())
             ->method('path')
-            ->will($this->returnCallback(fn() => $this->path));
+            ->will($this->returnCallback(fn () => $this->path));
 
         $file->expects($this->any())
             ->method('type')
-            ->will($this->returnCallback(fn() => $this->type));
+            ->will($this->returnCallback(fn () => $this->type));
 
         $file->expects($this->any())
             ->method('size')
-            ->will($this->returnCallback(fn() => $this->size));
+            ->will($this->returnCallback(fn () => $this->size));
 
         $file->expects($this->any())
             ->method('blob')
-            ->will($this->returnCallback(fn() => $this->blob));
+            ->will($this->returnCallback(fn () => $this->blob));
 
         return $file;
     }
