@@ -6,7 +6,7 @@ use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Caption;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
-use Atproto\Lexicons\App\Bsky\Embed\File;
+use Atproto\Lexicons\App\Bsky\Embed\Blob;
 use Atproto\Lexicons\App\Bsky\Embed\Video;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ class VideoTest extends TestCase
     use FileMocking;
 
     private Video $video;
-    private File $file;
+    private Blob $file;
 
     protected function setUp(): void
     {

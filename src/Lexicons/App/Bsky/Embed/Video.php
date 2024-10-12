@@ -9,7 +9,7 @@ use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
 
 class Video implements VideoInterface, Stringable
 {
-    private File $file;
+    private Blob $file;
     private ?string $alt = null;
     private CaptionCollection $captions;
     private array $aspectRatio = [];
@@ -17,7 +17,7 @@ class Video implements VideoInterface, Stringable
     /**
      * @throws InvalidArgumentException
      */
-    public function __construct(File $file)
+    public function __construct(Blob $file)
     {
         if ("video/mp4" !== $file->type()) {
             throw new InvalidArgumentException($file->path()." is not a valid video file.");

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
-use Atproto\Lexicons\App\Bsky\Embed\File;
+use Atproto\Lexicons\App\Bsky\Embed\Blob;
 use PHPUnit\Framework\MockObject\MockObject;
 
 trait FileMocking
@@ -13,11 +13,11 @@ trait FileMocking
     private string $type = 'text/vtt';
 
     /**
-     * @return (File&MockObject)
+     * @return (Blob&MockObject)
      */
     private function createMockFile()
     {
-        $file = $this->getMockBuilder(File::class)
+        $file = $this->getMockBuilder(Blob::class)
             ->disableOriginalConstructor()
             ->getMock();
 

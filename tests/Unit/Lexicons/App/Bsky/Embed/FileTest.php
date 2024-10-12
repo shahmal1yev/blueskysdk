@@ -3,7 +3,7 @@
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Embed\File;
+use Atproto\Lexicons\App\Bsky\Embed\Blob;
 use PHPUnit\Framework\TestCase;
 
 class FileTest extends TestCase
@@ -11,7 +11,7 @@ class FileTest extends TestCase
     private string $testFilePath;
     private string $unreadableFilePath;
     private string $nonFilePath;
-    private File $fileInstance;
+    private Blob $fileInstance;
 
     /**
      * @throws InvalidArgumentException
@@ -22,7 +22,7 @@ class FileTest extends TestCase
 
         $this->testFilePath = tempnam(sys_get_temp_dir(), 'testfile');
         file_put_contents($this->testFilePath, 'This is a test file.');
-        $this->fileInstance = new File($this->testFilePath);
+        $this->fileInstance = new Blob($this->testFilePath);
 
         $this->unreadableFilePath = tempnam(sys_get_temp_dir(), 'unreadable');
         file_put_contents($this->unreadableFilePath, 'This is an unreadable file.');
@@ -85,7 +85,7 @@ class FileTest extends TestCase
 
         $this->assertFalse(is_readable($this->unreadableFilePath), 'File should not be readable.');
 
-        new File($this->unreadableFilePath);
+        new Blob($this->unreadableFilePath);
     }
 
     public function testConstructorThrowsExceptionWhenPassedNonFilePath(): void
@@ -93,6 +93,6 @@ class FileTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("$this->nonFilePath is not a file.");
 
-        new File($this->nonFilePath);
+        new Blob($this->nonFilePath);
     }
 }

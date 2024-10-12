@@ -11,12 +11,12 @@ class Caption implements CaptionInterface
     private const MAX_SIZE = 20000;
 
     private string $lang;
-    private File $file;
+    private Blob $file;
 
     /**
      * @throws InvalidArgumentException
      */
-    public function __construct(string $lang, File $file)
+    public function __construct(string $lang, Blob $file)
     {
         $this->lang($lang);
         $this->file($file);
@@ -36,7 +36,7 @@ class Caption implements CaptionInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function file(File $file = null)
+    public function file(Blob $file = null)
     {
         if (is_null($file)) {
             return $this->file;
