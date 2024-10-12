@@ -2,9 +2,11 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\InvalidArgumentException;
+use JsonSerializable;
 
-class External
+class External implements JsonSerializable, Stringable
 {
     private string $uri;
     private string $title;
@@ -86,5 +88,20 @@ class External
         $this->blob = $blob;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_filter([
+            'uri' => $this->uri,
+            'title' => $this->title,
+            'description' => $this->description,
+            'blob' => ($b = $this->blob) ? $b->blob() : null,
+        ]);
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
     }
 }

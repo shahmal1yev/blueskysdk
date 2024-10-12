@@ -18,6 +18,7 @@ class ExternalTest extends TestCase
     public function setUp(): void
     {
         $this->external = new External('https://shahmal1yev.dev', 'foo', 'bar');
+
         $this->blob = $this->getMockBuilder(Blob::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -29,6 +30,10 @@ class ExternalTest extends TestCase
         $this->blob->expects($this->any())
             ->method('type')
             ->will($this->returnCallback(fn () => $this->allowedMimes));
+
+        $this->blob->expects($this->any())
+            ->method('blob')
+            ->willReturn('blob');
     }
 
     public function testDescription()
@@ -100,5 +105,33 @@ class ExternalTest extends TestCase
         $this->assertSame('foo', $this->external->title());
         $this->external->title('bar');
         $this->assertSame('bar', $this->external->title());
+    }
+
+    public function testJsonSerializeWithoutSetBlob(): void
+    {
+        $expected = [
+            'uri' => 'https://shahmal1yev.dev',
+            'title' => 'foo',
+            'description' => 'bar',
+        ];
+
+        $this->assertSame($expected, json_decode($this->external, true));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testJsonSerializeWithSetBlob(): void
+    {
+        $this->external->thumb($this->blob);
+
+        $expected = [
+            'uri' => 'https://shahmal1yev.dev',
+            'title' => 'foo',
+            'description' => 'bar',
+            'blob' => 'blob',
+        ];
+
+        $this->assertSame($expected, json_decode($this->external, true));
     }
 }
