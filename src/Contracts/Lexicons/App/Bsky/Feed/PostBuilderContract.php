@@ -23,4 +23,6 @@ interface PostBuilderContract extends LexiconBuilder, Stringable
     public function embed(EmbedInterface $embed): PostBuilderContract;
 
     public function reply(StrongRef $root, StrongRef $parent): PostBuilderContract;
+
+    public function langs(array $languages): PostBuilderContract;
 }
