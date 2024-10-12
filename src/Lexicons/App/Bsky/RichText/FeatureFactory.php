@@ -4,7 +4,6 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class FeatureFactory
 {
-
     public static function link(string $reference, string $label = null): Link
     {
         return new Link($reference, $label);

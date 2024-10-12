@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Feed;
 
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
@@ -138,7 +140,7 @@ class PostTest extends TestCase
             "Argument at index 4 is invalid: must be a string or an instance of " . FeatureAbstract::class
         );
 
-        $this->post->text(1, true, 'string', new Post);
+        $this->post->text(1, true, 'string', new Post());
     }
 
     public function testCreatedAtField()
@@ -148,15 +150,40 @@ class PostTest extends TestCase
         $this->assertNotNull($result['createdAt']);
     }
 
+    public function testEmbed(): void
+    {
+        $video = $this->getMockBuilder(VideoInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $video->expects($this->once())
+            ->method('jsonSerialize')
+            ->willReturn(['foo' => 'bar']);
+
+        $this->post->embed($video);
+
+        $expected = ['foo' => 'bar'];
+        $actual = json_decode($this->post, true);
+
+        $this->assertArrayHasKey('embed', $actual);
+        $this->assertSame($expected, $actual['embed']);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testJsonSerialize()
     {
-        $this->post->text('Test post');
+        $this->post->text('Test post: ', new Mention('reference', 'label'));
+        $this->post->embed($embed = $this->createMock(EmbedInterface::class));
+
         $result = $this->post->jsonSerialize();
         $this->assertArrayHasKey('$type', $result);
         $this->assertEquals('app.bsky.feed.post', $result['$type']);
         $this->assertArrayHasKey('text', $result);
         $this->assertArrayHasKey('createdAt', $result);
         $this->assertArrayHasKey('facets', $result);
+        $this->assertArrayHasKey('embed', $result);
     }
 
     /**

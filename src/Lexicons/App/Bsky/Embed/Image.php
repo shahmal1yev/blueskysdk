@@ -7,14 +7,14 @@ use Atproto\Exceptions\InvalidArgumentException;
 
 class Image implements ImageInterface
 {
-    private File $file;
+    private Blob $file;
     private string $alt;
     private ?array $aspectRatio = null;
 
     /**
      * @throws InvalidArgumentException
      */
-    public function __construct(File $file, string $alt)
+    public function __construct(Blob $file, string $alt)
     {
         if (true !== str_starts_with($file->type(), 'image/')) {
             throw new InvalidArgumentException($file->path()." is not a valid image file.");
@@ -45,7 +45,7 @@ class Image implements ImageInterface
         }
 
         if ($width < 1 || $height < 1) {
-            throw new InvalidArgumentException("Width and height must be at least 1");
+            throw new InvalidArgumentException("'\$width' and '\$height' must be greater than 0");
         }
 
         $this->aspectRatio = [
@@ -66,5 +66,15 @@ class Image implements ImageInterface
             'image' => $this->file->blob(),
             'aspectRatio' => $this->aspectRatio() ?: null,
         ]);
+    }
+
+    public function size(): int
+    {
+        return $this->file->size();
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
     }
 }

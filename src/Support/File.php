@@ -10,7 +10,7 @@ namespace Atproto\Support;
 class File
 {
     /** @var string $file_path The path to the file. */
-    private $file_path;
+    private string $file_path;
 
     /**
      * Constructor.
