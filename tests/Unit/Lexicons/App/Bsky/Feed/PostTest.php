@@ -182,6 +182,41 @@ class PostTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
+    public function testLangsMethodWithValidInput()
+    {
+        $this->post->langs(['en', 'fr', 'es']);
+        $result = json_decode($this->post, true);
+
+        $this->assertArrayHasKey('langs', $result);
+        $this->assertEquals(['en', 'fr', 'es'], $result['langs']);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testLangsMethodThrowsExceptionOnTooManyLanguages()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A maximum of 3 language codes is allowed.');
+
+        $this->post->langs(['en', 'fr', 'es', 'de']);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testLangsMethodThrowsExceptionOnInvalidLanguageCode()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid language code: d');
+
+        $this->post->langs(['en', 'd']);
+    }
+
+
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testJsonSerialize()
     {
         $this->post->text('Test post: ', new Mention('reference', 'label'));
@@ -190,6 +225,7 @@ class PostTest extends TestCase
         $this->post->embed($embed);
         $sRef = new StrongRef('foo', 'bar');
         $this->post->reply($sRef, clone $sRef);
+        $this->post->langs(['en', 'fr', 'es']);
 
         $result = $this->post->jsonSerialize();
         $this->assertArrayHasKey('$type', $result);
@@ -199,6 +235,7 @@ class PostTest extends TestCase
         $this->assertArrayHasKey('facets', $result);
         $this->assertArrayHasKey('embed', $result);
         $this->assertArrayHasKey('replyRef', $result);
+        $this->assertArrayHasKey('langs', $result);
     }
 
     public function testConstructorWorksCorrectlyOnDirectBuild()
