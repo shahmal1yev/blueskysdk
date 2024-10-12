@@ -11,6 +11,7 @@ use Atproto\Lexicons\App\Bsky\RichText\ByteSlice;
 use Atproto\Lexicons\App\Bsky\RichText\Facet;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureFactory;
+use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Carbon\Carbon;
 use DateTimeImmutable;
 
@@ -23,6 +24,7 @@ class Post implements PostBuilderContract
     private ?DateTimeImmutable $createdAt = null;
     private FacetCollection $facets;
     private ?EmbedInterface $embed = null;
+    private ?array $reply = null;
 
     public function __construct()
     {
@@ -79,6 +81,16 @@ class Post implements PostBuilderContract
         return $this;
     }
 
+    public function reply(StrongRef $root, StrongRef $parent): PostBuilderContract
+    {
+        $this->reply = [
+            'root' => $root,
+            'parent' => $parent
+        ];
+
+        return $this;
+    }
+
     public function createdAt(DateTimeImmutable $dateTime): PostBuilderContract
     {
         $this->createdAt = $dateTime;
@@ -93,7 +105,8 @@ class Post implements PostBuilderContract
             'createdAt' => $this->getFormattedCreatedAt(),
             'text' => $this->text,
             'facets' => $this->facets->toArray(),
-            'embed' => ($e = $this->embed) ? $e : null,
+            'embed' => $this->embed,
+            'replyRef' => $this->reply,
         ]);
     }
 
@@ -129,7 +142,7 @@ class Post implements PostBuilderContract
             );
         }
 
-        if ($this->isString($item) && mb_strlen($item) > self::TEXT_LIMIT) {
+        if ($this->isString($item) && (mb_strlen($item) + mb_strlen($this->text)) > self::TEXT_LIMIT) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Text must be less than or equal to %d characters.',
