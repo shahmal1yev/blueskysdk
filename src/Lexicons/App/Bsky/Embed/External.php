@@ -2,11 +2,12 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
 use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\InvalidArgumentException;
 use JsonSerializable;
 
-class External implements JsonSerializable, Stringable
+class External implements MediaInterface, JsonSerializable, Stringable
 {
     private string $uri;
     private string $title;

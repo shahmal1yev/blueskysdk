@@ -2,12 +2,13 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
 
-class Video implements VideoInterface, Stringable
+class Video implements MediaInterface, VideoInterface, Stringable
 {
     private Blob $file;
     private ?string $alt = null;

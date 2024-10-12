@@ -3,11 +3,12 @@
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\ImageInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use JsonSerializable;
 
-class ImageCollection extends GenericCollection implements JsonSerializable
+class ImageCollection extends GenericCollection implements MediaInterface, JsonSerializable
 {
     use EmbedCollection;
 
