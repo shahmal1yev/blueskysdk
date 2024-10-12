@@ -5,6 +5,7 @@ namespace Atproto\Contracts\Lexicons\App\Bsky\Feed;
 use Atproto\Contracts\LexiconBuilder;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Stringable;
+use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use DateTimeImmutable;
 
 interface PostBuilderContract extends LexiconBuilder, Stringable
@@ -20,4 +21,6 @@ interface PostBuilderContract extends LexiconBuilder, Stringable
     public function createdAt(DateTimeImmutable $dateTime): PostBuilderContract;
 
     public function embed(EmbedInterface $embed): PostBuilderContract;
+
+    public function reply(StrongRef $root, StrongRef $parent): PostBuilderContract;
 }

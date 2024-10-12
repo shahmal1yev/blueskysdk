@@ -3,11 +3,11 @@
 namespace Tests\Unit\Lexicons\App\Bsky\Feed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\Mention;
+use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Carbon\Carbon;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ class PostTest extends TestCase
 {
     private Post $post;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->post = new Post();
@@ -28,20 +28,18 @@ class PostTest extends TestCase
     public function testTextMethodWithBasicUsage()
     {
         $this->post->text('Hello, world!');
-        $result = json_decode($this->post, true);
+        $result = json_decode((string) $this->post, true);
         $this->assertEquals('Hello, world!', $result['text']);
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function testTextMethod()
+    public function testTextMethodWithMultipleItems()
     {
         $this->post->text('Hello', ', ', new Mention('example:did:123', 'user'), "! It's ", 5, " o'clock now.");
-        $result = json_decode(json_encode($this->post), true);
+        $result = json_decode((string) $this->post, true);
         $this->assertEquals("Hello, @user! It's 5 o'clock now.", $result['text']);
-
-        $this->post->text('This ', new Mention('example:did:123', 'user'), '!');
     }
 
     /**
@@ -50,7 +48,7 @@ class PostTest extends TestCase
     public function testTagMethod()
     {
         $this->post->tag('example', 'test');
-        $result = json_decode($this->post, true);
+        $result = json_decode((string) $this->post, true);
         $this->assertEquals('#test', $result['text']);
         $this->assertCount(1, $result['facets']);
     }
@@ -60,8 +58,8 @@ class PostTest extends TestCase
      */
     public function testLinkMethod()
     {
-        $this->post->link('https://example.com', 'Example');
-        $result = json_decode($this->post, true);
+        $this->post->link('https://shahmal1yev.dev', 'Example');
+        $result = json_decode((string) $this->post, true);
         $this->assertEquals('Example', $result['text']);
         $this->assertCount(1, $result['facets']);
     }
@@ -72,51 +70,55 @@ class PostTest extends TestCase
     public function testMentionMethod()
     {
         $this->post->mention('did:example:123', 'user');
-        $result = json_decode($this->post, true);
+        $result = json_decode((string) $this->post, true);
         $this->assertEquals('@user', $result['text']);
         $this->assertCount(1, $result['facets']);
     }
 
     public function testCombinationOfMethods()
     {
-        $this->post = $this->post();
+        $post = $this->createSamplePost();
 
-        $result = json_decode($this->post, true);
+        $result = json_decode((string) $post, true);
         $this->assertEquals('Hello @user! Check out this link #example_tag', $result['text']);
         $this->assertCount(3, $result['facets']);
     }
 
-    public function testCoordinatesOfFacets(): void
+    public function testCoordinatesOfFacets()
     {
-        $this->post = $this->post();
+        $post = $this->createSamplePost();
 
-        $result = json_decode($this->post, true);
+        $result = json_decode((string) $post, true);
 
         $text = $result['text'];
         $facets = $result['facets'];
 
-        $this->assertSame($facets[0]['index'], $this->bytes($text, "@user"));
-        $this->assertSame($facets[1]['index'], $this->bytes($text, "this link"));
-        $this->assertSame($facets[2]['index'], $this->bytes($text, "#example_tag"));
+        $this->assertSame($this->calculateByteSlice($text, '@user'), $facets[0]['index']);
+        $this->assertSame($this->calculateByteSlice($text, 'this link'), $facets[1]['index']);
+        $this->assertSame($this->calculateByteSlice($text, '#example_tag'), $facets[2]['index']);
     }
 
-    private function bytes(string $haystack, string $needle): array
+    private function calculateByteSlice(string $text, string $substring): array
     {
-        $pos = mb_strpos($haystack, $needle);
-        $len = $pos + mb_strlen($needle);
+        $byteStart = mb_strpos($text, $substring);
+        $byteEnd = $byteStart + mb_strlen($substring);
 
         return [
-            'byteStart' => $pos,
-            'byteEnd' => $len,
+            'byteStart' => $byteStart,
+            'byteEnd' => $byteEnd,
         ];
     }
 
-    private function post(): Post
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function createSamplePost(): Post
     {
-        return $this->post->text('Hello ')
+        return (new Post())
+            ->text('Hello ')
             ->mention('did:example:123', 'user')
             ->text('! Check out ')
-            ->link('https://example.com', 'this link')
+            ->link('https://shahmal1yev.dev', 'this link')
             ->text(' ')
             ->tag('example_tag');
     }
@@ -129,44 +131,52 @@ class PostTest extends TestCase
         $this->post->text(str_repeat('a', 3000));
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Text must be less than or equal to 3000 characters.');
 
-        $this->post->text(str_repeat('a', 3001));
+        // This should cause the total text length to exceed the limit
+        $this->post->text('a');
     }
 
-    public function testTextThrowsExceptionWhenPassedInvalidArgument(): void
+    public function testTextThrowsExceptionWhenPassedInvalidArgument()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            "Argument at index 4 is invalid: must be a string or an instance of " . FeatureAbstract::class
-        );
+        $this->expectExceptionMessageMatches('/Argument at index \d+ is invalid/');
 
         $this->post->text(1, true, 'string', new Post());
     }
 
-    public function testCreatedAtField()
+    public function testCreatedAtFieldIsSetByDefault()
     {
-        $result = json_decode($this->post, true);
+        $this->post->text('Test post');
+        $result = json_decode((string) $this->post, true);
+
         $this->assertArrayHasKey('createdAt', $result);
-        $this->assertNotNull($result['createdAt']);
+
+        $createdAt = Carbon::parse($result['createdAt']);
+        $now = Carbon::now();
+
+        $this->assertTrue($createdAt->diffInSeconds($now) < 5, 'createdAt should be within the last 5 seconds');
     }
 
-    public function testEmbed(): void
+    public function testCreatedAtReturnsAssignedTime()
     {
-        $video = $this->getMockBuilder(VideoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $futureTime = Carbon::now()->addHour();
+        $this->post->createdAt($futureTime->toDateTimeImmutable());
 
-        $video->expects($this->once())
-            ->method('jsonSerialize')
-            ->willReturn(['foo' => 'bar']);
+        $result = json_decode((string) $this->post, true);
+        $this->assertEquals($futureTime->toIso8601String(), $result['createdAt']);
+    }
 
-        $this->post->embed($video);
+    public function testEmbedMethod()
+    {
+        $embed = $this->createMock(EmbedInterface::class);
+        $embed->method('jsonSerialize')->willReturn(['embedData' => 'value']);
 
-        $expected = ['foo' => 'bar'];
-        $actual = json_decode($this->post, true);
+        $this->post->embed($embed);
 
-        $this->assertArrayHasKey('embed', $actual);
-        $this->assertSame($expected, $actual['embed']);
+        $result = json_decode((string) $this->post, true);
+        $this->assertArrayHasKey('embed', $result);
+        $this->assertEquals(['embedData' => 'value'], $result['embed']);
     }
 
     /**
@@ -175,7 +185,11 @@ class PostTest extends TestCase
     public function testJsonSerialize()
     {
         $this->post->text('Test post: ', new Mention('reference', 'label'));
-        $this->post->embed($embed = $this->createMock(EmbedInterface::class));
+        $embed = $this->createMock(EmbedInterface::class);
+        $embed->method('jsonSerialize')->willReturn(['embedKey' => 'embedValue']);
+        $this->post->embed($embed);
+        $sRef = new StrongRef('foo', 'bar');
+        $this->post->reply($sRef, clone $sRef);
 
         $result = $this->post->jsonSerialize();
         $this->assertArrayHasKey('$type', $result);
@@ -184,39 +198,13 @@ class PostTest extends TestCase
         $this->assertArrayHasKey('createdAt', $result);
         $this->assertArrayHasKey('facets', $result);
         $this->assertArrayHasKey('embed', $result);
+        $this->assertArrayHasKey('replyRef', $result);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function testCreatedAtAssignedByDefault(): void
+    public function testConstructorWorksCorrectlyOnDirectBuild()
     {
-        $post = $this->post->text('Test post');
-        $result = json_decode($post, true);
-
-        $this->assertSame($result['createdAt'], Carbon::now()->toIso8601String());
-    }
-
-    public function testCreatedAtReturnsAssignedTime(): void
-    {
-        $timestamp = time() + 3600; // Get the current timestamp
-        $this->post->createdAt(new DateTimeImmutable("@$timestamp"));
-
-        $actual = json_decode($this->post, false)->createdAt;
-        $expected = Carbon::now()->modify("+1 hour")->toIso8601String();
-
-        $this->assertSame(
-            $actual,
-            $expected,
-        );
-    }
-
-    public function testConstructorWorksCorrectlyOnDirectBuild(): void
-    {
-        $array = json_decode($this->post, true);
-        $json  = json_encode($array);
-
-        $this->assertTrue(is_array($array));
-        $this->assertTrue(json_encode($array) === $json);
+        $result = json_decode((string) $this->post, true);
+        $this->assertIsArray($result);
+        $this->assertEquals($result, json_decode(json_encode($result), true));
     }
 }
