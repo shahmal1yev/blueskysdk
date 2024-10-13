@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\Helpers;
+namespace Atproto\Support;
 
 use ArrayAccess;
 

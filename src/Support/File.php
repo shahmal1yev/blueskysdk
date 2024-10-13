@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\Helpers;
+namespace Atproto\Support;
 
 /**
  * Class File
@@ -10,7 +10,7 @@ namespace Atproto\Helpers;
 class File
 {
     /** @var string $file_path The path to the file. */
-    private $file_path;
+    private string $file_path;
 
     /**
      * Constructor.
