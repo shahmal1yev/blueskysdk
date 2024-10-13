@@ -50,7 +50,6 @@ class ClientTest extends TestCase
         $this->assertInstanceOf(ResourceContract::class, $authenticated);
 
         $this->assertIsString($authenticated->handle());
-        ;
         $this->assertSame($username, $authenticated->handle());
 
         $profile = $this->client
@@ -59,6 +58,7 @@ class ClientTest extends TestCase
             ->actor()
             ->getProfile()
             ->forge()
+            ->actor($this->client->authenticated()->did())
             ->send();
 
         $this->assertInstanceOf(ResourceContract::class, $profile);
@@ -95,5 +95,26 @@ class ClientTest extends TestCase
             ->getProfile()
             ->forge()
             ->send();
+    }
+
+    public function testObserverNotificationOnAuthentication(): void
+    {
+        $request = $this->client->app()
+            ->bsky()
+            ->actor()
+            ->getProfile()
+            ->forge();
+
+        $this->client->authenticate(
+            $_ENV['BLUESKY_IDENTIFIER'],
+            $_ENV['BLUESKY_PASSWORD']
+        );
+
+        $response = $request->actor($this->client->authenticated()->did())
+            ->build()
+            ->send();
+
+        $this->assertInstanceOf(ResourceContract::class, $response);
+        $this->assertInstanceOf(GetProfileResource::class, $response);
     }
 }

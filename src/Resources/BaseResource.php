@@ -4,7 +4,7 @@ namespace Atproto\Resources;
 
 use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
-use Atproto\Helpers\Arr;
+use Atproto\Support\Arr;
 use Atproto\Traits\Castable;
 
 trait BaseResource

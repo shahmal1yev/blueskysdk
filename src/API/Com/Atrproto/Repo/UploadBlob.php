@@ -4,7 +4,7 @@ namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
-use Atproto\Helpers\File;
+use Atproto\Support\File;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use InvalidArgumentException;
 
@@ -55,15 +55,18 @@ class UploadBlob implements RequestContract
     {
         $file = new File($filePath);
 
-        if (! $file->exists())
+        if (! $file->exists()) {
             throw new InvalidArgumentException("File '$filePath' does not exist");
+        }
 
-        if (! $file->isFile())
+        if (! $file->isFile()) {
             throw new InvalidArgumentException("File '$filePath' is not a file");
+        }
 
         $maxSize = 1000000;
-        if ($file->getFileSize() > $maxSize)
+        if ($file->getFileSize() > $maxSize) {
             throw new InvalidArgumentException("File '$filePath' is too big. Max file size is $maxSize bytes.");
+        }
 
         $this->body->blob = $file;
 
@@ -88,8 +91,9 @@ class UploadBlob implements RequestContract
      */
     public function getBody()
     {
-        if (! isset($this->body->blob))
+        if (! isset($this->body->blob)) {
             throw new RequestBodyHasMissingRequiredFields(implode(', ', ['blob']));
+        }
 
         return $this->body
             ->blob

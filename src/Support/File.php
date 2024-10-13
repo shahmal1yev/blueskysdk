@@ -1,22 +1,24 @@
 <?php
 
-namespace Atproto\Helpers;
+namespace Atproto\Support;
 
 /**
  * Class File
  *
  * Helper class for file-related operations.
  */
-class File {
+class File
+{
     /** @var string $file_path The path to the file. */
-    private $file_path;
+    private string $file_path;
 
     /**
      * Constructor.
      *
      * @param string $file_path The path to the file.
      */
-    public function __construct($file_path) {
+    public function __construct($file_path)
+    {
         $this->file_path = $file_path;
     }
 
@@ -25,7 +27,8 @@ class File {
      *
      * @return string The MIME type.
      */
-    public function getMimeType() {
+    public function getMimeType()
+    {
         $mime_type = mime_content_type($this->file_path);
         return $mime_type !== false ? $mime_type : 'unknown';
     }
@@ -35,7 +38,8 @@ class File {
      *
      * @return string The file extension.
      */
-    public function getExtension() {
+    public function getExtension()
+    {
         $extension = pathinfo($this->file_path, PATHINFO_EXTENSION);
         return $extension !== '' ? $extension : 'unknown';
     }
@@ -45,7 +49,8 @@ class File {
      *
      * @return string The filename.
      */
-    public function getFileName() {
+    public function getFileName()
+    {
         return pathinfo($this->file_path, PATHINFO_FILENAME);
     }
 
@@ -54,7 +59,8 @@ class File {
      *
      * @return string The base path.
      */
-    public function getBasePath() {
+    public function getBasePath()
+    {
         return pathinfo($this->file_path, PATHINFO_DIRNAME);
     }
 
@@ -63,7 +69,8 @@ class File {
      *
      * @return int The file size in bytes.
      */
-    public function getFileSize() {
+    public function getFileSize()
+    {
         return filesize($this->file_path);
     }
 
@@ -72,7 +79,8 @@ class File {
      *
      * @return bool True if the file exists, false otherwise.
      */
-    public function exists() {
+    public function exists()
+    {
         return file_exists($this->file_path);
     }
 
@@ -81,7 +89,8 @@ class File {
      *
      * @return bool True if the path is a file, false otherwise.
      */
-    public function isFile() {
+    public function isFile()
+    {
         return is_file($this->file_path);
     }
 
@@ -90,7 +99,8 @@ class File {
      *
      * @return bool True if the path is a directory, false otherwise.
      */
-    public function isDirectory() {
+    public function isDirectory()
+    {
         return is_dir($this->file_path);
     }
 
@@ -99,7 +109,8 @@ class File {
      *
      * @return false|int The creation time as a Unix timestamp, or false on failure.
      */
-    public function getCreationTime() {
+    public function getCreationTime()
+    {
         return filectime($this->file_path);
     }
 
@@ -108,7 +119,8 @@ class File {
      *
      * @return false|int The last modification time as a Unix timestamp, or false on failure.
      */
-    public function getModificationTime() {
+    public function getModificationTime()
+    {
         return filemtime($this->file_path);
     }
 

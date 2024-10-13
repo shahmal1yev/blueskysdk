@@ -2,34 +2,19 @@
 
 namespace Atproto\HTTP\API\Requests\App\Bsky\Actor;
 
-use Atproto\Client;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
+use Atproto\Exceptions\Http\Response\AuthMissingException;
+use Atproto\Support\Arr;
 use Atproto\HTTP\API\APIRequest;
+use Atproto\HTTP\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Exception;
 
 class GetProfile extends APIRequest
 {
-    public function __construct(Client $client = null)
-    {
-        if (! $client) {
-            return;
-        }
-
-        parent::__construct($client->prefix());
-
-        if (! $client->authenticated()) {
-            return;
-        }
-
-        try {
-            $this->header('Authorization', 'Bearer ' . $client->authenticated()->accessJwt());
-            $this->queryParameter('actor', $client->authenticated()->did());
-        } catch (AuthRequired $e) {}
-    }
+    use Authentication;
 
     /**
      * @return RequestContract|string
@@ -64,18 +49,12 @@ class GetProfile extends APIRequest
      */
     public function build(): RequestContract
     {
-        $missing = [];
+        if (! $this->header('Authorization')) {
+            throw new AuthMissingException();
+        }
 
         if (! $this->queryParameter('actor')) {
-            $missing[] = 'actor';
-        }
-
-        if (! $this->header('Authorization')) {
-            $missing[] = 'token';
-        }
-
-        if (! empty($missing)) {
-            throw new MissingFieldProvidedException(implode(", ", $missing));
+            throw new MissingFieldProvidedException('actor');
         }
 
         return $this;

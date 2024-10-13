@@ -4,15 +4,10 @@ namespace Atproto;
 
 use Atproto\Traits\Authentication;
 use Atproto\Traits\Smith;
+use SplSubject;
 
-class Client
+class Client implements SplSubject
 {
     use Smith;
     use Authentication;
-    protected static string $prefix = "Atproto\\HTTP\\API\\Requests\\";
-
-    public function prefix(): string
-    {
-        return self::$prefix;
-    }
 }

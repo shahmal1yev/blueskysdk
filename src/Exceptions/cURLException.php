@@ -2,7 +2,6 @@
 
 namespace Atproto\Exceptions;
 
-
 use Exception;
 
 /**

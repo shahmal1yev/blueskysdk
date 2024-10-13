@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\HTTP\API\Requests\App\Bsky\Actor;
 
+use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
@@ -25,7 +26,7 @@ class GetProfileTest extends TestCase
     {
         parent::setUp();
         $this->faker = Factory::create();
-        $this->request = new GetProfile();
+        $this->request = new GetProfile($this->createMock(Client::class));
     }
 
     /**
@@ -89,8 +90,10 @@ class GetProfileTest extends TestCase
 
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
+        $this->request->token($this->faker->word);
+
         $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing provided fields: actor, token");
+        $this->expectExceptionMessage("Missing fields provided: actor");
 
         $this->request->build();
     }

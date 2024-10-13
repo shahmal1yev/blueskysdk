@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\Helpers;
+namespace Atproto\Support;
 
 use ArrayAccess;
 
@@ -16,15 +16,16 @@ class Arr
      */
     public static function get(array $array, string $key, $default = null)
     {
-        if (isset($array[$key]))
+        if (isset($array[$key])) {
             return $array[$key];
+        }
 
         $segments = explode('.', $key);
 
-        foreach($segments as $segment)
-        {
-            if (! self::exists($array, $segment))
+        foreach($segments as $segment) {
+            if (! self::exists($array, $segment)) {
                 return $default;
+            }
 
             $array = $array[$segment];
         }
@@ -41,11 +42,13 @@ class Arr
      */
     public static function exists($array, string $key): bool
     {
-        if (! is_array($array))
+        if (! is_array($array)) {
             return false;
+        }
 
-        if (! array_key_exists($key, $array))
+        if (! array_key_exists($key, $array)) {
             return false;
+        }
 
         return true;
     }
@@ -66,12 +69,12 @@ class Arr
     {
         $parts = explode(".", $key);
 
-        while(count($parts) > 1)
-        {
+        while(count($parts) > 1) {
             $part = array_shift($parts);
 
-            if (isset($array[$part]))
+            if (isset($array[$part])) {
                 $array = &$array[$part];
+            }
         }
 
         unset($array[array_shift($parts)]);

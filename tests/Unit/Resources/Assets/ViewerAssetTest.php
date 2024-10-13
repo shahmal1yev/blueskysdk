@@ -15,7 +15,8 @@ use Tests\Supports\PrimitiveAssetTest;
 
 class ViewerAssetTest extends TestCase
 {
-    use PrimitiveAssetTest, NonPrimitiveAssetTest;
+    use PrimitiveAssetTest;
+    use NonPrimitiveAssetTest;
 
     /**
      * @throws InvalidArgumentException

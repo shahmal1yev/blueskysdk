@@ -48,8 +48,9 @@ class CreateRecord implements RequestContract
      */
     public function setRepo($repo)
     {
-        if (!is_string($repo))
+        if (!is_string($repo)) {
             throw new InvalidArgumentException("'repo' must be a string");
+        }
 
         $this->body->repo = $repo;
 
@@ -75,11 +76,13 @@ class CreateRecord implements RequestContract
      */
     public function setRkey($rkey)
     {
-        if (! is_string($rkey))
+        if (! is_string($rkey)) {
             throw new InvalidArgumentException("'key' must be a string");
+        }
 
-        if (strlen($rkey) > 15 || 1 > strlen($rkey))
+        if (strlen($rkey) > 15 || 1 > strlen($rkey)) {
             throw new InvalidArgumentException("'key' length must be between 1 and 15 characters");
+        }
 
         $this->body->rkey = $rkey;
 
@@ -105,8 +108,9 @@ class CreateRecord implements RequestContract
      */
     public function setValidate($validate)
     {
-        if (! is_bool($validate))
+        if (! is_bool($validate)) {
             throw new InvalidArgumentException("'validate' must be a boolean");
+        }
 
         $this->body->validate = $validate;
 
@@ -163,11 +167,13 @@ class CreateRecord implements RequestContract
             'app.bsky.graph.follow'
         ];
 
-        if (! is_string($collection))
+        if (! is_string($collection)) {
             throw new InvalidArgumentException("'collection' must be a string");
+        }
 
-        if (! in_array($collection, $acceptableCollections))
+        if (! in_array($collection, $acceptableCollections)) {
             throw new InvalidArgumentException("'collection' must be one of '" . implode("', '", $acceptableCollections) . "'");
+        }
 
         $this->body->collection = $collection;
 
@@ -286,8 +292,9 @@ class CreateRecord implements RequestContract
             array_keys($fields)
         );
 
-        if (! empty($missingFields))
+        if (! empty($missingFields)) {
             throw new RequestBodyHasMissingRequiredFields(implode(', ', $missingFields));
+        }
 
         return json_encode($fields);
     }
