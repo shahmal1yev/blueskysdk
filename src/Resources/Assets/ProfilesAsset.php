@@ -2,9 +2,8 @@
 
 namespace Atproto\Resources\Assets;
 
+use Atproto\Collections\Types\NonPrimitive\ProfileAssetType;
 use Atproto\Contracts\HTTP\Resources\AssetContract;
-use Atproto\GenericCollection\Types\NonPrimitive\FollowerAssetType;
-use Atproto\GenericCollection\Types\NonPrimitive\ProfileAssetType;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\TypeInterface;

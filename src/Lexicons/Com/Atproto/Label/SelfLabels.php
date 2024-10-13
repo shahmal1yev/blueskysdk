@@ -62,7 +62,7 @@ class SelfLabels extends GenericCollection implements JsonSerializable, Stringab
         return json_encode($this);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
