@@ -7,6 +7,7 @@ use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\Mention;
+use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Carbon\Carbon;
 use DateTimeImmutable;
@@ -213,6 +214,23 @@ class PostTest extends TestCase
         $this->post->langs(['en', 'd']);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testLabelsMethod(): void
+    {
+        $labels = new SelfLabels(['v 1', 'v 2', 'v 3']);
+
+        $this->post->labels($labels);
+
+        $result = json_decode($this->post, true);
+        $this->assertArrayHasKey('labels', $result);
+        $this->assertEquals([
+            ['val' => 'v 1'],
+            ['val' => 'v 2'],
+            ['val' => 'v 3'],
+        ], $result['labels']);
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -226,6 +244,10 @@ class PostTest extends TestCase
         $sRef = new StrongRef('foo', 'bar');
         $this->post->reply($sRef, clone $sRef);
         $this->post->langs(['en', 'fr', 'es']);
+        $this->post->labels(new SelfLabels([
+            'val 1',
+            'val 2'
+        ]));
 
         $result = $this->post->jsonSerialize();
         $this->assertArrayHasKey('$type', $result);
@@ -236,6 +258,7 @@ class PostTest extends TestCase
         $this->assertArrayHasKey('embed', $result);
         $this->assertArrayHasKey('replyRef', $result);
         $this->assertArrayHasKey('langs', $result);
+        $this->assertArrayHasKey('labels', $result);
     }
 
     public function testConstructorWorksCorrectlyOnDirectBuild()
