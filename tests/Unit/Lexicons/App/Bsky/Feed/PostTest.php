@@ -232,6 +232,41 @@ class PostTest extends TestCase
         ], $result['labels']);
     }
 
+    public function testTagsThrowsExceptionWhenPassedTagExceedsAllowedLength(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid tags: ");
+
+        $trigger = [str_pad('', 641, 'a')];
+        $this->post->tags($trigger);
+    }
+
+    public function testTagsMethodThrowsExceptionWhenPassedArrayExceedsAllowedLength(): void
+    {
+        $max = 8;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("A maximum of $max tags is allowed.");
+
+        $trigger = str_split(str_pad('', ++$max, 'a'));
+
+        $this->post->tags($trigger);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testTags(): void
+    {
+        $tags = [str_pad('', 640, 'a')];
+        $this->post->tags($tags);
+
+        $result = json_decode($this->post, true);
+
+        $this->assertArrayHasKey('tags', $result);
+        $this->assertEquals($tags, $result['tags']);
+    }
+
     /**
      * @throws InvalidArgumentException
      */
@@ -241,15 +276,13 @@ class PostTest extends TestCase
         $embed = $this->createMock(EmbedInterface::class);
         $embed->method('jsonSerialize')->willReturn(['embedKey' => 'embedValue']);
         $this->post->embed($embed);
-        $sRef = new StrongRef('foo', 'bar');
-        $this->post->reply($sRef, clone $sRef);
+        $this->post->reply($sRef = new StrongRef('foo', 'bar'), clone $sRef);
         $this->post->langs(['en', 'fr', 'es']);
-        $this->post->labels(new SelfLabels([
-            'val 1',
-            'val 2'
-        ]));
+        $this->post->labels(new SelfLabels(str_split(str_pad('', 2, 'val'))));
+        $this->post->tags(str_split(str_pad('', 2, 'tag')));
 
         $result = $this->post->jsonSerialize();
+
         $this->assertArrayHasKey('$type', $result);
         $this->assertEquals('app.bsky.feed.post', $result['$type']);
         $this->assertArrayHasKey('text', $result);
@@ -259,6 +292,7 @@ class PostTest extends TestCase
         $this->assertArrayHasKey('replyRef', $result);
         $this->assertArrayHasKey('langs', $result);
         $this->assertArrayHasKey('labels', $result);
+        $this->assertArrayHasKey('tags', $result);
     }
 
     public function testConstructorWorksCorrectlyOnDirectBuild()

@@ -28,4 +28,6 @@ interface PostBuilderContract extends LexiconBuilder, Stringable
     public function langs(array $languages): PostBuilderContract;
 
     public function labels(SelfLabels $labels): PostBuilderContract;
+
+    public function tags(array $tags): PostBuilderContract;
 }
