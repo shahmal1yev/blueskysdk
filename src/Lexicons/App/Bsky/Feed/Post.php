@@ -28,6 +28,7 @@ class Post implements PostBuilderContract
     private ?array $reply = null;
     private ?array $languages = null;
     private ?SelfLabels $labels = null;
+    private ?array $tags = null;
 
 
     public function __construct()
@@ -131,6 +132,37 @@ class Post implements PostBuilderContract
     }
 
     /**
+     * @throws InvalidArgumentException
+     */
+    public function tags(array $tags): PostBuilderContract
+    {
+        $maxLength = 8;
+        $maxLengthByTag = 640;
+
+        if (count($tags) > $maxLength) {
+            throw new InvalidArgumentException('A maximum of 8 tags is allowed.');
+        }
+
+        $invalid = array_filter($tags, function ($tag) {
+            if (mb_strlen($tag) > 640) {
+                return true;
+            }
+        });
+
+        if (! empty($invalid)) {
+            throw new InvalidArgumentException(sprintf(
+                "Invalid tags: %s. A tag maximum of %s characters is allowed.",
+                implode(', ', $invalid),
+                $maxLengthByTag
+            ));
+        }
+
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
      * Validates the format of a language code.
      *
      * @param string $lang
@@ -175,7 +207,8 @@ class Post implements PostBuilderContract
             'embed' => $this->embed,
             'replyRef' => $this->reply,
             'langs' => $this->languages,
-            'labels' => $this->labels
+            'labels' => $this->labels,
+            'tags' => $this->tags,
         ]);
     }
 
