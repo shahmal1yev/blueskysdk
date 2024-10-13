@@ -11,6 +11,7 @@ use Atproto\Lexicons\App\Bsky\RichText\ByteSlice;
 use Atproto\Lexicons\App\Bsky\RichText\Facet;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureFactory;
+use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Carbon\Carbon;
 use DateTimeImmutable;
@@ -26,6 +27,8 @@ class Post implements PostBuilderContract
     private ?EmbedInterface $embed = null;
     private ?array $reply = null;
     private ?array $languages = null;
+    private ?SelfLabels $labels = null;
+
 
     public function __construct()
     {
@@ -120,6 +123,13 @@ class Post implements PostBuilderContract
         return $this;
     }
 
+    public function labels(SelfLabels $labels): PostBuilderContract
+    {
+        $this->labels = $labels;
+
+        return $this;
+    }
+
     /**
      * Validates the format of a language code.
      *
@@ -165,6 +175,7 @@ class Post implements PostBuilderContract
             'embed' => $this->embed,
             'replyRef' => $this->reply,
             'langs' => $this->languages,
+            'labels' => $this->labels
         ]);
     }
 
