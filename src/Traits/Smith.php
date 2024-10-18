@@ -23,7 +23,7 @@ trait Smith
     /**
      * @throws RequestNotFoundException
      */
-    public function forge(...$arguments): RequestContract
+    public function forge(...$arguments)
     {
         $arguments = array_merge([$this], array_values($arguments));
 
@@ -36,7 +36,10 @@ trait Smith
         /** @var APIRequestContract $request */
         $request = new $request(...$arguments);
 
-        $this->attach($request);
+        if ($request instanceof \SplObserver) {
+            $this->attach($request);
+        }
+
         $this->refresh();
 
         return $request;

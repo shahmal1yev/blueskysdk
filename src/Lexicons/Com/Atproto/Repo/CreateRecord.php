@@ -3,12 +3,13 @@
 namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
-class CreateRecord extends APIRequest
+class CreateRecord extends APIRequest implements LexiconContract
 {
     protected array $required = [
         'repo',
@@ -103,5 +104,21 @@ class CreateRecord extends APIRequest
     public function resource(array $data): ResourceContract
     {
         return new CreateRecordResource($data);
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this);
+    }
+
+    public function jsonSerialize()
+    {
+        return array_filter([
+            'repo' => $this->repo(),
+            'collection' => $this->collection(),
+            'record' => $this->record(),
+            'swapCommit' => $this->swapCommit(),
+            'validate' => $this->validate(),
+        ]);
     }
 }
