@@ -4,7 +4,7 @@ namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
 use Atproto\Client;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
-use Atproto\HTTP\API\Requests\Com\Atproto\Repo\CreateRecord;
+use Atproto\Lexicons\Com\Atproto\Repo\CreateRecord;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;

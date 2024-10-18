@@ -62,10 +62,10 @@ interface RequestContract
      * Get or set a query parameter in the request.
      *
      * @param string $name The query parameter name
-     * @param string|null $value The query parameter value to set, or null to get the current value.
+     * @param array|string|null $value The query parameter value to set, or null to get the current value.
      * @return mixed|string|null The query parameter value or instance for chaining
      */
-    public function queryParameter(string $name, string $value = null);
+    public function queryParameter(string $name, $value = null);
 
     /**
      * Get or set multiple headers at once.

@@ -6,9 +6,9 @@ use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\API\Requests\App\Bsky\Actor\GetProfile;
-use Atproto\HTTP\Request;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
+use Atproto\Lexicons\Request;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;
@@ -90,8 +90,10 @@ class GetProfileTest extends TestCase
 
     public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
     {
+        $this->request->token($this->faker->word);
+
         $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing provided fields: actor, token");
+        $this->expectExceptionMessage("Missing fields provided: actor");
 
         $this->request->build();
     }

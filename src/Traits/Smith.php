@@ -10,7 +10,7 @@ use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 
 trait Smith
 {
-    private string $prefix = "Atproto\\HTTP\\API\\Requests\\";
+    private string $prefix = "Atproto\\Lexicons\\";
     private array $path = [];
 
     public function __call(string $name, array $arguments): Client
@@ -23,7 +23,7 @@ trait Smith
     /**
      * @throws RequestNotFoundException
      */
-    public function forge(...$arguments): RequestContract
+    public function forge(...$arguments)
     {
         $arguments = array_merge([$this], array_values($arguments));
 
@@ -36,7 +36,10 @@ trait Smith
         /** @var APIRequestContract $request */
         $request = new $request(...$arguments);
 
-        $this->attach($request);
+        if ($request instanceof \SplObserver) {
+            $this->attach($request);
+        }
+
         $this->refresh();
 
         return $request;

@@ -3,8 +3,8 @@
 namespace Tests\Unit\HTTP\API;
 
 use Atproto\Client;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
 use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 use Tests\Supports\Reflection;
@@ -23,7 +23,7 @@ class APIRequestTest extends TestCase
         $clientMock = $this->createMock(Client::class);
 
         $clientMock->method('path')->willReturn(str_replace(
-            'Atproto\\HTTP\\API\\Requests\\',
+            'Atproto\\Lexicons\\',
             '',
             CreateSession::class
         ));

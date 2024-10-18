@@ -4,7 +4,7 @@ namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
-use Atproto\Helpers\File;
+use Atproto\Support\File;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use InvalidArgumentException;
 
