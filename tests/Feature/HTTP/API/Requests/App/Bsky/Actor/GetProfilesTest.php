@@ -7,7 +7,7 @@ use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\Http\Response\InvalidTokenException;
-use Atproto\HTTP\API\Requests\App\Bsky\Actor\GetProfiles;
+use Atproto\Lexicons\App\Bsky\Actor\GetProfiles;
 use Atproto\Resources\App\Bsky\Actor\GetProfilesResource;
 use Atproto\Resources\Assets\ProfileAsset;
 use GenericCollection\Exceptions\InvalidArgumentException;

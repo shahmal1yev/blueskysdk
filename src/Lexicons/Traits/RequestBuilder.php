@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\HTTP\Traits;
+namespace Atproto\Lexicons\Traits;
 
 trait RequestBuilder
 {

@@ -4,7 +4,7 @@ namespace Tests\Unit\HTTP;
 
 use ArgumentCountError;
 use Atproto\Contracts\RequestContract;
-use Atproto\HTTP\Request;
+use Atproto\Lexicons\Request;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;

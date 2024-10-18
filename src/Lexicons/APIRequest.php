@@ -1,11 +1,10 @@
 <?php
 
-namespace Atproto\HTTP\API;
+namespace Atproto\Lexicons;
 
 use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\HTTP\Request;
 use SplSubject;
 
 abstract class APIRequest extends Request implements APIRequestContract

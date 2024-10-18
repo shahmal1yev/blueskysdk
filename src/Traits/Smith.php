@@ -10,7 +10,7 @@ use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 
 trait Smith
 {
-    private string $prefix = "Atproto\\HTTP\\API\\Requests\\";
+    private string $prefix = "Atproto\\Lexicons\\";
     private array $path = [];
 
     public function __call(string $name, array $arguments): Client

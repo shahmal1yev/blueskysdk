@@ -5,8 +5,8 @@ namespace Tests\Unit;
 use Atproto\Client;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestNotFoundException;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -48,7 +48,7 @@ class ClientTest extends TestCase
 
         $namespace = $method->invoke($this->client);
 
-        $expectedNamespace = 'Atproto\\HTTP\\API\\Requests\\App\\Bsky\\Actor';
+        $expectedNamespace = 'Atproto\\Lexicons\\App\\Bsky\\Actor';
         $this->assertSame($expectedNamespace, $namespace);
     }
 
@@ -57,7 +57,7 @@ class ClientTest extends TestCase
         $this->client->nonExistentMethod();
 
         $this->expectException(RequestNotFoundException::class);
-        $this->expectExceptionMessage("Atproto\\HTTP\\API\\Requests\\NonExistentMethod class does not exist.");
+        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod class does not exist.");
 
         $this->client->forge();
     }

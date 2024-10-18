@@ -1,10 +1,10 @@
 <?php
 
-namespace Atproto\HTTP;
+namespace Atproto\Lexicons;
 
 use Atproto\Contracts\RequestContract;
-use Atproto\HTTP\Traits\RequestBuilder;
-use Atproto\HTTP\Traits\RequestHandler;
+use Atproto\Lexicons\Traits\RequestBuilder;
+use Atproto\Lexicons\Traits\RequestHandler;
 
 class Request implements RequestContract
 {

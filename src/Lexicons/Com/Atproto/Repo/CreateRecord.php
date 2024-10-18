@@ -1,11 +1,11 @@
 <?php
 
-namespace Atproto\HTTP\API\Requests\Com\Atproto\Repo;
+namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
-use Atproto\HTTP\API\APIRequest;
+use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
 class CreateRecord extends APIRequest

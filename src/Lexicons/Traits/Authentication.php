@@ -1,9 +1,9 @@
 <?php
 
-namespace Atproto\HTTP\Traits;
+namespace Atproto\Lexicons\Traits;
 
 use Atproto\Client;
-use Atproto\HTTP\API\APIRequest;
+use Atproto\Lexicons\APIRequest;
 use SplSubject;
 
 trait Authentication

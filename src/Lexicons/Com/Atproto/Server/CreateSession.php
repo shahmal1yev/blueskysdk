@@ -1,11 +1,11 @@
 <?php
 
-namespace Atproto\HTTP\API\Requests\Com\Atproto\Server;
+namespace Atproto\Lexicons\Com\Atproto\Server;
 
 use Atproto\Client;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
-use Atproto\HTTP\API\APIRequest;
+use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
 class CreateSession extends APIRequest

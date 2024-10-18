@@ -6,7 +6,7 @@ use Atproto\Client;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\HTTP\API\Requests\App\Bsky\Actor\GetProfiles;
+use Atproto\Lexicons\App\Bsky\Actor\GetProfiles;
 use Atproto\Resources\App\Bsky\Actor\GetProfilesResource;
 use GenericCollection\GenericCollection;
 use GenericCollection\Types\Primitive\StringType;

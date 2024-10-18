@@ -7,7 +7,7 @@ use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\HTTP\API\Requests\App\Bsky\Graph\GetFollowers;
+use Atproto\Lexicons\App\Bsky\Graph\GetFollowers;
 use PHPUnit\Framework\TestCase;
 
 class GetFollowersTest extends TestCase

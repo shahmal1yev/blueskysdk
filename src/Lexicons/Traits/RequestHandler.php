@@ -1,6 +1,6 @@
 <?php
 
-namespace Atproto\HTTP\Traits;
+namespace Atproto\Lexicons\Traits;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Exceptions\BlueskyException;

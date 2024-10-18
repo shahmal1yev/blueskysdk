@@ -1,14 +1,13 @@
 <?php
 
-namespace Atproto\HTTP\API\Requests\App\Bsky\Actor;
+namespace Atproto\Lexicons\App\Bsky\Actor;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
-use Atproto\Support\Arr;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\Traits\Authentication;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Exception;
 

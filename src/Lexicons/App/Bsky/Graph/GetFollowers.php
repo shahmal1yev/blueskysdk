@@ -1,16 +1,16 @@
 <?php
 
-namespace Atproto\HTTP\API\Requests\App\Bsky\Graph;
+namespace Atproto\Lexicons\App\Bsky\Graph;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Support\Arr;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\Traits\Authentication;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Graph\GetFollowersResource;
+use Atproto\Support\Arr;
 
 class GetFollowers extends APIRequest
 {
