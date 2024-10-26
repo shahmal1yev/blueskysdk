@@ -6,8 +6,8 @@ use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\ChatAsset;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Tests\Supports\PrimitiveAssetTest;
 use Tests\Supports\NonPrimitiveAssetTest;
+use Tests\Supports\PrimitiveAssetTest;
 
 class AssociatedAssetTest extends TestCase
 {

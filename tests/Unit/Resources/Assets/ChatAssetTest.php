@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Resources\Assets\ChatAsset;
 use PHPUnit\Framework\TestCase;
 use Tests\Supports\PrimitiveAssetTest;

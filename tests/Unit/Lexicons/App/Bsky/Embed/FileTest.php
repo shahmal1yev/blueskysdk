@@ -2,55 +2,61 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Embed\Blob;
+use Atproto\Support\FileSupport;
 use PHPUnit\Framework\TestCase;
 
 class FileTest extends TestCase
 {
     private string $testFilePath;
-    private string $unreadableFilePath;
-    private string $nonFilePath;
+    private string $testDirPath;
     private Blob $fileInstance;
+    private const FILE_PREFIX = '__FileTest__';
 
-    /**
-     * @throws InvalidArgumentException
-     */
     protected function setUp(): void
     {
-        parent::setUp();
+        // Create a temporary test file
+        $this->testFilePath = tempnam(sys_get_temp_dir(), self::FILE_PREFIX);
+        file_put_contents($this->testFilePath, 'test content');
 
-        $this->testFilePath = tempnam(sys_get_temp_dir(), 'testfile');
-        file_put_contents($this->testFilePath, 'This is a test file.');
-        $this->fileInstance = new Blob($this->testFilePath);
+        // Create a temporary test directory
+        $this->testDirPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . self::FILE_PREFIX . uniqid();
+        mkdir($this->testDirPath);
 
-        $this->unreadableFilePath = tempnam(sys_get_temp_dir(), 'unreadable');
-        file_put_contents($this->unreadableFilePath, 'This is an unreadable file.');
-        chmod($this->unreadableFilePath, 0000);
-
-        $this->nonFilePath = sys_get_temp_dir() . '/nonFile' . uniqid();
-        mkdir($this->nonFilePath, 0777, true);
+        // Create file instance using the factory method
+        $fileSupport = new FileSupport($this->testFilePath);
+        $this->fileInstance = Blob::viaFile($fileSupport);
     }
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-
+        // Clean up test files
         if (file_exists($this->testFilePath)) {
             unlink($this->testFilePath);
         }
-
-        if (file_exists($this->unreadableFilePath)) {
-            chmod($this->unreadableFilePath, 0644);
-            unlink($this->unreadableFilePath);
-        }
-
-        if (is_dir($this->nonFilePath)) {
-            rmdir($this->nonFilePath);
+        if (is_dir($this->testDirPath)) {
+            rmdir($this->testDirPath);
         }
     }
 
-    public function testFileSize(): void
+    public function testConstructorThrowsExceptionForNonExistentFile(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $nonExistentFile = new FileSupport('/path/to/nonexistent/file');
+        Blob::viaFile($nonExistentFile);
+    }
+
+    public function testConstructorThrowsExceptionForDirectory(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $directory = new FileSupport($this->testDirPath);
+        Blob::viaFile($directory);
+    }
+
+    public function testSize(): void
     {
         $expectedSize = filesize($this->testFilePath);
         $this->assertEquals($expectedSize, $this->fileInstance->size());
@@ -59,40 +65,18 @@ class FileTest extends TestCase
     public function testMimeType(): void
     {
         $expectedType = mime_content_type($this->testFilePath);
-        $this->assertEquals($expectedType, $this->fileInstance->type());
+        $this->assertEquals($expectedType, $this->fileInstance->mimeType());
     }
 
-    public function testFileBlob(): void
+    public function testJsonSerialize(): void
     {
-        $expectedContent = file_get_contents($this->testFilePath);
-        $this->assertEquals($expectedContent, $this->fileInstance->blob());
-    }
+        $serialized = json_decode(json_encode($this->fileInstance), true);
 
-    public function testToStringMethod(): void
-    {
-        $expectedContent = file_get_contents($this->testFilePath);
-        $this->assertEquals($expectedContent, (string) $this->fileInstance);
-    }
+        $this->assertArrayHasKey('$type', $serialized);
+        $this->assertArrayHasKey('ref', $serialized);
+        $this->assertArrayHasKey('mimeType', $serialized);
+        $this->assertArrayHasKey('size', $serialized);
 
-    public function testConstructorThrowsExceptionWhenPassedUnreadableFilePath(): void
-    {
-        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
-            $this->markTestSkipped('Test skipped because it is running as root.');
-        }
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("$this->unreadableFilePath is not readable.");
-
-        $this->assertFalse(is_readable($this->unreadableFilePath), 'File should not be readable.');
-
-        new Blob($this->unreadableFilePath);
-    }
-
-    public function testConstructorThrowsExceptionWhenPassedNonFilePath(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("$this->nonFilePath is not a file.");
-
-        new Blob($this->nonFilePath);
+        $this->assertEquals('blob', $serialized['$type']);
     }
 }

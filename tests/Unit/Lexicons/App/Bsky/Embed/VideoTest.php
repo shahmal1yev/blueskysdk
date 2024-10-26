@@ -2,18 +2,17 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Embed\Caption;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
-use Atproto\Lexicons\App\Bsky\Embed\Blob;
 use Atproto\Lexicons\App\Bsky\Embed\Video;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class VideoTest extends TestCase
 {
-    use FileMocking;
+    use FileMock;
 
     private Video $video;
     private Blob $file;
@@ -69,15 +68,13 @@ class VideoTest extends TestCase
 
     public function testJsonSerializeReturnsCorrectSchema(): void
     {
-        $this->assertSame($this->file->blob(), $this->blob);
-
         $expected = [
-            'video' => $this->file->blob(),
+            'video' => $this->file,
         ];
 
         $target = new Video($this->file);
 
-        $this->assertSame($expected, json_decode($target, true));
+        $this->assertSame($expected, $target->jsonSerialize());
 
         $captions = $this->createCaptionsMock();
         $aspectRatio = $this->randAspectRatio();
@@ -93,7 +90,7 @@ class VideoTest extends TestCase
             ->alt($expected['alt'])
             ->aspectRatio(...array_values($expected['aspectRatio']));
 
-        $this->assertSame($expected, json_decode($target, true));
+        $this->assertSame($expected, $target->jsonSerialize());
     }
 
     /**
@@ -109,7 +106,7 @@ class VideoTest extends TestCase
      */
     private function createCaptionsMock(): CaptionCollection
     {
-        $caption = $this->getMockBuilder(CaptionInterface::class)
+        $caption = $this->getMockBuilder(CaptionContract::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -117,7 +114,7 @@ class VideoTest extends TestCase
             ->method('jsonSerialize')
             ->willReturn([
                 'lang' => 'lang',
-                'file' => $this->file->blob(),
+                'file' => $this->file,
             ]);
 
         $captions = $this->getMockBuilder(CaptionCollection::class)

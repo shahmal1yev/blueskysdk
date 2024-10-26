@@ -3,7 +3,6 @@
 namespace Tests\Unit\Resources\Assets\Resources\Assets;
 
 use Atproto\Resources\Assets\BlockingByListAsset;
-use Atproto\Resources\Assets\FollowersAsset;
 use Atproto\Resources\Assets\KnownFollowersAsset;
 use Atproto\Resources\Assets\LabelsAsset;
 use Atproto\Resources\Assets\MutedByListAsset;

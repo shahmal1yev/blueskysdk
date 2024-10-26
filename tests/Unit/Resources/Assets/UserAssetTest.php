@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Resources\Assets;
 
-use Atproto\Resources\Assets\UserAsset;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\DatetimeAsset;
 use Atproto\Resources\Assets\JoinedViaStarterPackAsset;
-use Atproto\Resources\Assets\ViewerAsset;
 use Atproto\Resources\Assets\LabelsAsset;
+use Atproto\Resources\Assets\UserAsset;
+use Atproto\Resources\Assets\ViewerAsset;
 use Carbon\Carbon;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

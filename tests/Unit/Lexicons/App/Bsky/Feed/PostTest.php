@@ -5,12 +5,10 @@ namespace Tests\Unit\Lexicons\App\Bsky\Feed;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
-use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\Mention;
 use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Carbon\Carbon;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class PostTest extends TestCase

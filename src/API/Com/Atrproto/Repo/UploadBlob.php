@@ -4,7 +4,7 @@ namespace Atproto\API\Com\Atrproto\Repo;
 
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
-use Atproto\Support\File;
+use Atproto\Support\FileSupport;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use InvalidArgumentException;
 
@@ -20,7 +20,7 @@ class UploadBlob implements RequestContract
     /** @var object $body The request body */
     private $body;
 
-    /** @var File The blob content. */
+    /** @var FileSupport The blob content. */
     private $blob;
 
     /** @var array The headers for the request. */
@@ -53,7 +53,7 @@ class UploadBlob implements RequestContract
      */
     public function setBlob($filePath)
     {
-        $file = new File($filePath);
+        $file = new FileSupport($filePath);
 
         if (! $file->exists()) {
             throw new InvalidArgumentException("File '$filePath' does not exist");
@@ -76,7 +76,7 @@ class UploadBlob implements RequestContract
     /**
      * Get the blob content.
      *
-     * @return ?File The blob content.
+     * @return ?FileSupport The blob content.
      */
     public function getBlob()
     {

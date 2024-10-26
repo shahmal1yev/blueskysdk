@@ -2,23 +2,17 @@
 
 namespace Tests\Unit\Resources\App\Bsky\Actor;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\DatetimeAsset;
 use Atproto\Resources\Assets\JoinedViaStarterPackAsset;
-use Atproto\Resources\Assets\LabelAsset;
 use Atproto\Resources\Assets\ViewerAsset;
-use Carbon\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
-use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 use PHPUnit\Framework\TestCase;
-use Tests\Supports\PrimitiveAssetTest;
 use Tests\Supports\DateAssetTest;
 use Tests\Supports\NonPrimitiveAssetTest;
+use Tests\Supports\PrimitiveAssetTest;
 
 class GetProfileResourceTest extends TestCase
 {

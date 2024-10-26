@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class CaptionTest extends TestCase
 {
-    use FileMocking;
+    use FileMock;
 
     private Caption $caption;
     private array $dependencies = ['lang' => 'lang'];
@@ -78,7 +78,7 @@ class CaptionTest extends TestCase
     public function testJsonSerialize()
     {
         $expected = [
-            'file' => $this->blob,
+            'file' => $this->createMockFile()->jsonSerialize(),
             'lang' => $this->dependencies['lang'],
         ];
 
@@ -93,7 +93,7 @@ class CaptionTest extends TestCase
         $this->type = 'image/png';
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage($this->dependencies['file']->path()." is not a text/vtt file.");
+        $this->expectExceptionMessage('$file is not a text/vtt file.');
 
         $this->createCaption();
     }
@@ -103,7 +103,7 @@ class CaptionTest extends TestCase
         $this->size = 20001;
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage($this->dependencies['file']->path()." is too large. Max size: 20000");
+        $this->expectExceptionMessage('$file is too large. Max size: 20000');
 
         $this->createCaption();
     }

@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Resources\Assets;
 
+use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Resources\Assets\BaseAsset;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Tests\Supports\AssetTest;
 
 class BaseAssetTest extends TestCase

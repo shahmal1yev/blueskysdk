@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Embed\Blob;
 use Atproto\Lexicons\App\Bsky\Embed\External;
 use PHPUnit\Framework\TestCase;
 
@@ -28,12 +28,8 @@ class ExternalTest extends TestCase
             ->will($this->returnCallback(fn () => $this->maximumAllowedBlobSize));
 
         $this->blob->expects($this->any())
-            ->method('type')
+            ->method('mimeType')
             ->will($this->returnCallback(fn () => $this->allowedMimes));
-
-        $this->blob->expects($this->any())
-            ->method('blob')
-            ->willReturn('blob');
     }
 
     public function testDescription()
@@ -129,7 +125,7 @@ class ExternalTest extends TestCase
             'uri' => 'https://shahmal1yev.dev',
             'title' => 'foo',
             'description' => 'bar',
-            'blob' => 'blob',
+            'blob' => $this->blob->jsonSerialize(),
         ];
 
         $this->assertSame($expected, json_decode($this->external, true));

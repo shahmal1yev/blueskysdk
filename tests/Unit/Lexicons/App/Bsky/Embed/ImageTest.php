@@ -10,7 +10,7 @@ use Tests\Supports\Reflection;
 
 class ImageTest extends TestCase
 {
-    use FileMocking;
+    use FileMock;
     use Reflection;
 
     private Image $image;
@@ -113,12 +113,12 @@ class ImageTest extends TestCase
     {
         $expected = [
             'alt' => $this->dependencies['alt'],
-            'image' => $this->dependencies['file']->blob(),
+            'image' => $this->dependencies['file'],
         ];
 
         $image = $this->createImage();
 
-        $this->assertSame($expected, json_decode($image, true));
+        $this->assertSame($expected, $image->jsonSerialize());
 
         $aspectRatio = $this->randAspectRatio();
 
@@ -126,7 +126,7 @@ class ImageTest extends TestCase
 
         $image->aspectRatio(...array_values($aspectRatio));
 
-        $this->assertSame($expected, json_decode($image, true));
+        $this->assertSame($expected, $image->jsonSerialize());
     }
 
     /**

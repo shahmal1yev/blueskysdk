@@ -111,7 +111,7 @@ class CreateRecord extends APIRequest implements LexiconContract
         return json_encode($this);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_filter([
             'repo' => $this->repo(),
