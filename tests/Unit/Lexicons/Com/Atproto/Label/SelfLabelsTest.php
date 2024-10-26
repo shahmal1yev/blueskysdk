@@ -35,8 +35,10 @@ class SelfLabelsTest extends TestCase
 
     public function test__constructorThrowsInvalidArgumentExceptionWhenPassedInvalidArgument(): void
     {
+        $givenLabel = (PHP_VERSION_ID < 80000) ? 'object' : 'stdClass';
+
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("must be of the type string");
+        $this->expectExceptionMessage("$givenLabel given");
 
         $this->selfLabels = new SelfLabels(['val 1', new stdClass()]);
     }

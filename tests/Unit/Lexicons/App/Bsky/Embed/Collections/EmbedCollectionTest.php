@@ -47,8 +47,7 @@ trait EmbedCollectionTest
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
-            "must implement interface %s, instance of %s given",
-            $this->dependency,
+            "%s given",
             get_class($given)
         ));
 
