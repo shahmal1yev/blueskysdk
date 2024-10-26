@@ -2,11 +2,11 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use JsonSerializable;
 
-class Caption implements CaptionInterface
+class Caption implements CaptionContract
 {
     private const MAX_SIZE = 20000;
 
@@ -43,11 +43,11 @@ class Caption implements CaptionInterface
         }
 
         if ($file->size() > self::MAX_SIZE) {
-            throw new InvalidArgumentException($file->path().' is too large. Max size: '.self::MAX_SIZE);
+            throw new InvalidArgumentException('$file is too large. Max size: '.self::MAX_SIZE);
         }
 
-        if ($file->type() !== 'text/vtt') {
-            throw new InvalidArgumentException($file->path().' is not a text/vtt file.');
+        if ($file->mimeType() !== 'text/vtt') {
+            throw new InvalidArgumentException('$file is not a text/vtt file.');
         }
 
         $this->file = $file;
@@ -62,7 +62,7 @@ class Caption implements CaptionInterface
     {
         return [
             'lang' => $this->lang(),
-            'file'  => $this->file()->blob(),
+            'file'  => $this->file(),
         ];
     }
 

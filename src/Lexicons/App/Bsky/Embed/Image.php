@@ -3,6 +3,7 @@
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\ImageInterface;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 
 class Image implements ImageInterface
@@ -16,7 +17,7 @@ class Image implements ImageInterface
      */
     public function __construct(Blob $file, string $alt)
     {
-        if (true !== str_starts_with($file->type(), 'image/')) {
+        if (true !== str_starts_with($file->mimeType(), 'image/')) {
             throw new InvalidArgumentException($file->path()." is not a valid image file.");
         }
 
@@ -63,7 +64,7 @@ class Image implements ImageInterface
     {
         return array_filter([
             'alt' => $this->alt(),
-            'image' => $this->file->blob(),
+            'image' => $this->file,
             'aspectRatio' => $this->aspectRatio() ?: null,
         ]);
     }

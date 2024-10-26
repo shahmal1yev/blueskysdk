@@ -4,11 +4,11 @@ namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\ImageInterface;
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 
-class ImageCollection extends GenericCollection implements EmbedInterface, MediaInterface
+class ImageCollection extends GenericCollection implements EmbedInterface, MediaContract
 {
     use EmbedCollection;
 

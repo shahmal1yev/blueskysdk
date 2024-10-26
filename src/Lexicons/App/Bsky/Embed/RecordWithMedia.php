@@ -2,20 +2,20 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 
 class RecordWithMedia extends Record
 {
-    private MediaInterface $media;
+    private MediaContract $media;
 
-    public function __construct(StrongRef $ref, MediaInterface $media)
+    public function __construct(StrongRef $ref, MediaContract $media)
     {
         parent::__construct($ref);
         $this->media($media);
     }
 
-    public function media(MediaInterface $media = null)
+    public function media(MediaContract $media = null)
     {
         if (is_null($media)) {
             return $this->media;

@@ -2,12 +2,13 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
 
-class Video implements VideoInterface, MediaInterface
+class Video implements VideoInterface, MediaContract
 {
     private Blob $file;
     private ?string $alt = null;
@@ -19,7 +20,7 @@ class Video implements VideoInterface, MediaInterface
      */
     public function __construct(Blob $file)
     {
-        if ("video/mp4" !== $file->type()) {
+        if ("video/mp4" !== $file->mimeType()) {
             throw new InvalidArgumentException($file->path()." is not a valid video file.");
         }
 
@@ -35,7 +36,7 @@ class Video implements VideoInterface, MediaInterface
     {
         $result = array_filter([
             'alt' => $this->alt() ?: null,
-            'video' => $this->file->blob(),
+            'video' => $this->file,
             'aspectRatio' => $this->aspectRatio() ?: null,
             'captions' => $this->captions()->toArray() ?: null,
         ]);

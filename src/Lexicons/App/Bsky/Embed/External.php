@@ -3,10 +3,11 @@
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 
-class External implements EmbedInterface, MediaInterface
+class External implements EmbedInterface, MediaContract
 {
     private string $uri;
     private string $title;
@@ -69,18 +70,16 @@ class External implements EmbedInterface, MediaInterface
             return $this->blob;
         }
 
-        if (! str_starts_with($blob->type(), 'image/*')) {
+        if (! str_starts_with($blob->mimeType(), 'image/*')) {
             throw new InvalidArgumentException(sprintf(
-                "'%s' is not a valid image type: %s",
-                $blob->path(),
-                $blob->type()
+                "\$blob is not a valid image type: %s",
+                $blob->mimeType()
             ));
         }
 
         if (1000000 < $blob->size()) {
             throw new InvalidArgumentException(sprintf(
-                "'%s' size is too big than maximum allowed: %d",
-                $blob->path(),
+                "\$blob size is too big than maximum allowed: %d",
                 $blob->size()
             ));
         }
@@ -96,7 +95,7 @@ class External implements EmbedInterface, MediaInterface
             'uri' => $this->uri,
             'title' => $this->title,
             'description' => $this->description,
-            'blob' => ($b = $this->blob) ? $b->blob() : null,
+            'blob' => ($b = $this->blob) ? $b : null,
         ]);
     }
 

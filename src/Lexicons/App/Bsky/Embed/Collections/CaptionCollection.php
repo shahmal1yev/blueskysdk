@@ -2,7 +2,7 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
-use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionInterface;
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use JsonSerializable;
@@ -14,7 +14,7 @@ class CaptionCollection extends GenericCollection implements JsonSerializable
 
     protected function validator(): \Closure
     {
-        return function (CaptionInterface $caption) {
+        return function (CaptionContract $caption) {
             if ($this->count() > self::MAX_SIZE) {
                 throw new InvalidArgumentException(self::class.' collection exceeds maximum size: ' .self::MAX_SIZE);
             }
