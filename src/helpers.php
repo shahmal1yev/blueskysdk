@@ -57,24 +57,3 @@ if (! function_exists('encode_varint')) {
         return $encoded;
     }
 }
-
-if (! function_exists('decode_varint')) {
-    function decode_varint(string $data): int
-    {
-        $number = 0;
-        $shift = 0;
-
-        foreach (str_split($data) as $char) {
-            $byte = ord($char);
-            $number |= ($byte & 0x7F) << $shift;
-
-            if (($byte & 0x80) === 0) {
-                break;
-            }
-
-            $shift += 7;
-        }
-
-        return $number;
-    }
-}
