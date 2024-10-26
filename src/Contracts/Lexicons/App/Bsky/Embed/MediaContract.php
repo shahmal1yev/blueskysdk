@@ -2,7 +2,6 @@
 
 namespace Atproto\Contracts\Lexicons\App\Bsky\Embed;
 
-interface MediaInterface
+interface MediaContract
 {
-
 }

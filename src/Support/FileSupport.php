@@ -7,7 +7,7 @@ namespace Atproto\Support;
  *
  * Helper class for file-related operations.
  */
-class File
+class FileSupport
 {
     /** @var string $file_path The path to the file. */
     private string $file_path;
@@ -92,6 +92,11 @@ class File
     public function isFile()
     {
         return is_file($this->file_path);
+    }
+
+    public function isReadable(): bool
+    {
+        return is_readable($this->file_path);
     }
 
     /**
