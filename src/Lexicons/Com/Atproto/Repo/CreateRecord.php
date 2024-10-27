@@ -7,15 +7,25 @@ use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Traits\Authentication;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
 class CreateRecord extends APIRequest implements LexiconContract
 {
+    use Authentication;
+
     protected array $required = [
         'repo',
         'collection',
         'record'
     ];
+
+    protected function initialize(): void
+    {
+        parent::initialize();
+
+        $this->method('POST');
+    }
 
     public function repo(string $repo = null)
     {
