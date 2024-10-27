@@ -29,4 +29,17 @@ class ImageCollection extends GenericCollection implements EmbedInterface, Media
             return true;
         };
     }
+
+    public function type(): string
+    {
+        return 'app.bsky.embed.images';
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'images' => $this->toArray(),
+            '$type' => $this->type(),
+        ];
+    }
 }

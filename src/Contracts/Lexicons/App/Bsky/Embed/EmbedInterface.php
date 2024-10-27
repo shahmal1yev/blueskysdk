@@ -6,4 +6,5 @@ use Atproto\Contracts\Stringable;
 
 interface EmbedInterface extends \JsonSerializable, Stringable
 {
+    public function type(): string;
 }

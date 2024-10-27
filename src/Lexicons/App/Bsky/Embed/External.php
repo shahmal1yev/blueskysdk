@@ -92,6 +92,7 @@ class External implements EmbedInterface, MediaContract
     public function jsonSerialize(): array
     {
         return array_filter([
+            '$type' => $this->type(),
             'uri' => $this->uri,
             'title' => $this->title,
             'description' => $this->description,
@@ -102,5 +103,10 @@ class External implements EmbedInterface, MediaContract
     public function __toString(): string
     {
         return json_encode($this);
+    }
+
+    public function type(): string
+    {
+        return 'app.bsky.embed.external';
     }
 }

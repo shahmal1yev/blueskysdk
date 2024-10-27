@@ -35,6 +35,7 @@ class Video implements VideoInterface, MediaContract
     public function jsonSerialize(): array
     {
         $result = array_filter([
+            '$type' => $this->type(),
             'alt' => $this->alt() ?: null,
             'video' => $this->file,
             'aspectRatio' => $this->aspectRatio() ?: null,
@@ -91,5 +92,10 @@ class Video implements VideoInterface, MediaContract
     {
         $result = json_encode($this);
         return $result;
+    }
+
+    public function type(): string
+    {
+        return 'app.bsky.embed.video';
     }
 }

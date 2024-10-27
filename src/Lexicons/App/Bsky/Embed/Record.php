@@ -22,7 +22,13 @@ class Record implements EmbedInterface
     public function jsonSerialize(): array
     {
         return [
+            '$type' => $this->type(),
             'record' => $this->ref,
         ];
+    }
+
+    public function type(): string
+    {
+        return 'app.bsky.embed.record';
     }
 }
