@@ -5,7 +5,6 @@ namespace Atproto\Traits;
 use Atproto\Client;
 use Atproto\Contracts\HTTP\APIRequestContract;
 use Atproto\Contracts\Observer;
-use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 
 trait Smith

@@ -2,8 +2,6 @@
 
 namespace Atproto\Contracts;
 
-use Exception;
-
 /**
  * Interface AuthStrategyContract
  *

@@ -2,9 +2,9 @@
 
 namespace Atproto\DataModel\Blob;
 
+use Atproto\Contracts\DataModel\BlobHandler;
 use Atproto\Exceptions\InvalidArgumentException;
 use finfo;
-use Atproto\Contracts\DataModel\BlobHandler;
 
 class BinaryBlobHandler implements BlobHandler
 {

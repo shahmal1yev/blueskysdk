@@ -2,8 +2,8 @@
 
 namespace Atproto\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
 use Atproto\Collections\Types\NonPrimitive\LabelAssetType;
+use Atproto\Contracts\HTTP\Resources\AssetContract;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\TypeInterface;

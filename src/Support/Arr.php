@@ -2,8 +2,6 @@
 
 namespace Atproto\Support;
 
-use ArrayAccess;
-
 class Arr
 {
     /**

@@ -5,7 +5,6 @@ namespace Atproto\API\Com\Atrproto\Repo;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
 use Atproto\Support\FileSupport;
-use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use InvalidArgumentException;
 
 /**

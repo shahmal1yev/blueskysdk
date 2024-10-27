@@ -3,7 +3,6 @@
 namespace Atproto\Contracts;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use stdClass;
 
 /**

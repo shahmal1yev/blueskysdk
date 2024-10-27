@@ -2,9 +2,9 @@
 
 namespace Atproto\DataModel\Blob;
 
+use Atproto\Contracts\DataModel\BlobHandler;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Support\FileSupport;
-use Atproto\Contracts\DataModel\BlobHandler;
 
 class FileBlobHandler implements BlobHandler
 {

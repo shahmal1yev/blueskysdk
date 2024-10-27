@@ -2,12 +2,12 @@
 
 namespace Atproto\DataModel\Blob;
 
+use Atproto\Contracts\DataModel\BlobContract;
+use Atproto\Contracts\DataModel\BlobHandler;
 use Atproto\IPFS\CID\CID;
 use Atproto\MultiFormats\MultiBase\MultiBase;
 use Atproto\MultiFormats\MultiCodec;
 use Atproto\Support\FileSupport;
-use Atproto\Contracts\DataModel\BlobContract;
-use Atproto\Contracts\DataModel\BlobHandler;
 
 class Blob implements BlobContract
 {

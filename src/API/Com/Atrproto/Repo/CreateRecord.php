@@ -5,7 +5,6 @@ namespace Atproto\API\Com\Atrproto\Repo;
 use Atproto\Contracts\HTTP\RequestContract;
 use Atproto\Contracts\RecordBuilderContract;
 use Atproto\Exceptions\Http\Request\RequestBodyHasMissingRequiredFields;
-use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 use InvalidArgumentException;
 
 /**

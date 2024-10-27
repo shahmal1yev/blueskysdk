@@ -2,7 +2,6 @@
 
 namespace Atproto\MultiFormats;
 
-use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Support\Enum;
 
 abstract class MultiCodec

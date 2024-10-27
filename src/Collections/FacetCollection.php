@@ -3,7 +3,6 @@
 namespace Atproto\Collections;
 
 use Atproto\Contracts\Lexicons\App\Bsky\RichText\FacetContract;
-use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use GenericCollection\GenericCollection;
 
 class FacetCollection extends GenericCollection
