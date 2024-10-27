@@ -4,22 +4,32 @@ namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
+use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
+use Atproto\Support\FileSupport;
 
 class UploadBlob extends APIRequest
 {
-    protected ?string $blob = null;
-    protected ?string $token = null;
+    protected function initialize(): void
+    {
+        parent::initialize();
+        $this->method('POST')
+            ->header('Content-Type', '*/*');
+    }
 
     public function blob(string $blob = null)
     {
         if (is_null($blob)) {
-            return $this->blob;
+            return $this->parameter('blob');
         }
 
-        $this->blob = $blob;
+        $blob = (! mb_check_encoding($blob, 'UTF-8'))
+            ? $blob
+            : (new FileSupport($blob))->getBlob();
+
+        $this->parameter('blob', bin2hex($blob));
 
         return $this;
     }
@@ -27,12 +37,10 @@ class UploadBlob extends APIRequest
     public function token(string $token = null)
     {
         if (is_null($token)) {
-            return $this->token;
+            return $this->header('Authorization');
         }
 
-        $this->token = $token;
-
-        $this->header('Authorization', "Bearer $this->token");
+        $this->header('Authorization', "Bearer $token");
 
         return $this;
     }
@@ -43,13 +51,12 @@ class UploadBlob extends APIRequest
     public function build(): RequestContract
     {
         $missing = array_filter(
-            [$this->token => 'token', $this->blob => 'blob'],
-            fn ($key, $value) => ! $value,
-            ARRAY_FILTER_USE_BOTH
+            ['token' => $this->header('Authorization'), 'blob' => $this->parameter('blob')],
+            fn ($value) => is_null($value),
         );
 
         if (count($missing)) {
-            throw new MissingFieldProvidedException(implode(", ", $missing));
+            throw new MissingFieldProvidedException(implode(", ", array_keys($missing)));
         }
 
         return $this;
@@ -57,6 +64,8 @@ class UploadBlob extends APIRequest
 
     public function resource(array $data): ResourceContract
     {
-        return new UploadBlobResource($data);
+        return new UploadBlobResource([
+            'blob' => Blob::viaBinary(hex2bin($this->parameter('blob')))
+        ]);
     }
 }
