@@ -26,7 +26,7 @@ class UploadBlobTest extends TestCase
 
     public function testBlobMethodSetsAndReturnsValue(): void
     {
-        $blobData = $this->faker->word;
+        $blobData = random_bytes(1024);
 
         $result = $this->uploadBlob->blob($blobData);
 
@@ -69,7 +69,7 @@ class UploadBlobTest extends TestCase
         $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage('token');
 
-        $this->uploadBlob->blob($this->faker->word)->build();
+        $this->uploadBlob->blob(random_bytes(1024))->build();
     }
 
     /**
@@ -78,7 +78,7 @@ class UploadBlobTest extends TestCase
     public function testBuildReturnsInstanceWhenAllFieldsAreSet(): void
     {
         $result = $this->uploadBlob
-            ->blob($this->faker->word)
+            ->blob(random_bytes(1024))
             ->token($this->faker->word)
             ->build();
 

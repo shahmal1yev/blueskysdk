@@ -69,6 +69,7 @@ class VideoTest extends TestCase
     public function testJsonSerializeReturnsCorrectSchema(): void
     {
         $expected = [
+            '$type' => 'app.bsky.embed.video',
             'video' => $this->file,
         ];
 
@@ -80,6 +81,7 @@ class VideoTest extends TestCase
         $aspectRatio = $this->randAspectRatio();
 
         $expected = [
+            '$type' => 'app.bsky.embed.video',
             'alt' => 'alt text',
             'video' => $expected['video'],
             'aspectRatio' => $aspectRatio,

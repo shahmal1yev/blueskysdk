@@ -11,7 +11,7 @@ class RecordTest extends TestCase
     private Record $record;
 
     private array $expected = [
-
+        '$type' => 'app.bsky.embed.record',
         'record' => [
             'uri' => 'foo',
             'cid' => 'bar'

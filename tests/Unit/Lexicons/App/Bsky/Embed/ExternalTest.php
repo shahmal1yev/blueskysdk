@@ -106,6 +106,7 @@ class ExternalTest extends TestCase
     public function testJsonSerializeWithoutSetBlob(): void
     {
         $expected = [
+            '$type' => 'app.bsky.embed.external',
             'uri' => 'https://shahmal1yev.dev',
             'title' => 'foo',
             'description' => 'bar',
@@ -122,6 +123,7 @@ class ExternalTest extends TestCase
         $this->external->thumb($this->blob);
 
         $expected = [
+            '$type' => 'app.bsky.embed.external',
             'uri' => 'https://shahmal1yev.dev',
             'title' => 'foo',
             'description' => 'bar',

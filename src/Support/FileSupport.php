@@ -2,6 +2,8 @@
 
 namespace Atproto\Support;
 
+use Atproto\Exceptions\InvalidArgumentException;
+
 /**
  * Class File
  *
@@ -15,11 +17,16 @@ class FileSupport
     /**
      * Constructor.
      *
-     * @param string $file_path The path to the file.
+     * @param  string  $file_path  The path to the file.
+     * @throws InvalidArgumentException
      */
     public function __construct($file_path)
     {
         $this->file_path = $file_path;
+
+        if (! $this->isFile() && ! $this->isDirectory()) {
+            throw new InvalidArgumentException("File path '$file_path' does not exist.");
+        }
     }
 
     /**

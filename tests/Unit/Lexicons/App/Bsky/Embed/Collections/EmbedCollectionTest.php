@@ -61,17 +61,4 @@ trait EmbedCollectionTest
 
         new $this->target($this->items(++$this->maxLength));
     }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function testJsonSerialize()
-    {
-        $items = new $this->target($this->items(2));
-
-        $expected = json_encode(array_map(fn () => ['foo' => 'bar'], $items->toArray()));
-        $actual   = json_encode($items);
-
-        $this->assertSame($expected, $actual);
-    }
 }

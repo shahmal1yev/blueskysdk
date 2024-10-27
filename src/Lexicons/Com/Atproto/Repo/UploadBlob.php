@@ -6,6 +6,7 @@ use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
+use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use Atproto\Support\FileSupport;
@@ -19,10 +20,13 @@ class UploadBlob extends APIRequest
             ->header('Content-Type', '*/*');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function blob(string $blob = null)
     {
         if (is_null($blob)) {
-            return $this->parameter('blob');
+            return hex2bin($this->parameter('blob'));
         }
 
         $blob = (! mb_check_encoding($blob, 'UTF-8'))
@@ -37,7 +41,8 @@ class UploadBlob extends APIRequest
     public function token(string $token = null)
     {
         if (is_null($token)) {
-            return $this->header('Authorization');
+            $token = $this->header('Authorization');
+            return trim(substr($token, strrpos($token, ' '))) ?: null;
         }
 
         $this->header('Authorization', "Bearer $token");

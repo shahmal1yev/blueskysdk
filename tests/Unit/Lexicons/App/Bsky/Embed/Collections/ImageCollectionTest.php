@@ -31,4 +31,17 @@ class ImageCollectionTest extends TestCase
 
         new ImageCollection([$dependency]);
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testJsonSerialize()
+    {
+        $items = new $this->target($this->items(2));
+
+        $expected = json_encode(['images' => array_map(fn () => ['foo' => 'bar'], $items->toArray()), '$type' => 'app.bsky.embed.images']);
+        $actual   = json_encode($items);
+
+        $this->assertSame($expected, $actual);
+    }
 }

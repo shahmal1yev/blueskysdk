@@ -35,7 +35,7 @@ class ImageCollection extends GenericCollection implements EmbedInterface, Media
         return 'app.bsky.embed.images';
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'images' => $this->toArray(),
