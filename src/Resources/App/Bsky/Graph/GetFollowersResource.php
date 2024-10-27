@@ -5,6 +5,7 @@ namespace Atproto\Resources\App\Bsky\Graph;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\Assets\FollowersAsset;
+use Atproto\Resources\Assets\SubjectAsset;
 use Atproto\Resources\BaseResource;
 use Atproto\Traits\Castable;
 
@@ -23,6 +24,7 @@ class GetFollowersResource implements ResourceContract
     {
         return [
             'followers' => FollowersAsset::class,
+            'subject' => SubjectAsset::class,
         ];
     }
 }

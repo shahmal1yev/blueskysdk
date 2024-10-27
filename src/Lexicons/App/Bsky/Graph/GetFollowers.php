@@ -5,17 +5,12 @@ namespace Atproto\Lexicons\App\Bsky\Graph;
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
-use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
-use Atproto\Lexicons\Traits\Authentication;
 use Atproto\Resources\App\Bsky\Graph\GetFollowersResource;
-use Atproto\Support\Arr;
 
 class GetFollowers extends APIRequest
 {
-    use Authentication;
-
     public function actor(string $actor = null)
     {
         if (is_null($actor)) {
@@ -63,14 +58,9 @@ class GetFollowers extends APIRequest
 
     /**
      * @throws MissingFieldProvidedException
-     * @throws AuthMissingException
      */
     public function build(): RequestContract
     {
-        if (! Arr::exists($this->headers(false), 'Authorization')) {
-            throw new AuthMissingException();
-        }
-
         if (! $this->queryParameter('actor')) {
             throw new MissingFieldProvidedException('actor');
         }

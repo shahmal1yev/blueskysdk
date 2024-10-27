@@ -65,34 +65,22 @@ class GetFollowersTest extends TestCase
         $this->assertSame($cursor, $this->request->cursor(), 'Cursor getter should return the value set by the setter.');
     }
 
-    public function testBuildThrowsExceptionWhenAuthorizationHeaderMissing()
-    {
-        $this->expectException(AuthMissingException::class);
-        $this->expectExceptionMessage('Authentication Required');
-
-        // Set required 'actor' parameter
-        $this->request->actor('testActor');
-
-        // Do not set 'Authorization' header
-        $this->request->build();
-    }
-
     public function testBuildThrowsExceptionWhenActorParameterMissing()
     {
         $this->expectException(MissingFieldProvidedException::class);
         $this->expectExceptionMessage("Missing fields provided: actor");
 
-        // Set 'Authorization' header
-        $this->request->token('Bearer token');
-
         // Do not set 'actor' parameter
         $this->request->build();
     }
 
+    /**
+     * @throws MissingFieldProvidedException
+     * @throws AuthMissingException
+     */
     public function testBuildSucceedsWithRequiredParameters()
     {
         // Set required 'Authorization' header and 'actor' parameter
-        $this->request->token('Bearer token');
         $this->request->actor('testActor');
 
         // Should not throw any exceptions
