@@ -3,6 +3,7 @@
 namespace Tests\Unit\HTTP\API\Requests\Com\Atproto\Repo;
 
 use Atproto\Client;
+use Atproto\Contracts\Lexicons\App\Bsky\Feed\PostBuilderContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Lexicons\Com\Atproto\Repo\CreateRecord;
 use Faker\Factory;
@@ -59,7 +60,7 @@ class CreateRecordTest extends TestCase
     {
         $this->assertNull($this->createRecord->record());
 
-        $record = (object)['key' => 'value'];
+        $record = $this->createMock(PostBuilderContract::class);
         $this->createRecord->record($record);
         $this->assertEquals($record, $this->createRecord->record());
     }
@@ -80,7 +81,7 @@ class CreateRecordTest extends TestCase
     {
         $this->createRecord->repo($this->faker->word)
             ->collection($this->faker->word)
-            ->record((object)['key' => 'value']);
+            ->record($this->createMock(PostBuilderContract::class));
 
         $result = $this->createRecord->build();
 
@@ -104,7 +105,7 @@ class CreateRecordTest extends TestCase
             ->collection($this->faker->word)
             ->rkey($this->faker->word)
             ->validate(true)
-            ->record((object)['key' => 'value'])
+            ->record($this->createMock(PostBuilderContract::class))
             ->swapCommit($this->faker->word);
 
         $this->assertInstanceOf(CreateRecord::class, $result);

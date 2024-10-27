@@ -4,8 +4,10 @@ namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\LexiconContract;
+use Atproto\Contracts\Lexicons\App\Bsky\Feed\PostBuilderContract;
 use Atproto\Contracts\RequestContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
+use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\Authentication;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
@@ -49,10 +51,17 @@ class CreateRecord extends APIRequest implements LexiconContract
         return $this;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function rkey(string $rkey = null)
     {
         if (is_null($rkey)) {
             return $this->parameter('rkey') ?? null;
+        }
+
+        if (strlen($rkey) > 15) {
+            throw new InvalidArgumentException("The 'rkey' must be a maximum of 15 characters.");
         }
 
         $this->parameter('rkey', $rkey);
@@ -71,7 +80,7 @@ class CreateRecord extends APIRequest implements LexiconContract
         return $this;
     }
 
-    public function record(object $record = null)
+    public function record(PostBuilderContract $record = null)
     {
         if (is_null($record)) {
             return $this->parameter('record') ?? null;
