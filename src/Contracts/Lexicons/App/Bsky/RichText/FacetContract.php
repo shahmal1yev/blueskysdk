@@ -3,10 +3,9 @@
 namespace Atproto\Contracts\Lexicons\App\Bsky\RichText;
 
 use Atproto\Collections\FeatureCollection;
-use Atproto\Contracts\LexiconBuilder;
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\LexiconContract;
 
-interface FacetContract extends LexiconBuilder, Stringable
+interface FacetContract extends LexiconContract
 {
     public function features(): FeatureCollection;
     public function byteSlice(): ByteSliceContract;

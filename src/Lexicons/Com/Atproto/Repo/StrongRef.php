@@ -2,11 +2,13 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Repo;
 
-use Atproto\Contracts\Stringable;
-use JsonSerializable;
+use Atproto\Contracts\LexiconContract;
+use Atproto\Lexicons\Traits\Serializable;
 
-class StrongRef implements JsonSerializable, Stringable
+class StrongRef implements LexiconContract
 {
+    use Serializable;
+
     private string $uri;
     private string $cid;
 
@@ -44,10 +46,5 @@ class StrongRef implements JsonSerializable, Stringable
             'uri' => $this->uri,
             'cid' => $this->cid,
         ];
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Atproto\Contracts\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Stringable;
-use JsonSerializable;
+use Atproto\Contracts\SerializableContract;
 
-interface ImageInterface extends JsonSerializable, Stringable
+interface ImageInterface extends SerializableContract
 {
     public function jsonSerialize(): array;
     public function alt(string $alt = null);

@@ -5,9 +5,12 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 use Atproto\Collections\FeatureCollection;
 use Atproto\Contracts\Lexicons\App\Bsky\RichText\ByteSliceContract;
 use Atproto\Contracts\Lexicons\App\Bsky\RichText\FacetContract;
+use Atproto\Lexicons\Traits\Serializable;
 
 class Facet implements FacetContract
 {
+    use Serializable;
+
     private ByteSliceContract $byteSlice;
 
     private FeatureCollection $features;
@@ -38,10 +41,5 @@ class Facet implements FacetContract
             'index' => $this->byteSlice,
             'features' => $this->features->toArray()
         ];
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 }

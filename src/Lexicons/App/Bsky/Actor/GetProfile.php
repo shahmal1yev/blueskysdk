@@ -2,18 +2,19 @@
 
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
+use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Lexicons\APIRequest;
-use Atproto\Lexicons\Traits\Authentication;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Exception;
 
-class GetProfile extends APIRequest
+class GetProfile extends APIRequest implements LexiconContract
 {
-    use Authentication;
+    use AuthenticatedEndpoint;
 
     /**
      * @return RequestContract|string

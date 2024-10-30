@@ -2,13 +2,16 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Label;
 
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\LexiconContract;
+use Atproto\Contracts\SerializableContract;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Serializable;
 use GenericCollection\GenericCollection;
-use JsonSerializable;
 
-class SelfLabels extends GenericCollection implements JsonSerializable, Stringable
+class SelfLabels extends GenericCollection implements LexiconContract
 {
+    use Serializable;
+
     private const MAXLENGTH = 10;
     private const MAXLENGTH_BY_ITEM = 128;
 
@@ -55,11 +58,6 @@ class SelfLabels extends GenericCollection implements JsonSerializable, Stringab
             0,
             $exception
         );
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 
     public function jsonSerialize(): array

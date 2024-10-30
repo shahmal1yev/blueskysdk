@@ -6,9 +6,13 @@ use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Endpoint;
+use Atproto\Lexicons\Traits\Serializable;
 
 class External implements EmbedInterface, MediaContract
 {
+    use Serializable;
+
     private string $uri;
     private string $title;
     private string $description;
@@ -98,11 +102,6 @@ class External implements EmbedInterface, MediaContract
             'description' => $this->description,
             'blob' => ($b = $this->blob) ? $b : null,
         ]);
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 
     public function type(): string

@@ -2,9 +2,9 @@
 
 namespace Atproto\Contracts\Lexicons\App\Bsky\Embed;
 
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\LexiconContract;
 
-interface EmbedInterface extends \JsonSerializable, Stringable
+interface EmbedInterface extends LexiconContract
 {
     public function type(): string;
 }

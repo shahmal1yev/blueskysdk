@@ -13,12 +13,15 @@ use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureFactory;
 use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
+use Atproto\Lexicons\Traits\Serializable;
 use Carbon\Carbon;
 use DateTimeImmutable;
 
 class Post implements PostBuilderContract
 {
-    private const TYPE_NAME = 'app.bsky.feed.post';
+    use Serializable;
+
+    private const NSID = 'app.bsky.feed.post';
     private const TEXT_LIMIT = 3000;
 
     private string $text = '';
@@ -200,7 +203,7 @@ class Post implements PostBuilderContract
     public function jsonSerialize(): array
     {
         return array_filter([
-            '$type' => self::TYPE_NAME,
+            '$type' => self::NSID,
             'createdAt' => $this->getFormattedCreatedAt(),
             'text' => $this->text,
             'facets' => $this->facets->toArray(),
@@ -210,11 +213,6 @@ class Post implements PostBuilderContract
             'labels' => $this->labels,
             'tags' => $this->tags,
         ]);
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 
     private function isString($item): bool

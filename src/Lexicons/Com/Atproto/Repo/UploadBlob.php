@@ -2,17 +2,21 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Repo;
 
+use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
 use Atproto\Support\FileSupport;
 
-class UploadBlob extends APIRequest
+class UploadBlob extends APIRequest implements LexiconContract
 {
+    use AuthenticatedEndpoint;
+
     protected function initialize(): void
     {
         parent::initialize();

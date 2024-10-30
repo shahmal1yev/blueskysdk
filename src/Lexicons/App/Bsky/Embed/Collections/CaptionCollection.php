@@ -3,13 +3,15 @@
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
+use Atproto\Contracts\SerializableContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use JsonSerializable;
 
-class CaptionCollection extends GenericCollection implements JsonSerializable
+class CaptionCollection extends GenericCollection implements SerializableContract
 {
     use EmbedCollection;
+
     private const MAX_SIZE = 20;
 
     protected function validator(): \Closure

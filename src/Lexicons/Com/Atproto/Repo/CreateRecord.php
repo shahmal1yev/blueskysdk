@@ -9,12 +9,12 @@ use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
-use Atproto\Lexicons\Traits\Authentication;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Resources\Com\Atproto\Repo\CreateRecordResource;
 
 class CreateRecord extends APIRequest implements LexiconContract
 {
-    use Authentication;
+    use AuthenticatedEndpoint;
 
     protected array $required = [
         'repo',
@@ -123,11 +123,6 @@ class CreateRecord extends APIRequest implements LexiconContract
     public function resource(array $data): ResourceContract
     {
         return new CreateRecordResource($data);
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 
     public function jsonSerialize(): array

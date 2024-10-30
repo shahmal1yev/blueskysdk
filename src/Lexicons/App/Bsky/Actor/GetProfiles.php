@@ -2,20 +2,21 @@
 
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
+use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
-use Atproto\Lexicons\Traits\Authentication;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Resources\App\Bsky\Actor\GetProfilesResource;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 use GenericCollection\Types\Primitive\StringType;
 
-class GetProfiles extends APIRequest
+class GetProfiles extends APIRequest implements LexiconContract
 {
-    use Authentication;
+    use AuthenticatedEndpoint;
 
     private ?GenericCollectionInterface $actors = null;
 

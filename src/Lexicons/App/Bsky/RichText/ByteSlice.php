@@ -3,9 +3,12 @@
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
 use Atproto\Contracts\Lexicons\App\Bsky\RichText\ByteSliceContract;
+use Atproto\Lexicons\Traits\Serializable;
 
 class ByteSlice implements ByteSliceContract
 {
+    use Serializable;
+
     private string $text;
     private string $added;
 

@@ -2,6 +2,6 @@
 
 namespace Atproto\Contracts;
 
-interface LexiconContract extends \JsonSerializable, Stringable
+interface LexiconContract extends SerializableContract
 {
 }

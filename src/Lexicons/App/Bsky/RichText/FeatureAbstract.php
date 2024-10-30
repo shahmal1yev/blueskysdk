@@ -2,10 +2,9 @@
 
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
-use Atproto\Contracts\LexiconBuilder;
-use Atproto\Contracts\Stringable;
+use Atproto\Contracts\LexiconContract;
 
-abstract class FeatureAbstract implements LexiconBuilder, Stringable
+abstract class FeatureAbstract implements LexiconContract
 {
     protected string $reference;
     protected string $label;

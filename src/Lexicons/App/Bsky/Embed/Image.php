@@ -5,9 +5,12 @@ namespace Atproto\Lexicons\App\Bsky\Embed;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\ImageInterface;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Serializable;
 
 class Image implements ImageInterface
 {
+    use Serializable;
+
     private Blob $file;
     private string $alt;
     private ?array $aspectRatio = null;
@@ -72,10 +75,5 @@ class Image implements ImageInterface
     public function size(): int
     {
         return $this->file->size();
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
+use Atproto\Lexicons\Traits\Serializable;
+
 class Tag extends FeatureAbstract
 {
     protected function schema(): array

@@ -6,8 +6,10 @@ use Atproto\Client;
 use Atproto\Lexicons\APIRequest;
 use SplSubject;
 
-trait Authentication
+trait AuthenticatedEndpoint
 {
+    use Endpoint;
+
     public function __construct(Client $client)
     {
         if (! is_subclass_of(static::class, APIRequest::class)) {

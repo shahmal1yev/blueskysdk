@@ -3,9 +3,12 @@
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Serializable;
 
 trait EmbedCollection
 {
+    use Serializable;
+
     /**
      * @throws InvalidArgumentException
      */
@@ -41,10 +44,5 @@ trait EmbedCollection
     public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 }

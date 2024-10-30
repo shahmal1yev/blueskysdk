@@ -7,9 +7,12 @@ use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
+use Atproto\Lexicons\Traits\Serializable;
 
 class Video implements VideoInterface, MediaContract
 {
+    use Serializable;
+
     private Blob $file;
     private ?string $alt = null;
     private CaptionCollection $captions;
@@ -86,12 +89,6 @@ class Video implements VideoInterface, MediaContract
         $this->captions = $captions;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        $result = json_encode($this);
-        return $result;
     }
 
     public function type(): string

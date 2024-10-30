@@ -5,7 +5,7 @@ namespace Atproto\Traits;
 use Atproto\Client;
 use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Observer;
-use Atproto\Exceptions\Http\Request\RequestNotFoundException;
+use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 
 trait Smith
 {
@@ -20,7 +20,7 @@ trait Smith
     }
 
     /**
-     * @throws RequestNotFoundException
+     * @throws LexiconNotFoundException
      */
     public function forge(...$arguments)
     {
@@ -29,7 +29,7 @@ trait Smith
         $request = $this->request();
 
         if (! class_exists($request)) {
-            throw new RequestNotFoundException("$request class does not exist.");
+            throw new LexiconNotFoundException("$request class does not exist.");
         }
 
         /** @var APIRequestContract $request */

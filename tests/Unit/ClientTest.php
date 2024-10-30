@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use Atproto\Client;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Exceptions\Http\Request\RequestNotFoundException;
+use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
@@ -56,14 +56,14 @@ class ClientTest extends TestCase
     {
         $this->client->nonExistentMethod();
 
-        $this->expectException(RequestNotFoundException::class);
+        $this->expectException(LexiconNotFoundException::class);
         $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod class does not exist.");
 
         $this->client->forge();
     }
 
     /**
-     * @throws RequestNotFoundException
+     * @throws LexiconNotFoundException
      */
     public function testForgeReturnsRequestContract(): void
     {

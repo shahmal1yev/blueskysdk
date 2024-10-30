@@ -4,19 +4,18 @@ namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
+use Atproto\Lexicons\Traits\Endpoint;
+use Atproto\Lexicons\Traits\Serializable;
 
 class Record implements EmbedInterface
 {
+    use Serializable;
+
     private StrongRef $ref;
 
     public function __construct(StrongRef $ref)
     {
         $this->ref = $ref;
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 
     public function jsonSerialize(): array

@@ -5,9 +5,12 @@ namespace Atproto\Lexicons\App\Bsky\Embed;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Serializable;
 
 class Caption implements CaptionContract
 {
+    use Serializable;
+
     private const MAX_SIZE = 20000;
 
     private string $lang;
@@ -64,10 +67,5 @@ class Caption implements CaptionContract
             'lang' => $this->lang(),
             'file'  => $this->file(),
         ];
-    }
-
-    public function __toString(): string
-    {
-        return json_encode($this);
     }
 }

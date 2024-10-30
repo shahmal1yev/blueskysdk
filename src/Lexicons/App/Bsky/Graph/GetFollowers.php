@@ -2,15 +2,19 @@
 
 namespace Atproto\Lexicons\App\Bsky\Graph;
 
+use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Resources\App\Bsky\Graph\GetFollowersResource;
 
-class GetFollowers extends APIRequest
+class GetFollowers extends APIRequest implements LexiconContract
 {
+    use Endpoint;
+
     public function actor(string $actor = null)
     {
         if (is_null($actor)) {
