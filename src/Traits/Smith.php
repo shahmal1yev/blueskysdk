@@ -3,7 +3,7 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\APIRequestContract;
+use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Observer;
 use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 

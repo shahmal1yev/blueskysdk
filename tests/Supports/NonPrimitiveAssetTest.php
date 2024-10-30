@@ -2,7 +2,7 @@
 
 namespace Tests\Supports;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;

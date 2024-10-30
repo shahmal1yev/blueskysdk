@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Resources;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\AssetContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\BaseResource;

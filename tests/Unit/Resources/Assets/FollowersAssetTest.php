@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\DatetimeAsset;

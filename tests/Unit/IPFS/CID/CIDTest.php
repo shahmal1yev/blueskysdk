@@ -4,9 +4,9 @@ namespace Tests\Unit\IPFS\CID;
 
 use Atproto\IPFS\CID\CID;
 use Atproto\IPFS\CID\CIDVersion;
-use Atproto\MultiFormats\MultiBase\Encoders\Base32Encoder;
-use Atproto\MultiFormats\MultiBase\MultiBase;
-use Atproto\MultiFormats\MultiCodec;
+use Atproto\IPFS\MultiFormats\MultiBase\Encoders\Base32Encoder;
+use Atproto\IPFS\MultiFormats\MultiBase\MultiBase;
+use Atproto\IPFS\MultiFormats\MultiCodec;
 use PHPUnit\Framework\TestCase;
 use Tests\Supports\Reflection;
 

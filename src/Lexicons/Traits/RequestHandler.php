@@ -2,7 +2,7 @@
 
 namespace Atproto\Lexicons\Traits;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\cURLException;
 

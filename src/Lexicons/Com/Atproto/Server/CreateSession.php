@@ -3,8 +3,8 @@
 namespace Atproto\Lexicons\Com\Atproto\Server;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Contracts\RequestContract;
+use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 

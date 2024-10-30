@@ -2,7 +2,7 @@
 
 namespace Atproto\Resources\App\Bsky\Graph;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Resources\Assets\BaseAsset;
 use Atproto\Resources\Assets\FollowersAsset;
 use Atproto\Resources\Assets\SubjectAsset;

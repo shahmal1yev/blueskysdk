@@ -3,8 +3,8 @@
 namespace Atproto\IPFS\CID\Versions;
 
 use Atproto\IPFS\CID\CIDVersion;
-use Atproto\MultiFormats\MultiCodec;
-use Atproto\MultiFormats\MultiHash;
+use Atproto\IPFS\MultiFormats\MultiCodec;
+use Atproto\IPFS\MultiFormats\MultiHash;
 
 class CIDV1 extends CIDVersion
 {

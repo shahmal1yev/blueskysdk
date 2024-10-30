@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use Atproto\Resources\Assets\CollectionAsset;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;

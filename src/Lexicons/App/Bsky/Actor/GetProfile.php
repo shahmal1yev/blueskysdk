@@ -2,8 +2,8 @@
 
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
-use Atproto\Contracts\RequestContract;
+use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Lexicons\APIRequest;

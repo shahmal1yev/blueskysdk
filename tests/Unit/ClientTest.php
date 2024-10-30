@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use Atproto\Client;
-use Atproto\Contracts\RequestContract;
+use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Exceptions\Http\Request\RequestNotFoundException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;

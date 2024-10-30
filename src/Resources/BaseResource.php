@@ -2,7 +2,7 @@
 
 namespace Atproto\Resources;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Support\Arr;
 use Atproto\Traits\Castable;

@@ -5,8 +5,8 @@ namespace Atproto\IPFS\CID;
 use Atproto\Contracts\EncoderContract;
 use Atproto\Contracts\Stringable;
 use Atproto\IPFS\CID\Versions\CIDV1;
-use Atproto\MultiFormats\MultiBase\MultiBase;
-use Atproto\MultiFormats\MultiCodec;
+use Atproto\IPFS\MultiFormats\MultiBase\MultiBase;
+use Atproto\IPFS\MultiFormats\MultiCodec;
 
 class CID implements Stringable
 {

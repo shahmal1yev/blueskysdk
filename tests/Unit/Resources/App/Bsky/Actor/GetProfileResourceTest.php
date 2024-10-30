@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Resources\App\Bsky\Actor;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\DatetimeAsset;

@@ -3,7 +3,7 @@
 namespace Atproto\Resources\Assets;
 
 use Atproto\Collections\Types\NonPrimitive\FollowerAssetType;
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\TypeInterface;

@@ -2,7 +2,7 @@
 
 namespace Atproto\Resources\App\Bsky\Actor;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Resources\Assets\AssociatedAsset;
 use Atproto\Resources\Assets\DatetimeAsset;
 use Atproto\Resources\Assets\JoinedViaStarterPackAsset;

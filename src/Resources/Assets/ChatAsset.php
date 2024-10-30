@@ -2,8 +2,8 @@
 
 namespace Atproto\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\AssetContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Resources\BaseResource;
 
 /**

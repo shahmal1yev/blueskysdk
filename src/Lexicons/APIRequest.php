@@ -3,8 +3,8 @@
 namespace Atproto\Lexicons;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\APIRequestContract;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Lexicons\APIRequestContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use SplSubject;
 
 abstract class APIRequest extends Request implements APIRequestContract

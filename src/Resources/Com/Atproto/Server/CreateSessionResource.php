@@ -2,7 +2,7 @@
 
 namespace Atproto\Resources\Com\Atproto\Server;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Resources\BaseResource;
 
 /**

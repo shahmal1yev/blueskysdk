@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;

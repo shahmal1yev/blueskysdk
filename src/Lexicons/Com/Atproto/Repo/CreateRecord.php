@@ -2,10 +2,10 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Repo;
 
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\App\Bsky\Feed\PostBuilderContract;
-use Atproto\Contracts\RequestContract;
+use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;

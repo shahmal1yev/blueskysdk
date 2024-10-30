@@ -2,7 +2,7 @@
 
 namespace Atproto\Resources\Assets;
 
-use Atproto\Contracts\HTTP\Resources\AssetContract;
+use Atproto\Contracts\Resources\AssetContract;
 use Carbon\Carbon;
 
 class DatetimeAsset implements AssetContract
