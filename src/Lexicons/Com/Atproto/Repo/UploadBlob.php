@@ -23,7 +23,7 @@ class UploadBlob extends APIRequest implements LexiconContract
             ->headers(self::API_BASE_HEADERS)
             ->header('Content-Type', '*/*')
             ->path(sprintf("/xrpc/%s", $this->nsid()))
-            ->method($this->method);
+            ->method('POST');
     }
 
     /**

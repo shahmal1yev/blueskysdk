@@ -18,7 +18,7 @@ class CreateSession extends APIRequest implements LexiconContract
     {
         parent::__construct($client);
 
-        $this->parameters([
+        $this->method('POST')->parameters([
             'identifier' => $identifier,
             'password'   => $password,
         ]);

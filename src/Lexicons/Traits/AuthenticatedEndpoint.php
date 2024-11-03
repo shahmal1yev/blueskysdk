@@ -16,8 +16,6 @@ trait AuthenticatedEndpoint
             return;
         }
 
-        $this->method = 'POST';
-
         parent::__construct($client);
         $this->update($client);
     }

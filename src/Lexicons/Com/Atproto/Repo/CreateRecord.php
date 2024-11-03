@@ -22,6 +22,14 @@ class CreateRecord extends APIRequest implements LexiconContract
         'record'
     ];
 
+    protected function initialize(): void
+    {
+        $this->origin(self::API_BASE_URL)
+            ->headers(self::API_BASE_HEADERS)
+            ->path(sprintf("/xrpc/%s", $this->nsid()))
+            ->method('POST');
+    }
+
     public function repo(string $repo = null)
     {
         if (is_null($repo)) {
