@@ -33,8 +33,8 @@ class ClientTest extends TestCase
      */
     public function testGetProfile(): void
     {
-        $username = $_ENV['BLUESKY_IDENTIFIER'];
-        $password = $_ENV['BLUESKY_PASSWORD'];
+        $username = getenv('BLUESKY_IDENTIFIER');
+        $password = getenv('BLUESKY_PASSWORD');
 
         $this->assertIsString($username);
         $this->assertIsString($password);
@@ -106,8 +106,8 @@ class ClientTest extends TestCase
             ->forge();
 
         $this->client->authenticate(
-            $_ENV['BLUESKY_IDENTIFIER'],
-            $_ENV['BLUESKY_PASSWORD']
+            getenv('BLUESKY_IDENTIFIER'),
+            getenv('BLUESKY_PASSWORD')
         );
 
         $response = $request->actor($this->client->authenticated()->did())
