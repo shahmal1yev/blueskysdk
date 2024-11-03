@@ -2,7 +2,7 @@
 
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
-class FeatureFactory
+class RichText
 {
     public static function link(string $reference, string $label = null): Link
     {

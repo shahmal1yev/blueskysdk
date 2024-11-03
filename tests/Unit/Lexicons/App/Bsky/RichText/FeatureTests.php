@@ -10,6 +10,8 @@ trait FeatureTests
 {
     use Reflection;
 
+    private string $nsid = 'app.bsky.richtext.facet';
+
     private string $label;
     private string $reference;
 
@@ -45,6 +47,7 @@ trait FeatureTests
         $feature = $this->feature($this->reference, $this->label);
 
         $expected = [
+            '$type' => $feature->nsid() . "#" . $feature->type(),
             'label' => $this->prefix . $this->label,
             $this->key => $this->reference,
         ];
@@ -62,6 +65,7 @@ trait FeatureTests
     private function schema(string $label): array
     {
         return [
+            '$type' => sprintf("%s#%s", $this->nsid, $this->type),
             'label' => $this->prefix . $label,
             $this->key => $this->reference,
         ];

@@ -10,7 +10,7 @@ use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\RichText\ByteSlice;
 use Atproto\Lexicons\App\Bsky\RichText\Facet;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
-use Atproto\Lexicons\App\Bsky\RichText\FeatureFactory;
+use Atproto\Lexicons\App\Bsky\RichText\RichText;
 use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Atproto\Lexicons\Traits\Lexicon;
@@ -272,7 +272,7 @@ class Post implements PostBuilderContract
      */
     private function addFeatureItem(string $type, string $reference, ?string $label): PostBuilderContract
     {
-        $feature = FeatureFactory::{$type}($reference, $label);
+        $feature = RichText::{$type}($reference, $label);
         $this->addFeature($feature);
 
         return $this;

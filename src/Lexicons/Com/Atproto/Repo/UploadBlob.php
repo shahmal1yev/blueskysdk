@@ -32,16 +32,25 @@ class UploadBlob extends APIRequest implements LexiconContract
     public function blob(string $blob = null)
     {
         if (is_null($blob)) {
-            return hex2bin($this->parameter('blob'));
+            return $this->parameter('blob');
         }
 
         $blob = (! mb_check_encoding($blob, 'UTF-8'))
             ? $blob
             : (new FileSupport($blob))->getBlob();
 
-        $this->parameter('blob', bin2hex($blob));
+        $this->parameter('blob', $blob);
 
         return $this;
+    }
+
+    public function parameters($parameters = null)
+    {
+        if (is_bool($parameters)) {
+            return $this->parameters['blob'] ?: '';
+        }
+
+        parent::parameters($parameters);
     }
 
     public function token(string $token = null)
@@ -76,7 +85,7 @@ class UploadBlob extends APIRequest implements LexiconContract
     public function resource(array $data): ResourceContract
     {
         return new UploadBlobResource([
-            'blob' => Blob::viaBinary(hex2bin($this->parameter('blob')))
+            'blob' => Blob::viaBinary($this->parameter('blob'))
         ]);
     }
 }

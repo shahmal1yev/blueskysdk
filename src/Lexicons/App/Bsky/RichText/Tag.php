@@ -4,7 +4,7 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class Tag extends FeatureAbstract
 {
-    public function jsonSerialize(): array
+    protected function schema(): array
     {
         return [
             "label" => "#$this->label",

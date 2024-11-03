@@ -4,7 +4,7 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class Link extends FeatureAbstract
 {
-    public function jsonSerialize(): array
+    protected function schema(): array
     {
         return [
             "label" => $this->label,
