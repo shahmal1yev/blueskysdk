@@ -2,13 +2,12 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Label;
 
-use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\SerializableContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\Traits\Serializable;
 use GenericCollection\GenericCollection;
 
-class SelfLabels extends GenericCollection implements LexiconContract
+class SelfLabels extends GenericCollection implements SerializableContract
 {
     use Serializable;
 

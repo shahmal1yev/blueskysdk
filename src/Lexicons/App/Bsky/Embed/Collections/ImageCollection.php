@@ -5,11 +5,13 @@ namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\ImageInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
+use Atproto\Lexicons\Traits\Lexicon;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 
 class ImageCollection extends GenericCollection implements EmbedInterface, MediaContract
 {
+    use Lexicon;
     use EmbedCollection;
 
     private const MAX_LENGTH = 4;
@@ -30,16 +32,16 @@ class ImageCollection extends GenericCollection implements EmbedInterface, Media
         };
     }
 
-    public function type(): string
-    {
-        return 'app.bsky.embed.images';
-    }
-
     public function jsonSerialize(): array
     {
         return [
             'images' => $this->toArray(),
-            '$type' => $this->type(),
+            '$type' => $this->nsid(),
         ];
+    }
+
+    public function nsid(): string
+    {
+        return 'app.bsky.embed.images';
     }
 }

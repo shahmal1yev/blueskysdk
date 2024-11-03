@@ -16,6 +16,8 @@ trait AuthenticatedEndpoint
             return;
         }
 
+        $this->method = 'POST';
+
         parent::__construct($client);
         $this->update($client);
     }
@@ -39,5 +41,13 @@ trait AuthenticatedEndpoint
         $this->header('Authorization', "Bearer $token");
 
         return $this;
+    }
+
+    protected function initialize(): void
+    {
+        $this->origin(self::API_BASE_URL)
+            ->headers(self::API_BASE_HEADERS)
+            ->path(sprintf("/xrpc/%s", $this->nsid()))
+            ->method($this->method);
     }
 }

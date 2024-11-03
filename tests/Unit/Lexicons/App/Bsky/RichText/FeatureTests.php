@@ -25,7 +25,7 @@ trait FeatureTests
     public function testTypeReturnsCorrectType(): void
     {
         $feature = $this->feature($this->reference);
-        $method = $this->method('type', $feature);
+        $method = $this->method('nsid', $feature);
         $expected = $this->type;
 
         $this->assertSame(

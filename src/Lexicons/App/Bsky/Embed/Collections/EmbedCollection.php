@@ -3,12 +3,9 @@
 namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\Traits\Serializable;
 
 trait EmbedCollection
 {
-    use Serializable;
-
     /**
      * @throws InvalidArgumentException
      */
@@ -40,9 +37,4 @@ trait EmbedCollection
     }
 
     abstract protected function validator(): \Closure;
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
 }

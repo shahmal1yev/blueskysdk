@@ -16,9 +16,4 @@ class Link extends FeatureAbstract
     {
         return $this->label;
     }
-
-    protected function type(): string
-    {
-        return "link";
-    }
 }

@@ -6,5 +6,4 @@ use Atproto\Contracts\LexiconContract;
 
 interface EmbedInterface extends LexiconContract
 {
-    public function type(): string;
 }

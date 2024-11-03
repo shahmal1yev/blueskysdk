@@ -7,11 +7,11 @@ use Atproto\Contracts\Lexicons\App\Bsky\Embed\VideoInterface;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\Collections\CaptionCollection;
-use Atproto\Lexicons\Traits\Serializable;
+use Atproto\Lexicons\Traits\Lexicon;
 
 class Video implements VideoInterface, MediaContract
 {
-    use Serializable;
+    use Lexicon;
 
     private Blob $file;
     private ?string $alt = null;
@@ -38,7 +38,7 @@ class Video implements VideoInterface, MediaContract
     public function jsonSerialize(): array
     {
         $result = array_filter([
-            '$type' => $this->type(),
+            '$type' => $this->nsid(),
             'alt' => $this->alt() ?: null,
             'video' => $this->file,
             'aspectRatio' => $this->aspectRatio() ?: null,
@@ -89,10 +89,5 @@ class Video implements VideoInterface, MediaContract
         $this->captions = $captions;
 
         return $this;
-    }
-
-    public function type(): string
-    {
-        return 'app.bsky.embed.video';
     }
 }

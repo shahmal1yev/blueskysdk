@@ -4,12 +4,11 @@ namespace Atproto\Lexicons\App\Bsky\Embed;
 
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
-use Atproto\Lexicons\Traits\Endpoint;
-use Atproto\Lexicons\Traits\Serializable;
+use Atproto\Lexicons\Traits\Lexicon;
 
 class Record implements EmbedInterface
 {
-    use Serializable;
+    use Lexicon;
 
     private StrongRef $ref;
 
@@ -21,13 +20,8 @@ class Record implements EmbedInterface
     public function jsonSerialize(): array
     {
         return [
-            '$type' => $this->type(),
+            '$type' => $this->nsid(),
             'record' => $this->ref,
         ];
-    }
-
-    public function type(): string
-    {
-        return 'app.bsky.embed.record';
     }
 }

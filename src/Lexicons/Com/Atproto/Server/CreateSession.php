@@ -8,7 +8,6 @@ use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResourceContract;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\Endpoint;
-use Atproto\Lexicons\Traits\Serializable;
 use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
 
 class CreateSession extends APIRequest implements LexiconContract
@@ -19,7 +18,7 @@ class CreateSession extends APIRequest implements LexiconContract
     {
         parent::__construct($client);
 
-        $this->method('POST')->origin('https://bsky.social/')->parameters([
+        $this->parameters([
             'identifier' => $identifier,
             'password'   => $password,
         ]);

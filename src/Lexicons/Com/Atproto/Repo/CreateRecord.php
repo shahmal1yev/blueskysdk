@@ -22,13 +22,6 @@ class CreateRecord extends APIRequest implements LexiconContract
         'record'
     ];
 
-    protected function initialize(): void
-    {
-        parent::initialize();
-
-        $this->method('POST');
-    }
-
     public function repo(string $repo = null)
     {
         if (is_null($repo)) {

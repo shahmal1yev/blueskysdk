@@ -29,13 +29,8 @@ class RecordWithMedia extends Record
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            '$type' => $this->type(),
+            '$type' => $this->nsid(),
             'media' => $this->media,
         ]);
-    }
-
-    public function type(): string
-    {
-        return 'app.bsky.embed.recordWithMedia';
     }
 }

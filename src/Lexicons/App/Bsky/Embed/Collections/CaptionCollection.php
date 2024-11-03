@@ -5,11 +5,12 @@ namespace Atproto\Lexicons\App\Bsky\Embed\Collections;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\CaptionContract;
 use Atproto\Contracts\SerializableContract;
 use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Lexicons\Traits\Serializable;
 use GenericCollection\GenericCollection;
-use JsonSerializable;
 
 class CaptionCollection extends GenericCollection implements SerializableContract
 {
+    use Serializable;
     use EmbedCollection;
 
     private const MAX_SIZE = 20;
@@ -23,5 +24,10 @@ class CaptionCollection extends GenericCollection implements SerializableContrac
 
             return true;
         };
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

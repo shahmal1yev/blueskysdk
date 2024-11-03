@@ -13,15 +13,13 @@ use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
 use Atproto\Lexicons\App\Bsky\RichText\FeatureFactory;
 use Atproto\Lexicons\Com\Atproto\Label\SelfLabels;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
-use Atproto\Lexicons\Traits\Serializable;
+use Atproto\Lexicons\Traits\Lexicon;
 use Carbon\Carbon;
 use DateTimeImmutable;
 
 class Post implements PostBuilderContract
 {
-    use Serializable;
-
-    private const NSID = 'app.bsky.feed.post';
+    use Lexicon;
     private const TEXT_LIMIT = 3000;
 
     private string $text = '';
@@ -150,6 +148,8 @@ class Post implements PostBuilderContract
             if (mb_strlen($tag) > 640) {
                 return true;
             }
+
+            return false;
         });
 
         if (! empty($invalid)) {
@@ -203,7 +203,7 @@ class Post implements PostBuilderContract
     public function jsonSerialize(): array
     {
         return array_filter([
-            '$type' => self::NSID,
+            '$type' => $this->nsid(),
             'createdAt' => $this->getFormattedCreatedAt(),
             'text' => $this->text,
             'facets' => $this->facets->toArray(),

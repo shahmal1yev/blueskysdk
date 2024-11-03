@@ -19,9 +19,11 @@ class UploadBlob extends APIRequest implements LexiconContract
 
     protected function initialize(): void
     {
-        parent::initialize();
-        $this->method('POST')
-            ->header('Content-Type', '*/*');
+        $this->origin(self::API_BASE_URL)
+            ->headers(self::API_BASE_HEADERS)
+            ->header('Content-Type', '*/*')
+            ->path(sprintf("/xrpc/%s", $this->nsid()))
+            ->method($this->method);
     }
 
     /**

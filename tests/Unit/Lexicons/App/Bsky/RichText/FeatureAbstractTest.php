@@ -32,7 +32,7 @@ class FeatureAbstractTest extends TestCase
     {
         $mock = $this->getMockBuilder(FeatureAbstract::class)
             ->setConstructorArgs(['reference', 'label'])
-            ->onlyMethods(['schema', 'type'])
+            ->onlyMethods(['schema', 'nsid'])
             ->getMockForAbstractClass();
 
         $schema = ['key' => 'value'];
@@ -42,7 +42,7 @@ class FeatureAbstractTest extends TestCase
             ->willReturn($schema);
 
         $mock->expects($this->once())
-            ->method('type')
+            ->method('nsid')
             ->willReturn('feature');
 
         $this->assertSame(

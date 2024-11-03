@@ -4,8 +4,6 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class Mention extends FeatureAbstract
 {
-    protected ?string $type = 'mention';
-
     protected function schema(): array
     {
         return [
@@ -17,10 +15,5 @@ class Mention extends FeatureAbstract
     public function __toString(): string
     {
         return "@$this->label";
-    }
-
-    protected function type(): string
-    {
-        return 'mention';
     }
 }

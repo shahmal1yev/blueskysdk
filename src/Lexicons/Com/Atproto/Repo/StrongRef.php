@@ -3,11 +3,11 @@
 namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\LexiconContract;
-use Atproto\Lexicons\Traits\Serializable;
+use Atproto\Lexicons\Traits\Lexicon;
 
 class StrongRef implements LexiconContract
 {
-    use Serializable;
+    use Lexicon;
 
     private string $uri;
     private string $cid;

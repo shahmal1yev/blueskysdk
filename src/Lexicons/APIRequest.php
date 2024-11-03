@@ -22,24 +22,7 @@ abstract class APIRequest extends Request implements APIRequestContract
         return $this->resource(parent::send());
     }
 
-    protected function initialize(): void
-    {
-        $this->origin(self::API_BASE_URL)
-            ->path($this->endpoint())
-            ->headers(self::API_BASE_HEADERS);
-    }
-
-    private function endpoint(): string
-    {
-        $endpointParts = explode("\\", $this->client->path());
-
-        $endpoint = array_reduce(
-            $endpointParts,
-            fn ($carry, $part) => $carry .= "." . lcfirst($part)
-        );
-
-        return sprintf("/xrpc/%s", trim($endpoint, "."));
-    }
+    abstract protected function initialize(): void;
 
     abstract public function resource(array $data): ResourceContract;
 

@@ -3,9 +3,12 @@
 namespace Atproto\Lexicons\App\Bsky\RichText;
 
 use Atproto\Contracts\LexiconContract;
+use Atproto\Lexicons\Traits\Lexicon;
 
 abstract class FeatureAbstract implements LexiconContract
 {
+    use Lexicon;
+
     protected string $reference;
     protected string $label;
 
@@ -21,10 +24,8 @@ abstract class FeatureAbstract implements LexiconContract
 
     final public function jsonSerialize(): array
     {
-        return ['type' => $this->type()] + $this->schema();
+        return ['type' => $this->nsid()] + $this->schema();
     }
-
-    abstract protected function type(): string;
 
     abstract protected function schema(): array;
 }

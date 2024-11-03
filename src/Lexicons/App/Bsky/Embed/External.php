@@ -6,12 +6,11 @@ use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\Traits\Endpoint;
-use Atproto\Lexicons\Traits\Serializable;
+use Atproto\Lexicons\Traits\Lexicon;
 
 class External implements EmbedInterface, MediaContract
 {
-    use Serializable;
+    use Lexicon;
 
     private string $uri;
     private string $title;
@@ -96,16 +95,11 @@ class External implements EmbedInterface, MediaContract
     public function jsonSerialize(): array
     {
         return array_filter([
-            '$type' => $this->type(),
+            '$type' => $this->nsid(),
             'uri' => $this->uri,
             'title' => $this->title,
             'description' => $this->description,
             'blob' => ($b = $this->blob) ? $b : null,
         ]);
-    }
-
-    public function type(): string
-    {
-        return 'app.bsky.embed.external';
     }
 }
