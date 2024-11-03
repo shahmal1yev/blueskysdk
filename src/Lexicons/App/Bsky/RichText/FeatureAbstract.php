@@ -21,11 +21,4 @@ abstract class FeatureAbstract implements LexiconContract
         $this->reference = $reference;
         $this->label = $label;
     }
-
-    final public function jsonSerialize(): array
-    {
-        return ['type' => $this->nsid()] + $this->schema();
-    }
-
-    abstract protected function schema(): array;
 }

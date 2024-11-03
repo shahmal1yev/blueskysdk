@@ -19,21 +19,6 @@ trait FeatureTests
         $this->reference = 'reference';
     }
 
-    /**
-     * @throws ReflectionException
-     */
-    public function testTypeReturnsCorrectType(): void
-    {
-        $feature = $this->feature($this->reference);
-        $method = $this->method('nsid', $feature);
-        $expected = $this->type;
-
-        $this->assertSame(
-            $expected,
-            $method->invoke($feature)
-        );
-    }
-
     public function test__toStringReturnsCorrectLabelWhenPassedBothParameters(): void
     {
         $feature = $this->feature($this->reference, $this->label);
@@ -60,7 +45,6 @@ trait FeatureTests
         $feature = $this->feature($this->reference, $this->label);
 
         $expected = [
-            'type' => $this->type,
             'label' => $this->prefix . $this->label,
             $this->key => $this->reference,
         ];
@@ -78,7 +62,6 @@ trait FeatureTests
     private function schema(string $label): array
     {
         return [
-            'type' => $this->type,
             'label' => $this->prefix . $label,
             $this->key => $this->reference,
         ];

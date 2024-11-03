@@ -4,7 +4,7 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 class Mention extends FeatureAbstract
 {
-    protected function schema(): array
+    public function jsonSerialize(): array
     {
         return [
             'label' => "@$this->label",

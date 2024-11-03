@@ -18,7 +18,6 @@ class FeatureAbstractTest extends TestCase
     {
         $mock = $this->getMockBuilder(FeatureAbstract::class)
             ->setConstructorArgs(['reference', 'label'])
-            ->onlyMethods(['schema'])
             ->getMockForAbstractClass();
 
         $reference = $this->getPropertyValue('reference', $mock);
@@ -32,21 +31,17 @@ class FeatureAbstractTest extends TestCase
     {
         $mock = $this->getMockBuilder(FeatureAbstract::class)
             ->setConstructorArgs(['reference', 'label'])
-            ->onlyMethods(['schema', 'nsid'])
+            ->onlyMethods(['jsonSerialize'])
             ->getMockForAbstractClass();
 
         $schema = ['key' => 'value'];
 
         $mock->expects($this->once())
-            ->method('schema')
+            ->method('jsonSerialize')
             ->willReturn($schema);
 
-        $mock->expects($this->once())
-            ->method('nsid')
-            ->willReturn('feature');
-
         $this->assertSame(
-            ['type' => 'feature'] + $schema,
+            $schema,
             $mock->jsonSerialize()
         );
     }
