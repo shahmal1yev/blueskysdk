@@ -4,12 +4,12 @@ namespace Atproto\Lexicons\App\Bsky\Actor;
 
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
-use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Exception;
 
 class GetProfile extends APIRequest implements LexiconContract
@@ -60,8 +60,8 @@ class GetProfile extends APIRequest implements LexiconContract
         return $this;
     }
 
-    public function resource(array $data): ResourceContract
+    public function response(array $data): ResponseContract
     {
-        return new GetProfileResource($data);
+        return new GetProfileResponse($data);
     }
 }

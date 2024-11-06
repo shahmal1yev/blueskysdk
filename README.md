@@ -42,7 +42,7 @@ First, instantiate the `Client` class and authenticate using your BlueSky creden
 
 ```php
 use Atproto\Client;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 
 $client = new Client();
 
@@ -50,7 +50,7 @@ $client = new Client();
 $client->authenticate($identifier, $password);
 
 // Once authenticated, you can retrieve the user's session resource
-/** @var CreateSessionResource $session */
+/** @var CreateSessionResponse $session */
 $session = $client->authenticated();
 ```
 
@@ -94,17 +94,17 @@ $createdAt = $profile->createdAt();
 BlueSky SDK allows you to access complex assets like followers and labels directly through the resource instances.
 
 ```php
-use Atproto\Resources\Assets\FollowersAsset;
-use Atproto\Resources\Assets\FollowerAsset;
+use Atproto\Responses\Objects\FollowersObject;
+use Atproto\Responses\Objects\FollowerObject;
 
 // Fetch the user's followers
-/** @var FollowersAsset<FollowerAsset> $followers */
+/** @var FollowersObject<FollowerObject> $followers */
 $followers = $profile->viewer()
                      ->knownFollowers()
                      ->followers();
 
 foreach ($followers as $follower) {
-    /** @var FollowerAsset $follower */
+    /** @var FollowerObject $follower */
     echo $follower->displayName() . " - Created at: " . $follower->createdAt()->format(DATE_ATOM) . "\n";
 }
 ```
@@ -116,7 +116,7 @@ Here is a more complete example of fetching and displaying profile information, 
 ```php
 use Atproto\Client;
 use Atproto\API\App\Bsky\Actor\GetProfile;
-use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
+use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 
 $client->authenticate('user@example.com', 'password');
 
@@ -127,7 +127,7 @@ $client->app()
        ->forge();
        // ->actor($client->authenticated()->did());
 
-/** @var GetProfileResource $user */
+/** @var GetProfileResponse $user */
 $user = $client->send();
 
 // Output profile details

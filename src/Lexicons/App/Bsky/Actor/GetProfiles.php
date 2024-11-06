@@ -4,13 +4,13 @@ namespace Atproto\Lexicons\App\Bsky\Actor;
 
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
-use Atproto\Resources\App\Bsky\Actor\GetProfilesResource;
+use Atproto\Responses\App\Bsky\Actor\GetProfilesResponse;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 use GenericCollection\Types\Primitive\StringType;
 
@@ -20,9 +20,9 @@ class GetProfiles extends APIRequest implements LexiconContract
 
     private ?GenericCollectionInterface $actors = null;
 
-    public function resource(array $data): ResourceContract
+    public function response(array $data): ResponseContract
     {
-        return new GetProfilesResource($data);
+        return new GetProfilesResponse($data);
     }
 
     /**

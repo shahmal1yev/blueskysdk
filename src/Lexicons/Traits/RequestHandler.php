@@ -2,13 +2,13 @@
 
 namespace Atproto\Lexicons\Traits;
 
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\cURLException;
 
 trait RequestHandler
 {
-    /** @var resource|ResourceContract $resource */
+    /** @var resource|ResponseContract $resource */
     private $resource;
 
     /** @var array $responseHeaders */

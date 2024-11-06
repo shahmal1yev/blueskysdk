@@ -7,7 +7,7 @@ use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Actor\GetProfiles;
-use Atproto\Resources\App\Bsky\Actor\GetProfilesResource;
+use Atproto\Responses\App\Bsky\Actor\GetProfilesResponse;
 use GenericCollection\GenericCollection;
 use GenericCollection\Types\Primitive\StringType;
 use PHPUnit\Framework\TestCase;
@@ -88,7 +88,7 @@ class GetProfilesTest extends TestCase
     public function testResourceMethodReturnsCorrectInstance(): void
     {
         $data = ['actors' => []];
-        $resource = $this->request->resource($data);
-        $this->assertInstanceOf(GetProfilesResource::class, $resource, 'Resource method should return an instance of GetProfilesResource.');
+        $resource = $this->request->response($data);
+        $this->assertInstanceOf(GetProfilesResponse::class, $resource, 'Resource method should return an instance of GetProfilesResource.');
     }
 }

@@ -7,7 +7,7 @@ use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use SplObserver;
@@ -163,7 +163,7 @@ class ClientTest extends TestCase
 
         $mockCreateSession->expects($this->once())
             ->method('send')
-            ->willReturn($this->createMock(CreateSessionResource::class));
+            ->willReturn($this->createMock(CreateSessionResponse::class));
 
         $this->client = $this->getMockBuilder(Client::class)
             ->onlyMethods(['forge'])

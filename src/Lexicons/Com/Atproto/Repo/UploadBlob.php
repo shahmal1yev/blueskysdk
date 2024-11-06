@@ -4,13 +4,13 @@ namespace Atproto\Lexicons\Com\Atproto\Repo;
 
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
-use Atproto\Resources\Com\Atproto\Repo\UploadBlobResource;
+use Atproto\Responses\Com\Atproto\Repo\UploadBlobResponse;
 use Atproto\Support\FileSupport;
 
 class UploadBlob extends APIRequest implements LexiconContract
@@ -82,9 +82,9 @@ class UploadBlob extends APIRequest implements LexiconContract
         return $this;
     }
 
-    public function resource(array $data): ResourceContract
+    public function response(array $data): ResponseContract
     {
-        return new UploadBlobResource([
+        return new UploadBlobResponse([
             'blob' => Blob::viaBinary($this->parameter('blob'))
         ]);
     }

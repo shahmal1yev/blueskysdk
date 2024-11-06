@@ -2,7 +2,7 @@
 
 namespace Tests\Supports;
 
-use Atproto\Contracts\Resources\AssetContract;
+use Atproto\Contracts\Resources\ObjectContract;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -27,7 +27,7 @@ trait NonPrimitiveAssetTest
 
         $this->assertTrue(true);
 
-        if (! $actualAsset instanceof AssetContract) {
+        if (! $actualAsset instanceof ObjectContract) {
             return;
         }
 

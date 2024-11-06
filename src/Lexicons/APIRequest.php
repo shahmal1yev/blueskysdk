@@ -4,7 +4,7 @@ namespace Atproto\Lexicons;
 
 use Atproto\Client;
 use Atproto\Contracts\Lexicons\APIRequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use SplSubject;
 
 abstract class APIRequest extends Request implements APIRequestContract
@@ -17,14 +17,14 @@ abstract class APIRequest extends Request implements APIRequestContract
         $this->initialize();
     }
 
-    public function send(): ResourceContract
+    public function send(): ResponseContract
     {
-        return $this->resource(parent::send());
+        return $this->response(parent::send());
     }
 
     abstract protected function initialize(): void;
 
-    abstract public function resource(array $data): ResourceContract;
+    abstract public function response(array $data): ResponseContract;
 
     public function update(SplSubject $subject): void
     {

@@ -3,7 +3,7 @@
 namespace Tests\Feature\Lexicons\App\Bsky\Graph;
 
 use Atproto\Client;
-use Atproto\Resources\Assets\FollowersAsset;
+use Atproto\Responses\Objects\FollowersObject;
 use PHPUnit\Framework\TestCase;
 
 class GetFollowersTest extends TestCase
@@ -36,6 +36,6 @@ class GetFollowersTest extends TestCase
         $response = $request->send();
 
         $this->assertSame($client->authenticated()->did(), $response->subject()->did());
-        $this->assertInstanceOf(FollowersAsset::class, $response->followers());
+        $this->assertInstanceOf(FollowersObject::class, $response->followers());
     }
 }

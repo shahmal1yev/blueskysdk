@@ -4,13 +4,13 @@ namespace Atproto\Lexicons\App\Bsky\Graph;
 
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Lexicons\Traits\Endpoint;
-use Atproto\Resources\App\Bsky\Graph\GetFollowersResource;
+use Atproto\Responses\App\Bsky\Graph\GetFollowersResponse;
 
 class GetFollowers extends APIRequest implements LexiconContract
 {
@@ -56,9 +56,9 @@ class GetFollowers extends APIRequest implements LexiconContract
         return $this;
     }
 
-    public function resource(array $data): ResourceContract
+    public function response(array $data): ResponseContract
     {
-        return new GetFollowersResource($data);
+        return new GetFollowersResponse($data);
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Lexicons\App\Bsky\Graph;
 
 use Atproto\Client;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
 use Atproto\Exceptions\InvalidArgumentException;
@@ -91,8 +91,8 @@ class GetFollowersTest extends TestCase
     public function testResourceMethodReturnsCorrectInstance()
     {
         $data = ['followers' => []];
-        $resource = $this->request->resource($data);
-        $this->assertInstanceOf(ResourceContract::class, $resource, 'Resource method should return an instance of ResourceContract.');
+        $resource = $this->request->response($data);
+        $this->assertInstanceOf(ResponseContract::class, $resource, 'Resource method should return an instance of ResourceContract.');
     }
 
     public function testLimitGetterReturnsNullWhenNotSet()

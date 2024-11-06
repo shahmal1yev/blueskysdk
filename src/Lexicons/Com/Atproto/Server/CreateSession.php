@@ -5,10 +5,10 @@ namespace Atproto\Lexicons\Com\Atproto\Server;
 use Atproto\Client;
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\Endpoint;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 
 class CreateSession extends APIRequest implements LexiconContract
 {
@@ -29,8 +29,8 @@ class CreateSession extends APIRequest implements LexiconContract
         return $this;
     }
 
-    public function resource(array $data): ResourceContract
+    public function response(array $data): ResponseContract
     {
-        return new CreateSessionResource($data);
+        return new CreateSessionResponse($data);
     }
 }
