@@ -111,7 +111,7 @@ class CreateRecordTest extends TestCase
             ->text("Testing post creation without a blob uploading")
             ->embed(new ImageCollection([
                 new Image(
-                    Blob::viaFile(new FileSupport(__DIR__.'/../../../../../../art/file.png')),
+                    Blob::viaFile(new FileSupport(__DIR__.'/../../../../../../art/logo-small.webp')),
                     'This blob not uploaded during this post creation'
                 ),
             ]));
