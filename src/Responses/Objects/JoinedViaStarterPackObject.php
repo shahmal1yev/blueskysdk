@@ -3,8 +3,6 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 use Carbon\Carbon;
 
@@ -18,9 +16,8 @@ use Carbon\Carbon;
  * @method LabelsObject labels()
  * @method Carbon indexedAt()
  */
-class JoinedViaStarterPackObject implements ResponseContract, ObjectContract
+class JoinedViaStarterPackObject implements ObjectContract
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 

@@ -21,6 +21,10 @@ trait NonPrimitiveAssetTest
      */
     public function testNonPrimitiveAssets(string $name, string $expectedAsset, $value): void
     {
+        if ($name === 'labels') {
+            ;
+        }
+
         $data = [$name => $value];
 
         $actualAsset = $this->resource($data)->$name();

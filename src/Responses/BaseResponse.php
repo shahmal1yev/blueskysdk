@@ -30,19 +30,19 @@ trait BaseResponse
     }
 
     /**
-     * @param  string  $name
+     * @param  string  $offset
      *
      * @return mixed
      *
      * @throws BadAssetCallException
      */
-    public function get(string $name)
+    public function get($offset)
     {
-        if (! $this->exist($name)) {
-            throw new BadAssetCallException($name);
+        if (! $this->exist($offset)) {
+            throw new BadAssetCallException($offset);
         }
 
-        return $this->parse($name);
+        return $this->parse($offset);
     }
 
     public function exist(string $name): bool

@@ -3,8 +3,6 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 
 /**
@@ -17,9 +15,8 @@ use Atproto\Traits\Castable;
  * @method DatetimeObject cts
  * @method DatetimeObject exp
  */
-class LabelObject implements ResponseContract, ObjectContract
+class LabelObject implements ObjectContract
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 

@@ -3,7 +3,6 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
 
 /**
  * @method string did()
@@ -15,7 +14,7 @@ use Atproto\Contracts\Resources\ResponseContract;
  * @method ViewerObject viewer()
  * @method LabelsObject labels()
  */
-class FollowerObject implements ResponseContract, ObjectContract
+class FollowerObject implements ObjectContract
 {
     use UserObject;
 }

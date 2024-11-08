@@ -3,7 +3,6 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
 use Carbon\Carbon;
 
 /**
@@ -17,7 +16,7 @@ use Carbon\Carbon;
  * @method ViewerObject viewer()
  * @method Carbon indexedAt()
  */
-class BlockingByListObject implements ResponseContract, ObjectContract
+class BlockingByListObject implements ObjectContract
 {
-    use ByListAsset;
+    use ByListObject;
 }

@@ -3,8 +3,6 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 
 /**
@@ -18,9 +16,8 @@ use Atproto\Traits\Castable;
  * @method KnownFollowersObject knownFollowers
  * @method LabelsObject labels
  */
-class ViewerObject implements ResponseContract, ObjectContract
+class ViewerObject implements ObjectContract
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 

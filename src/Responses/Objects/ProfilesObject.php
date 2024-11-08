@@ -10,7 +10,7 @@ use GenericCollection\Interfaces\TypeInterface;
 
 class ProfilesObject extends GenericCollection implements ObjectContract
 {
-    use CollectionAsset;
+    use CollectionObject;
 
     /**
      * @throws InvalidArgumentException

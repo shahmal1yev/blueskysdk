@@ -3,7 +3,8 @@
 namespace Tests\Unit\Responses\Assets;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Responses\Objects\CollectionAsset;
+use Atproto\Responses\Objects\BaseObject;
+use Atproto\Responses\Objects\CollectionObject;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\TypeInterface;
@@ -79,7 +80,7 @@ class CollectionObjectTest extends TestCase
 
 class TestCollectionObject extends GenericCollection implements ObjectContract
 {
-    use CollectionAsset;
+    use CollectionObject;
 
     public function __construct(array $content)
     {
@@ -99,6 +100,8 @@ class TestCollectionObject extends GenericCollection implements ObjectContract
 
 class ExampleObject implements ObjectContract
 {
+    use BaseObject;
+
     protected $value;
 
     public function __construct($value)

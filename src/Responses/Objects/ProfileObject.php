@@ -3,9 +3,8 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Contracts\Resources\ResponseContract;
 
-class ProfileObject implements ResponseContract, ObjectContract
+class ProfileObject implements ObjectContract
 {
     use UserObject;
 }

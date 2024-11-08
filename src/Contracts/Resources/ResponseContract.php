@@ -20,7 +20,7 @@ interface ResponseContract
      *
      * @throws BadAssetCallException If the asset does not exist on resource.
      */
-    public function get(string $name);
+    public function get($offset);
 
     /**
      * @param  string  $name

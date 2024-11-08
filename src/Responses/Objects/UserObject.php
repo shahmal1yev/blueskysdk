@@ -2,7 +2,6 @@
 
 namespace Atproto\Responses\Objects;
 
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 
 /**
@@ -24,7 +23,6 @@ use Atproto\Traits\Castable;
  */
 trait UserObject
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 

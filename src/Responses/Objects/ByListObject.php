@@ -2,7 +2,6 @@
 
 namespace Atproto\Responses\Objects;
 
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 use Carbon\Carbon;
 
@@ -17,9 +16,8 @@ use Carbon\Carbon;
  * @method ViewerObject viewer()
  * @method Carbon indexedAt()
  */
-trait ByListAsset
+trait ByListObject
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 

@@ -3,9 +3,12 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
+use Atproto\Responses\BaseResponse;
 
 trait BaseObject
 {
+    use BaseResponse;
+
     /** @var mixed */
     protected $value;
 

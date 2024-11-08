@@ -3,12 +3,10 @@
 namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 
 class KnownFollowersObject implements ObjectContract
 {
-    use BaseResponse;
     use BaseObject;
     use Castable;
 
