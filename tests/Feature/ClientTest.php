@@ -3,12 +3,12 @@
 namespace Tests\Feature;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\Resources\ResourceContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
 use Atproto\Exceptions\Http\Response\AuthMissingException;
-use Atproto\Resources\App\Bsky\Actor\GetProfileResource;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -33,8 +33,8 @@ class ClientTest extends TestCase
      */
     public function testGetProfile(): void
     {
-        $username = $_ENV['BLUESKY_IDENTIFIER'];
-        $password = $_ENV['BLUESKY_PASSWORD'];
+        $username = getenv('BLUESKY_IDENTIFIER');
+        $password = getenv('BLUESKY_PASSWORD');
 
         $this->assertIsString($username);
         $this->assertIsString($password);
@@ -44,10 +44,10 @@ class ClientTest extends TestCase
             $password
         );
 
-        /** @var CreateSessionResource $authenticated */
+        /** @var CreateSessionResponse $authenticated */
         $authenticated = $this->getPropertyValue('authenticated', $this->client);
 
-        $this->assertInstanceOf(ResourceContract::class, $authenticated);
+        $this->assertInstanceOf(ResponseContract::class, $authenticated);
 
         $this->assertIsString($authenticated->handle());
         $this->assertSame($username, $authenticated->handle());
@@ -61,8 +61,8 @@ class ClientTest extends TestCase
             ->actor($this->client->authenticated()->did())
             ->send();
 
-        $this->assertInstanceOf(ResourceContract::class, $profile);
-        $this->assertInstanceOf(GetProfileResource::class, $profile);
+        $this->assertInstanceOf(ResponseContract::class, $profile);
+        $this->assertInstanceOf(GetProfileResponse::class, $profile);
 
         $this->assertInstanceOf(Carbon::class, $profile->createdAt());
     }
@@ -97,9 +97,6 @@ class ClientTest extends TestCase
             ->send();
     }
 
-    /**
-     * @throws BlueskyException
-     */
     public function testObserverNotificationOnAuthentication(): void
     {
         $request = $this->client->app()
@@ -109,15 +106,15 @@ class ClientTest extends TestCase
             ->forge();
 
         $this->client->authenticate(
-            $_ENV['BLUESKY_IDENTIFIER'],
-            $_ENV['BLUESKY_PASSWORD']
+            getenv('BLUESKY_IDENTIFIER'),
+            getenv('BLUESKY_PASSWORD')
         );
 
         $response = $request->actor($this->client->authenticated()->did())
             ->build()
             ->send();
 
-        $this->assertInstanceOf(ResourceContract::class, $response);
-        $this->assertInstanceOf(GetProfileResource::class, $response);
+        $this->assertInstanceOf(ResponseContract::class, $response);
+        $this->assertInstanceOf(GetProfileResponse::class, $response);
     }
 }

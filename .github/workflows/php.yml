@@ -16,6 +16,11 @@ jobs:
       matrix:
         php-version: ['7.4', '8.0', '8.1']
     name: PHP ${{ matrix.php-version }} Test
+
+    env:
+      BLUESKY_IDENTIFIER: ${{ secrets.BLUESKY_IDENTIFIER }}
+      BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+
     steps:
       - uses: shivammathur/setup-php@v2
         with:
@@ -43,7 +48,6 @@ jobs:
 
       - name: Run Feature Tests
         run: composer run-script test-feature
-        continue-on-error: true
 
       - name: Static Analyse
         run: composer run-script analyse

@@ -3,14 +3,13 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\HTTP\APIRequestContract;
+use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Observer;
-use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\Request\RequestNotFoundException;
+use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 
 trait Smith
 {
-    private string $prefix = "Atproto\\HTTP\\API\\Requests\\";
+    private string $prefix = "Atproto\\Lexicons\\";
     private array $path = [];
 
     public function __call(string $name, array $arguments): Client
@@ -21,22 +20,25 @@ trait Smith
     }
 
     /**
-     * @throws RequestNotFoundException
+     * @throws LexiconNotFoundException
      */
-    public function forge(...$arguments): RequestContract
+    public function forge(...$arguments)
     {
         $arguments = array_merge([$this], array_values($arguments));
 
         $request = $this->request();
 
         if (! class_exists($request)) {
-            throw new RequestNotFoundException("$request class does not exist.");
+            throw new LexiconNotFoundException("$request class does not exist.");
         }
 
         /** @var APIRequestContract $request */
         $request = new $request(...$arguments);
 
-        $this->attach($request);
+        if ($request instanceof \SplObserver) {
+            $this->attach($request);
+        }
+
         $this->refresh();
 
         return $request;
