@@ -3,10 +3,10 @@
 namespace Atproto\Responses\App\Bsky\Graph;
 
 use Atproto\Contracts\Resources\ResponseContract;
+use Atproto\Responses\BaseResponse;
 use Atproto\Responses\Objects\BaseObject;
 use Atproto\Responses\Objects\FollowersObject;
 use Atproto\Responses\Objects\SubjectObject;
-use Atproto\Responses\BaseResponse;
 use Atproto\Traits\Castable;
 
 class GetFollowersResponse implements ResponseContract

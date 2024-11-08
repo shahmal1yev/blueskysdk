@@ -9,6 +9,6 @@ class ActorCollection extends GenericCollection
 {
     public function __construct(iterable $collection = [])
     {
-        parent::__construct(new StringType, $collection);
+        parent::__construct(new StringType(), $collection);
     }
 }

@@ -4,7 +4,6 @@ namespace Tests\Feature\Lexicons\App\Bsky\Actor;
 
 use Atproto\Client;
 use Atproto\Collections\ActorCollection;
-use Atproto\Lexicons\App\Bsky\Actor\GetProfiles;
 use Atproto\Responses\App\Bsky\Actor\GetProfilesResponse;
 use Atproto\Responses\Objects\ProfileObject;
 use Atproto\Responses\Objects\ProfilesObject;

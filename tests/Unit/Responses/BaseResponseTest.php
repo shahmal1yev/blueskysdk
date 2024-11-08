@@ -5,8 +5,8 @@ namespace Tests\Unit\Responses;
 use Atproto\Contracts\Resources\ObjectContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
-use Atproto\Responses\Objects\BaseObject;
 use Atproto\Responses\BaseResponse;
+use Atproto\Responses\Objects\BaseObject;
 use Atproto\Traits\Castable;
 use PHPUnit\Framework\TestCase;
 

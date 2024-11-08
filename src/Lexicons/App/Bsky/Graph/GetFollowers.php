@@ -9,7 +9,6 @@ use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
-use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\App\Bsky\Graph\GetFollowersResponse;
 
 class GetFollowers extends APIRequest implements LexiconContract

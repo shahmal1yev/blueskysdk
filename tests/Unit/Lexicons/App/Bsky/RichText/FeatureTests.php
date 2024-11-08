@@ -3,7 +3,6 @@
 namespace Tests\Unit\Lexicons\App\Bsky\RichText;
 
 use Atproto\Lexicons\App\Bsky\RichText\FeatureAbstract;
-use ReflectionException;
 use Tests\Supports\Reflection;
 
 trait FeatureTests

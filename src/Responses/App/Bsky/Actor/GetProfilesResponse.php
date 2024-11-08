@@ -3,8 +3,8 @@
 namespace Atproto\Responses\App\Bsky\Actor;
 
 use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Responses\Objects\ProfilesObject;
 use Atproto\Responses\BaseResponse;
+use Atproto\Responses\Objects\ProfilesObject;
 use Atproto\Traits\Castable;
 
 class GetProfilesResponse implements ResponseContract

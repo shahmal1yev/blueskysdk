@@ -4,7 +4,6 @@ namespace Atproto\Lexicons\App\Bsky\RichText;
 
 use Atproto\Contracts\LexiconContract;
 use Atproto\Lexicons\Traits\Lexicon;
-use Atproto\Lexicons\Traits\Serializable;
 
 abstract class FeatureAbstract implements LexiconContract
 {
