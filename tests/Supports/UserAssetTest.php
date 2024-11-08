@@ -2,9 +2,9 @@
 
 namespace Tests\Supports;
 
-use Atproto\Resources\Assets\AssociatedAsset;
-use Atproto\Resources\Assets\JoinedViaStarterPackAsset;
-use Atproto\Resources\Assets\ViewerAsset;
+use Atproto\Responses\Objects\AssociatedObject;
+use Atproto\Responses\Objects\JoinedViaStarterPackObject;
+use Atproto\Responses\Objects\ViewerObject;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 
 trait UserAssetTest
@@ -32,9 +32,9 @@ trait UserAssetTest
     public function nonPrimitiveAssetsProvider(): array
     {
         return [
-            ['associated', AssociatedAsset::class, []],
-            ['joinedViaStarterPack', JoinedViaStarterPackAsset::class, []],
-            ['viewer', ViewerAsset::class,  []],
+            ['associated', AssociatedObject::class, []],
+            ['joinedViaStarterPack', JoinedViaStarterPackObject::class, []],
+            ['viewer', ViewerObject::class,  []],
             ['labels', GenericCollectionInterface::class, []],
         ];
     }

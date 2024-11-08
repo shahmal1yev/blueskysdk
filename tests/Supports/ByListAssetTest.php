@@ -2,8 +2,8 @@
 
 namespace Tests\Supports;
 
-use Atproto\Resources\Assets\LabelsAsset;
-use Atproto\Resources\Assets\ViewerAsset;
+use Atproto\Responses\Objects\LabelsObject;
+use Atproto\Responses\Objects\ViewerObject;
 use Carbon\Carbon;
 
 trait ByListAssetTest
@@ -27,8 +27,8 @@ trait ByListAssetTest
         list($this->faker) = self::getData();
 
         return [
-            ['labels', LabelsAsset::class, []],
-            ['viewer', ViewerAsset::class, []],
+            ['labels', LabelsObject::class, []],
+            ['viewer', ViewerObject::class, []],
             ['indexedAt', Carbon::class, $this->faker->dateTime->format(DATE_ATOM)],
         ];
     }

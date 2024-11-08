@@ -41,3 +41,19 @@ if (! function_exists('trait_uses_recursive')) {
         return $traits;
     }
 }
+
+if (! function_exists('encode_varint')) {
+    function encode_varint(int $int): string
+    {
+        $encoded = '';
+
+        while ($int >= 0x80) {
+            $encoded .= chr(($int & 0x7F) | 0x80);
+            $int >>= 7;
+        }
+
+        $encoded .= chr($int);
+
+        return $encoded;
+    }
+}

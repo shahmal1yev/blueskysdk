@@ -3,11 +3,11 @@
 namespace Tests\Unit;
 
 use Atproto\Client;
-use Atproto\Contracts\RequestContract;
-use Atproto\Exceptions\Http\Request\RequestNotFoundException;
-use Atproto\HTTP\API\APIRequest;
-use Atproto\HTTP\API\Requests\Com\Atproto\Server\CreateSession;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use SplObserver;
@@ -48,7 +48,7 @@ class ClientTest extends TestCase
 
         $namespace = $method->invoke($this->client);
 
-        $expectedNamespace = 'Atproto\\HTTP\\API\\Requests\\App\\Bsky\\Actor';
+        $expectedNamespace = 'Atproto\\Lexicons\\App\\Bsky\\Actor';
         $this->assertSame($expectedNamespace, $namespace);
     }
 
@@ -56,14 +56,14 @@ class ClientTest extends TestCase
     {
         $this->client->nonExistentMethod();
 
-        $this->expectException(RequestNotFoundException::class);
-        $this->expectExceptionMessage("Atproto\\HTTP\\API\\Requests\\NonExistentMethod class does not exist.");
+        $this->expectException(LexiconNotFoundException::class);
+        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod class does not exist.");
 
         $this->client->forge();
     }
 
     /**
-     * @throws RequestNotFoundException
+     * @throws LexiconNotFoundException
      */
     public function testForgeReturnsRequestContract(): void
     {
@@ -163,7 +163,7 @@ class ClientTest extends TestCase
 
         $mockCreateSession->expects($this->once())
             ->method('send')
-            ->willReturn($this->createMock(CreateSessionResource::class));
+            ->willReturn($this->createMock(CreateSessionResponse::class));
 
         $this->client = $this->getMockBuilder(Client::class)
             ->onlyMethods(['forge'])

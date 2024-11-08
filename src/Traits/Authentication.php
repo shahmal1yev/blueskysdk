@@ -3,13 +3,13 @@
 namespace Atproto\Traits;
 
 use Atproto\Exceptions\BlueskyException;
-use Atproto\Resources\Com\Atproto\Server\CreateSessionResource;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use SplObjectStorage;
 use SplObserver;
 
 trait Authentication
 {
-    private ?CreateSessionResource $authenticated = null;
+    private ?CreateSessionResponse $authenticated = null;
     private SplObjectStorage $observers;
 
     public function __construct()
@@ -24,7 +24,7 @@ trait Authentication
     {
         $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password);
 
-        /** @var CreateSessionResource $response */
+        /** @var CreateSessionResponse $response */
         $response = $request->send();
 
         $this->authenticated = $response;
@@ -32,7 +32,7 @@ trait Authentication
         $this->notify();
     }
 
-    public function authenticated(): ?CreateSessionResource
+    public function authenticated(): ?CreateSessionResponse
     {
         return $this->authenticated;
     }

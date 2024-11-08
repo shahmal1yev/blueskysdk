@@ -30,7 +30,8 @@
   "require-dev": {
     "phpunit/phpunit": "9.6.20",
     "fakerphp/faker": "^1.23",
-    "phpstan/phpstan": "^1.12"
+    "phpstan/phpstan": "^1.12",
+    "ext-posix": "*"
   },
   "require": {
     "ext-json": "*",
