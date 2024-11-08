@@ -2,11 +2,10 @@
 
 namespace Atproto\Responses\Objects;
 
-use Atproto\Collections\Types\NonPrimitive\LabelAssetType;
 use Atproto\Contracts\Resources\ObjectContract;
+use Closure;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
-use GenericCollection\Interfaces\TypeInterface;
 
 class LabelsObject extends GenericCollection implements ObjectContract
 {
@@ -20,8 +19,8 @@ class LabelsObject extends GenericCollection implements ObjectContract
         return new LabelObject($data);
     }
 
-    protected function type(): TypeInterface
+    protected function type(): Closure
     {
-        return new LabelAssetType();
+        return fn ($value): bool => $value instanceof LabelObject;
     }
 }

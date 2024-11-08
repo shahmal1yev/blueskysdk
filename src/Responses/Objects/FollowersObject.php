@@ -2,11 +2,10 @@
 
 namespace Atproto\Responses\Objects;
 
-use Atproto\Collections\Types\NonPrimitive\FollowerAssetType;
 use Atproto\Contracts\Resources\ObjectContract;
+use Closure;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
-use GenericCollection\Interfaces\TypeInterface;
 
 class FollowersObject extends GenericCollection implements ObjectContract
 {
@@ -20,8 +19,8 @@ class FollowersObject extends GenericCollection implements ObjectContract
         return new FollowerObject($data);
     }
 
-    protected function type(): TypeInterface
+    protected function type(): Closure
     {
-        return new FollowerAssetType();
+        return fn ($value): bool => $value instanceof FollowerObject;
     }
 }

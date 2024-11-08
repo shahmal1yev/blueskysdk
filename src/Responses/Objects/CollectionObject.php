@@ -4,7 +4,7 @@ namespace Atproto\Responses\Objects;
 
 use Atproto\Contracts\Resources\ObjectContract;
 use Atproto\Support\Arr;
-use GenericCollection\Interfaces\TypeInterface;
+use Closure;
 
 trait CollectionObject
 {
@@ -34,5 +34,5 @@ trait CollectionObject
     }
 
     abstract protected function item($data): ObjectContract;
-    abstract protected function type(): TypeInterface;
+    abstract protected function type(): Closure;
 }

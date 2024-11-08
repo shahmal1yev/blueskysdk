@@ -5,6 +5,7 @@ namespace Tests\Unit\Responses\Assets;
 use Atproto\Contracts\Resources\ObjectContract;
 use Atproto\Responses\Objects\BaseObject;
 use Atproto\Responses\Objects\CollectionObject;
+use Closure;
 use GenericCollection\Exceptions\InvalidArgumentException;
 use GenericCollection\GenericCollection;
 use GenericCollection\Interfaces\TypeInterface;
@@ -61,14 +62,6 @@ class CollectionObjectTest extends TestCase
         }
     }
 
-
-    public function testTypeMethod()
-    {
-        $type = $this->collectionAsset->type();
-
-        $this->assertInstanceOf(ExampleAssetType::class, $type);
-    }
-
     /**
      * @throws InvalidArgumentException
      */
@@ -92,9 +85,9 @@ class TestCollectionObject extends GenericCollection implements ObjectContract
         return new ExampleObject($data);
     }
 
-    public function type(): TypeInterface
+    public function type(): Closure
     {
-        return new ExampleAssetType();
+        return fn ($value): bool => $value instanceof ExampleObject;
     }
 }
 
