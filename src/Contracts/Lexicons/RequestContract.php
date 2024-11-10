@@ -2,12 +2,14 @@
 
 namespace Atproto\Contracts\Lexicons;
 
+use Psr\Http\Message\MessageInterface;
+
 /**
  * Interface RequestContract
  *
  * This interface defines the contract for an HTTP request.
  */
-interface RequestContract
+interface RequestContract extends MessageInterface
 {
     /**
      * Get the URL of the request.

@@ -8,6 +8,8 @@ use Atproto\Lexicons\Request;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
+use stdClass;
 use Tests\Supports\Reflection;
 use TypeError;
 
@@ -191,5 +193,122 @@ class RequestTest extends TestCase
             $keys,
             $values
         );
+    }
+
+    public function testGetProtocolVersionReturnsDefaultVersion(): void
+    {
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testWithProtocolVersionChangesProtocolVersion(): void
+    {
+        $message = $this->request->withProtocolVersion('2.0');
+
+        $this->assertSame('2.0', $message->getProtocolVersion());
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testWithProtocolVersionReturnsSameInstanceIfVersionNotChanged(): void
+    {
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+        $this->assertSame($this->request, $this->request->withProtocolVersion('1.1'));
+    }
+
+    public function testGetHeadersCanGetHeaders(): void
+    {
+        $headers = ['content-type' => ['application/json']];
+        $request = $this->request->withHeader('Content-Type', ['application/json']);
+
+        $this->assertEquals($headers, $request->getHeaders());
+    }
+
+    public function testHasHeaderReturnsTrueIfHeaderExists(): void
+    {
+        $request = $this->request->withHeader('Content-Type', ['application/json']);
+
+        $this->assertTrue($request->hasHeader('Content-Type'));
+        $this->assertTrue($request->hasHeader('content-type'));
+        $this->assertFalse($request->hasHeader('X-Custom'));
+    }
+
+    public function testGetHeaderCanGetHeaderValues(): void
+    {
+        $request = $this->request->withHeader('Accept', ['application/json', 'text/html']);
+
+        $this->assertEquals(['application/json', 'text/html'], $request->getHeader('Accept'));
+        $this->assertEquals([], $request->getHeader('X-Custom'));
+    }
+
+    public function testGetHeaderLineReturnsHeaderValuesSeparatedByComma(): void
+    {
+        $request = $this->request->withHeader('Accept', ['application/json', 'text/html']);
+
+        $this->assertSame('application/json, text/html', $request->getHeaderLine('Accept'));
+        $this->assertSame('', $request->getHeaderLine('X-Custom'));
+    }
+
+    public function testWithHeaderThrowsExceptionWhenPassedInvalidValue(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$value must be an array or string');
+        $this->request->withHeader('Test', new stdClass());
+    }
+
+    public function testWithAddedHeaderThrowsExceptionWhenPassedInvalidValue(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$value must be an array or string');
+        $this->request->withAddedHeader('Test', new stdClass());
+    }
+
+    public function testItCanAddHeaders(): void
+    {
+        $request = $this->request
+            ->withHeader('Content-Type', ['application/json'])
+            ->withAddedHeader('Content-Type', ['text/html']);
+
+        $this->assertEquals(['application/json', 'text/html'], $request->getHeader('Content-Type'));
+    }
+
+    public function testItCanRemoveHeaders(): void
+    {
+        $request = $this->request
+            ->withHeader('Content-Type', ['application/json'])
+            ->withoutHeader('Content-Type');
+
+        $this->assertFalse($request->hasHeader('Content-Type'));
+        $this->assertEquals([], $request->getHeader('Content-Type'));
+    }
+
+    public function testItCanSetBody(): void
+    {
+        $streamMock = $this->createMock(StreamInterface::class);
+
+        $request = $this->request->withBody($streamMock);
+
+        $this->assertSame($streamMock, $request->getBody());
+    }
+
+    public function testMaintainsImmutabilityWhenSettingBody(): void
+    {
+        $stream1 = $this->createMock(StreamInterface::class);
+        $stream2 = $this->createMock(StreamInterface::class);
+
+        $request1 = $this->request->withBody($stream1);
+        $request2 = $request1->withBody($stream2);
+
+        $this->assertNotSame($request1, $request2);
+        $this->assertSame($stream1, $request1->getBody());
+        $this->assertSame($stream2, $request2->getBody());
+    }
+
+    public function testMaintainsImmutabilityWhenSettingHeaders(): void
+    {
+        $request1 = $this->request->withHeader('Content-Type', ['application/json']);
+        $request2 = $request1->withHeader('Content-Type', ['text/html']);
+
+        $this->assertNotSame($request1, $request2);
+        $this->assertEquals(['application/json'], $request1->getHeader('Content-Type'));
+        $this->assertEquals(['text/html'], $request2->getHeader('Content-Type'));
     }
 }
