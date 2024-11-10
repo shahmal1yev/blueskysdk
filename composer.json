@@ -34,12 +34,13 @@
     "ext-posix": "*"
   },
   "require": {
+    "php": ">=7.4",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-fileinfo": "*",
-    "php": ">=7.4",
     "nesbot/carbon": "2.x",
-    "shahmal1yev/gcollection": "^1.0"
+    "shahmal1yev/gcollection": "^1.0",
+    "psr/http-message": "^2.0"
   },
   "scripts": {
     "test": "vendor/bin/phpunit tests",
