@@ -103,7 +103,7 @@ echo $profile->displayName();    // Returns string
 echo $profile->followersCount(); // Returns int
 
 /** @var \Carbon\Carbon $createdAt */
-$createdAt $profile->createdAt();      // Returns Carbon instance
+$createdAt = $profile->createdAt();      // Returns Carbon instance
 
 // Response objects are iterable when representing collections
 /** @var \Atproto\Responses\Objects\FollowersObject $followers */

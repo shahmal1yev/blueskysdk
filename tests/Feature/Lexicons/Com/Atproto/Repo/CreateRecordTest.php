@@ -22,8 +22,8 @@ class CreateRecordTest extends TestCase
     {
         static::$client = new Client();
         static::$client->authenticate(
-            getenv('BLUESKY_IDENTIFIER'),
-            getenv('BLUESKY_PASSWORD')
+            'shahmal1yevv.bsky.social',
+            'ucvlqcq8'
         );
     }
 
@@ -60,11 +60,11 @@ class CreateRecordTest extends TestCase
                 '. Author? Yes, ',
                 RichText::mention('did:plc:bdkw6ic5ugy6ni4pqvljcpva', 'here'),
                 ' it is. ',
-                RichText::tag('https://bsky.app/hashtag/php', 'php'),
+                RichText::tag('php', 'php'),
                 " ",
-                RichText::tag('https://bsky.app/hashtag/sdk', 'sdk'),
+                RichText::tag('sdk', 'sdk'),
                 " ",
-                RichText::tag('https://bsky.app/hashtag/bluesky', 'bluesky'),
+                RichText::tag('bluesky', 'bluesky'),
             )
             ->embed(new ImageCollection([
                 new Image($uploadedBlob, "PHP BlueSky SDK Logo")
