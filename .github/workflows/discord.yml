@@ -1,0 +1,24 @@
+name: Discord Release Notification
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce the release to community
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: |
+            🚀 **New Release**: `${{ github.event.release.tag_name }}`
+            ${{ github.event.release.prerelease && '`pre-release`' || '`stable`' }}
+
+            ${{ github.event.release.body }}
+            
+            🔗 [View Full Changelog](${{ github.event.release.html_url }})
+            
+            👤 Released by @${{ github.event.release.author.login }}
