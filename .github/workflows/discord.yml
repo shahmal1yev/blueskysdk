@@ -14,11 +14,10 @@ jobs:
         uses: Ilshidur/action-discord@0.3.2
         with:
           args: |
-            🚀 **New Release**: `${{ github.event.release.tag_name }}`
-            ${{ github.event.release.prerelease && '`pre-release`' || '`stable`' }}
+            🚀 **New Release**: `${{ github.event.release.tag_name }}` ${{ github.event.release.prerelease && '`pre-release`' || '`stable`' }}
 
             ${{ github.event.release.body }}
             
             🔗 [View Full Changelog](${{ github.event.release.html_url }})
             
-            👤 Released by @${{ github.event.release.author.login }}
+            👤 Released by @[${{ github.event.release.author.login }}](${{ github.event.release.author.html_url }})
