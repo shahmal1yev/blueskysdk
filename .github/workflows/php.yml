@@ -2,30 +2,27 @@ name: PHP Workflow
 
 on:
   push:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php-version: ['7.4', '8.0', '8.1']
-    name: PHP ${{ matrix.php-version }} Test
-
-    env:
-      BLUESKY_IDENTIFIER: ${{ secrets.BLUESKY_IDENTIFIER }}
-      BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+    name: PHP ${{ matrix.php-version }} Unit Tests
 
     steps:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: mbstring, intl
+          extensions: mbstring, intl, json, curl, fileinfo
+          coverage: none
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -46,8 +43,31 @@ jobs:
       - name: Run Unit Tests
         run: composer run-script test-unit
 
-      - name: Run Feature Tests
-        run: composer run-script test-feature
-
       - name: Static Analyse
         run: composer run-script analyse
+
+  feature-tests:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1']
+    name: PHP ${{ matrix.php-version }} Feature Tests
+    env:
+      BLUESKY_IDENTIFIER: ${{ secrets.BLUESKY_IDENTIFIER }}
+      BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, json, curl, fileinfo
+          coverage: none
+
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run Feature Tests
+        run: composer run-script test-feature
