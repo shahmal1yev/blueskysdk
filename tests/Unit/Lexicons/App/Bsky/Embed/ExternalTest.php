@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Lexicons\App\Bsky\Embed;
 
+use Atproto\Client;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\App\Bsky\Embed\External;
@@ -17,7 +18,7 @@ class ExternalTest extends TestCase
 
     public function setUp(): void
     {
-        $this->external = new External('https://shahmal1yev.dev', 'foo', 'bar');
+        $this->external = new External($this->createMock(Client::class), 'https://shahmal1yev.dev', 'foo', 'bar');
 
         $this->blob = $this->getMockBuilder(Blob::class)
             ->disableOriginalConstructor()
@@ -107,9 +108,11 @@ class ExternalTest extends TestCase
     {
         $expected = [
             '$type' => 'app.bsky.embed.external',
-            'uri' => 'https://shahmal1yev.dev',
-            'title' => 'foo',
-            'description' => 'bar',
+            'external' => [
+                'uri' => 'https://shahmal1yev.dev',
+                'title' => 'foo',
+                'description' => 'bar',
+            ]
         ];
 
         $this->assertSame($expected, json_decode($this->external, true));
@@ -124,10 +127,12 @@ class ExternalTest extends TestCase
 
         $expected = [
             '$type' => 'app.bsky.embed.external',
-            'uri' => 'https://shahmal1yev.dev',
-            'title' => 'foo',
-            'description' => 'bar',
-            'blob' => $this->blob->jsonSerialize(),
+            'external' => [
+                'uri' => 'https://shahmal1yev.dev',
+                'title' => 'foo',
+                'description' => 'bar',
+                'blob' => $this->blob->jsonSerialize()
+            ],
         ];
 
         $this->assertSame($expected, json_decode($this->external, true));
