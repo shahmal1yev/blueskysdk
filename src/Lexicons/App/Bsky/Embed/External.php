@@ -2,6 +2,7 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Client;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\DataModel\Blob\Blob;
@@ -17,7 +18,7 @@ class External implements EmbedInterface, MediaContract
     private string $description;
     private ?Blob $blob = null;
 
-    public function __construct(string $uri, string $title, string $description)
+    public function __construct(Client $bsky, string $uri, string $title, string $description)
     {
         $this->uri($uri)
             ->title($title)
@@ -94,12 +95,14 @@ class External implements EmbedInterface, MediaContract
 
     public function jsonSerialize(): array
     {
-        return array_filter([
+        return [
             '$type' => $this->nsid(),
-            'uri' => $this->uri,
-            'title' => $this->title,
-            'description' => $this->description,
-            'blob' => ($b = $this->blob) ? $b : null,
-        ]);
+            'external' => array_filter([
+                'uri' => $this->uri,
+                'title' => $this->title,
+                'description' => $this->description,
+                'blob' => ($b = $this->blob) ? $b : null,
+            ])
+        ];
     }
 }
