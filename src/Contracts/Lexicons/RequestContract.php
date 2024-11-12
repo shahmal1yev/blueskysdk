@@ -2,27 +2,21 @@
 
 namespace Atproto\Contracts\Lexicons;
 
+use Psr\Http\Message\RequestInterface;
+
 /**
  * Interface RequestContract
  *
  * This interface defines the contract for an HTTP request.
  */
-interface RequestContract
+interface RequestContract extends RequestInterface
 {
     /**
      * Get the URL of the request.
      *
-     * @return string The URL of the request
+     * @return RequestContract|string The URL of the request
      */
-    public function url(): string;
-
-    /**
-     * Get or set the host of the request.
-     *
-     * @param string|null $origin The host to set, or null to get the current host.
-     * @return mixed|string The request host or instance for chaining
-     */
-    public function origin(string $origin = null);
+    public function url($url = null);
 
     /**
      * Get or set the path of the request.

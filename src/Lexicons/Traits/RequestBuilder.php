@@ -2,152 +2,198 @@
 
 namespace Atproto\Lexicons\Traits;
 
+use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Exceptions\InvalidArgumentException;
+use Atproto\Support\Arr;
+
 trait RequestBuilder
 {
-    protected string $origin = '';
-    protected string $path = '';
-    protected string $method = 'GET';
-    protected array $headers = [];
-    protected array $parameters = [];
-    protected array $queryParameters = [];
-
-    public function url(): string
+    public function url($url = null, bool $preserveHost = false)
     {
-        $parts = array_map(fn ($part) => trim($part, "/"), [
-            'origin' => $this->origin(),
-            'path' => $this->path(),
-            'query' => $this->queryParameters(true),
-        ]);
+        if (is_null($url)) {
+            $uri = rtrim($this->getUri(), "/");
+            $target = "/" . trim($this->getRequestTarget(), "/");
 
-        $url = sprintf("%s/%s?%s", $parts['origin'], $parts['path'], $parts['query']);
+            if (false === $pos = strpos($uri, '?')) {
+                $uri = $uri . $target;
+            } else {
+                $uri = substr_replace($uri, $target, $pos, 0);
+            }
 
-        return $url;
-    }
-
-    public function origin(string $origin = null)
-    {
-        if (is_null($origin)) {
-            return $this->origin;
+            return $uri;
         }
 
-        $this->origin = rtrim($origin, "/");
-
-        return $this;
+        return $this->withUri($this->factory->createUri($url), $preserveHost);
     }
 
     public function path(string $path = null)
     {
         if (is_null($path)) {
-            return $this->path;
+            return $this->getRequestTarget();
         }
 
-        $this->path = trim($path, "/");
-
-        return $this;
+        return $this->withRequestTarget($path);
     }
 
     public function method(string $method = null)
     {
         if (is_null($method)) {
-            return $this->method;
+            return $this->getMethod();
         }
 
-        $this->method = $method;
-
-        return $this;
+        return $this->withMethod($method);
     }
 
     public function header(string $name, string $value = null)
     {
         if (is_null($value)) {
-            return $this->headers[$name] ?? null;
+            return $this->getHeaderLine($name);
         }
 
-        $this->headers[$name] = $value;
-
-        return $this;
+        return $this->withAddedHeader($name, $value);
     }
 
     public function parameter(string $name, $value = null)
     {
+        $content = json_decode($this->getBody()->getContents(), true);
+
         if (is_null($value)) {
-            return $this->parameters[$name] ?? null;
+            return Arr::get($content, $name);
         }
 
-        $this->parameters[$name] = $value;
+        $content[$name] = $value;
 
-        return $this;
+        $_this = clone $this;
+
+        $_this->request = $this->withBody($this->factory->createStream(json_encode($content)));
+
+        return $_this;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function queryParameter(string $name, $value = null)
     {
         if (is_null($value)) {
             return $this->queryParameters[$name] ?? null;
         }
 
-        $this->queryParameters[$name] = $value;
+        if (! is_array($value) && ! is_string($value)) {
+            throw new InvalidArgumentException('"$value" must be an array or string');
+        }
 
-        return $this;
+        return $this->withAddedQueryParameter($name, $value);
+    }
+
+    private function withAddedQueryParameter(string $name, $value): RequestContract
+    {
+        $_this = clone $this;
+
+        $queryParameters = $this->updateQuery($name, $value);
+
+        $_this->request = $this->withUri($_this->getUri()->withQuery($queryParameters));
+
+        return $_this;
+    }
+
+    private function updateQuery(string $name, $value): string
+    {
+        parse_str($this->getUri()->getQuery(), $query);
+
+        $query[$name] = $value;
+
+        return http_build_query(
+            $query,
+            '',
+            null,
+            PHP_QUERY_RFC3986
+        );
     }
 
     public function headers($headers = null)
     {
-        if (is_bool($headers)) {
-            if ($headers) {
-                return array_map(
-                    fn ($name, $value) => "$name: $value",
-                    array_keys($this->headers),
-                    array_values($this->headers)
-                );
+        if (true === $headers) {
+            return $this->emitHeaders();
+        }
+
+        if (is_null($headers) || false === $headers) {
+            return $this->getHeaders();
+        }
+
+        $_this = $this->headerlessRequest();
+
+        foreach ($headers as $headerName => $headerValue) {
+            $_this->request = $this->withHeader($headerName, $headerValue);
+        }
+
+        return $_this;
+    }
+
+    private function emitHeaders(): array
+    {
+        $result = [];
+
+        foreach($this->getHeaders() as $headerName => $headers) {
+            foreach($headers as $header) {
+                $headers[] = "$headerName: $header";
             }
-
-            return $this->headers;
         }
 
-        if (is_null($headers)) {
-            return $this->headers;
+        return $result;
+    }
+
+    private function headerlessRequest(): RequestContract
+    {
+        $_this = clone $this;
+
+        $headerNames = array_keys($_this->getHeaders());
+
+        foreach($headerNames as $headerName) {
+            $_this->request = $_this->withoutHeader($headerName);
         }
 
-        $this->headers = $headers;
-
-        return $this;
+        return $_this;
     }
 
     public function parameters($parameters = null)
     {
-        if (is_bool($parameters)) {
-            if ($parameters) {
-                return json_encode($this->parameters);
-            }
-
-            return $this->parameters;
+        if (true === $parameters) {
+            return $this->getBody()->getContents();
         }
 
-        if (is_null($parameters)) {
-            return $this->parameters;
+        if (is_null($parameters) || false === $parameters) {
+            return json_decode($this->getBody()->getContents(), true);
         }
 
-        $this->parameters = $parameters;
+        $_this = clone $this;
 
-        return $this;
+        $_this->request = $this->withBody($this->factory->createStream(json_encode($parameters)));
+
+        return $_this;
     }
 
     public function queryParameters($queryParameters = null)
     {
-        if (is_bool($queryParameters)) {
-            if ($queryParameters) {
-                return http_build_query($this->queryParameters);
-            }
-
-            return $this->queryParameters;
+        if (true === $queryParameters) {
+            return $this->getUri()->getQuery();
         }
 
-        if (is_null($queryParameters)) {
-            return $this->queryParameters;
+        if (is_null($queryParameters) || false === $queryParameters) {
+            parse_str($this->getUri()->getQuery(), $queryParameters);
+
+            return $queryParameters;
         }
 
-        $this->queryParameters = $queryParameters;
+        $_this = clone $this;
 
-        return $this;
+        $_this->request = $_this->request->withUri($_this->getUri()->withQuery(http_build_query(
+            $queryParameters,
+            '',
+            null,
+            PHP_QUERY_RFC3986
+        )));
+
+        return $_this;
     }
 }

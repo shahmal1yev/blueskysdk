@@ -8,6 +8,9 @@ use Atproto\Lexicons\Request;
 use Faker\Factory;
 use Faker\Generator;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
+use stdClass;
 use Tests\Supports\Reflection;
 use TypeError;
 
@@ -24,131 +27,25 @@ class RequestTest extends TestCase
         $this->faker = Factory::create();
     }
 
-    /** @dataProvider methodProvider */
-    public function testMethodSetsCorrectValue(string $method, string $property): void
-    {
-        $key = $this->faker->word;
-        $expected = $this->faker->word;
-
-        try {
-            $reflectedProperty = $this->getPropertyValue($property, $this->request);
-
-            $value = (is_array($reflectedProperty))
-                ? [$key => $expected]
-                : $expected;
-
-            $this->request->$method($value);
-        } catch (TypeError $e) {
-            $this->request->$method($key, $expected);
-        }
-
-        $actual = $this->getPropertyValue($property, $this->request);
-
-        if (is_array($actual)) {
-            $this->assertArrayHasKey($key, $actual);
-            $actual = $actual[$key];
-        }
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /** @dataProvider methodProvider */
-    public function testMethodReturnsCorrectValue(string $method, string $property): void
-    {
-        $key = $this->faker->word;
-        $expected = $this->faker->word;
-
-        $propertyValue = $this->getPropertyValue($property, $this->request);
-
-        if (is_array($propertyValue)) {
-            $expected = [$key => $expected];
-        }
-
-        $this->setPropertyValue($property, $expected, $this->request);
-
-        try {
-            $actual = $this->request->$method();
-        } catch (ArgumentCountError $e) {
-            $actual = $this->request->$method($key);
-            $expected = current($expected);
-        }
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /** @dataProvider methodProvider */
-    public function testMethodReturnsSameInstanceWhenSettingValue(string $method, string $property): void
-    {
-        $propertyValue = $this->getPropertyValue($property, $this->request);
-
-        $value = is_array($propertyValue)
-            ? [$this->faker->word]
-            : $this->faker->word;
-
-        try {
-            $actual = $this->request->$method($value);
-        } catch (TypeError $e) {
-            $actual = $this->request->$method($this->faker->word, $this->faker->word);
-        }
-
-        $this->assertInstanceOf(RequestContract::class, $actual);
-        $this->assertInstanceOf(Request::class, $actual);
-        $this->assertSame($this->request, $actual);
-    }
-
-    /** @dataProvider encodableProvider */
-    public function testMethodsReturnEncodableContentCorrectly(string $property, string $method, string $verifier): void
-    {
-        $content = $this->randomArray();
-
-        $this->setPropertyValue($property, $content, $this->request);
-
-        $expected = $content;
-        $actual = $this->request->$method(true);
-
-        $this->$verifier($expected, $actual);
-    }
-
     public function testUrlReturnsCorrectlyAddress(): void
     {
-        $origin = "https://example.com";
+        $url = "https://example.com";
         $path = "path/for/example/url";
         $queryParameters = ['foo' => 'bar', 'baz' => 'qux'];
 
-        $this->request->origin($origin)
+        $request = $this->request->url($url)
             ->path($path)
             ->queryParameters($queryParameters);
 
-        $actual = $this->request->url();
-        $expected = "$origin/$path?" . http_build_query($queryParameters);
+        $actual = $request->url();
+        $expected = sprintf("%s/%s?%s", $url, $path, http_build_query(
+            $queryParameters,
+            '',
+            null,
+            PHP_QUERY_RFC3986
+        ));
 
         $this->assertSame($expected, $actual);
-    }
-
-    public function encodableProvider(): array
-    {
-        return [
-            ['headers', 'headers', 'assertHeadersEncodedCorrectly'],
-            ['parameters', 'parameters', 'assertParametersEncodedCorrectly'],
-            ['queryParameters', 'queryParameters', 'assertQueryParametersEncodedCorrectly'],
-        ];
-    }
-
-    public function methodProvider(): array
-    {
-        # [method, property]
-
-        return [
-            ['path', 'path'],
-            ['origin', 'origin'],
-            ['method', 'method'],
-            ['header', 'headers'],
-            ['headers', 'headers'],
-            ['parameter', 'parameters'],
-            ['parameters', 'parameters'],
-            ['queryParameter', 'queryParameters'],
-            ['queryParameters', 'queryParameters'],
-        ];
     }
 
     protected function assertHeadersEncodedCorrectly(array $expected, array $actual): void
@@ -191,5 +88,175 @@ class RequestTest extends TestCase
             $keys,
             $values
         );
+    }
+
+    public function testGetProtocolVersionReturnsDefaultVersion(): void
+    {
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testWithProtocolVersionChangesProtocolVersion(): void
+    {
+        $message = $this->request->withProtocolVersion('2.0');
+
+        $this->assertSame('2.0', $message->getProtocolVersion());
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testWithProtocolVersionReturnsSameInstanceIfVersionNotChanged(): void
+    {
+        $this->assertSame('1.1', $this->request->getProtocolVersion());
+        $this->assertSame($this->request, $this->request->withProtocolVersion('1.1'));
+    }
+
+    public function testGetHeadersCanGetHeaders(): void
+    {
+        $headers = ['Content-Type' => ['application/json']];
+        $request = $this->request->withHeader('Content-Type', ['application/json']);
+
+        $this->assertEquals($headers, $request->getHeaders());
+    }
+
+    public function testHasHeaderReturnsTrueIfHeaderExists(): void
+    {
+        $request = $this->request->withHeader('Content-Type', ['application/json']);
+
+        $this->assertTrue($request->hasHeader('Content-Type'));
+        $this->assertTrue($request->hasHeader('content-type'));
+        $this->assertFalse($request->hasHeader('X-Custom'));
+    }
+
+    public function testGetHeaderCanGetHeaderValues(): void
+    {
+        $request = $this->request->withHeader('Accept', ['application/json', 'text/html']);
+
+        $this->assertEquals(['application/json', 'text/html'], $request->getHeader('Accept'));
+        $this->assertEquals([], $request->getHeader('X-Custom'));
+    }
+
+    public function testGetHeaderLineReturnsHeaderValuesSeparatedByComma(): void
+    {
+        $request = $this->request->withHeader('Accept', ['application/json', 'text/html']);
+
+        $this->assertSame('application/json, text/html', $request->getHeaderLine('Accept'));
+        $this->assertSame('', $request->getHeaderLine('X-Custom'));
+    }
+
+    public function testWithHeaderThrowsExceptionWhenPassedInvalidValue(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Header values must be RFC 7230 compatible strings');
+        $this->request->withHeader('Test', new stdClass());
+    }
+
+    public function testWithAddedHeaderThrowsExceptionWhenPassedInvalidValue(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Header values must be RFC 7230 compatible strings');
+        $this->request->withAddedHeader('Test', new stdClass());
+    }
+
+    public function testItCanAddHeaders(): void
+    {
+        $request = $this->request
+            ->withHeader('Content-Type', ['application/json'])
+            ->withAddedHeader('Content-Type', ['text/html']);
+
+        $this->assertEquals(['application/json', 'text/html'], $request->getHeader('Content-Type'));
+    }
+
+    public function testItCanRemoveHeaders(): void
+    {
+        $request = $this->request
+            ->withHeader('Content-Type', ['application/json'])
+            ->withoutHeader('Content-Type');
+
+        $this->assertFalse($request->hasHeader('Content-Type'));
+        $this->assertEquals([], $request->getHeader('Content-Type'));
+    }
+
+    public function testItCanSetBody(): void
+    {
+        $streamMock = $this->createMock(StreamInterface::class);
+
+        $request = $this->request->withBody($streamMock);
+
+        $this->assertSame($streamMock, $request->getBody());
+    }
+
+    public function testMaintainsImmutabilityWhenSettingBody(): void
+    {
+        $stream1 = $this->createMock(StreamInterface::class);
+        $stream2 = $this->createMock(StreamInterface::class);
+
+        $request1 = $this->request->withBody($stream1);
+        $request2 = $request1->withBody($stream2);
+
+        $this->assertNotSame($request1, $request2);
+        $this->assertSame($stream1, $request1->getBody());
+        $this->assertSame($stream2, $request2->getBody());
+    }
+
+    public function testMaintainsImmutabilityWhenSettingHeaders(): void
+    {
+        $request1 = $this->request->withHeader('Content-Type', ['application/json']);
+        $request2 = $request1->withHeader('Content-Type', ['text/html']);
+
+        $this->assertNotSame($request1, $request2);
+        $this->assertEquals(['application/json'], $request1->getHeader('Content-Type'));
+        $this->assertEquals(['text/html'], $request2->getHeader('Content-Type'));
+    }
+
+    public function testGetRequestReturnsDefaultValue(): void
+    {
+        $this->assertSame('/', $this->request->getRequestTarget());
+    }
+
+    public function testGetRequestCanChangeRequestTarget(): void
+    {
+        $this->assertSame('/', $this->request->getRequestTarget());
+        $this->assertNotSame($this->request, $instance = $this->request->withRequestTarget('/foo/bar'));
+        $this->assertSame('/foo/bar', $instance->getRequestTarget());
+    }
+
+    public function testGetMethodReturnsDefaultMethod(): void
+    {
+        $this->assertSame('GET', $this->request->getMethod());
+    }
+
+    public function testGetMethodCanChangeMethod(): void
+    {
+        $this->assertSame('GET', $this->request->getMethod());
+
+        $firstInstance = $this->request->withMethod('Post');
+        $secondInstance = $firstInstance->withMethod('POST');
+
+        $this->assertSame('Post', $firstInstance->getMethod());
+        $this->assertSame('POST', $secondInstance->getMethod());
+
+        $this->assertNotSame($this->request, $firstInstance);
+        $this->assertNotSame($firstInstance, $secondInstance);
+    }
+
+    public function testItReturnsInstanceOfSDKRequestAfterSet(): void
+    {
+        $this->assertInstanceOf(Request::class, $this->request);
+        $this->assertInstanceOf(Request::class, $this->request->withMethod('POST'));
+        $this->assertInstanceOf(Request::class, $this->request->withHeader('Content-type', 'application/json'));
+        $this->assertInstanceOf(Request::class, $this->request->withoutHeader('Content-type'));
+        $this->assertInstanceOf(Request::class, $this->request->withUri($this->createMock(UriInterface::class)));
+        $this->assertInstanceOf(Request::class, $this->request->withAddedHeader('Content-Type', 'application/json'));
+        $this->assertInstanceOf(Request::class, $this->request->withProtocolVersion('2.0'));
+        $this->assertInstanceOf(Request::class, $this->request->withRequestTarget('/foo/bar'));
+    }
+
+    public function testGetUriReturnsUriInstance(): void
+    {
+        $uriMock = $this->createMock(UriInterface::class);
+        $req = $this->request->withUri($uriMock);
+
+        $this->assertInstanceOf(UriInterface::class, $req->getUri());
+        $this->assertSame($uriMock, $req->getUri());
+        $this->assertNotInstanceOf(Request::class, $req->getUri());
     }
 }
