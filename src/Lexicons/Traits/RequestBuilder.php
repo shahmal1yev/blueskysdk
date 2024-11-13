@@ -11,16 +11,25 @@ trait RequestBuilder
     public function url($url = null, bool $preserveHost = false)
     {
         if (is_null($url)) {
-            $uri = rtrim($this->getUri(), "/");
-            $target = "/" . trim($this->getRequestTarget(), "/");
+            $uri = (string) $this->getUri();
+            $target = $this->getRequestTarget();
 
-            if (false === $pos = strpos($uri, '?')) {
-                $uri = $uri . $target;
-            } else {
-                $uri = substr_replace($uri, $target, $pos, 0);
+            if ($target[0] !== '/') {
+                $target = '/' . $target;
             }
 
-            return $uri;
+            if (false !== $pos = strpos($uri, '?')) {
+                $path = substr($uri, 0, $pos);
+                $query = substr($uri, $pos);
+
+                $path = rtrim($path, '/') . $target;
+
+                $uri = $path . $query;
+            } else {
+                $uri = rtrim($uri, '/') . $target;
+            }
+
+            return $uri === '/' ? '' : $uri;
         }
 
         return $this->withUri($this->factory->createUri($url), $preserveHost);
@@ -44,18 +53,25 @@ trait RequestBuilder
         return $this->withMethod($method);
     }
 
-    public function header(string $name, string $value = null)
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function header(string $name, $value = null)
     {
         if (is_null($value)) {
             return $this->getHeaderLine($name);
         }
 
-        return $this->withAddedHeader($name, $value);
+        try {
+            return $this->withAddedHeader($name, $value);
+        } catch (\InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     public function parameter(string $name, $value = null)
     {
-        $content = json_decode($this->getBody()->getContents(), true);
+        $content = json_decode($this->getBody()->getContents(), true) ?: [];
 
         if (is_null($value)) {
             return Arr::get($content, $name);
@@ -76,7 +92,8 @@ trait RequestBuilder
     public function queryParameter(string $name, $value = null)
     {
         if (is_null($value)) {
-            return $this->queryParameters[$name] ?? null;
+            parse_str($this->getUri()->getQuery(), $query);
+            return Arr::get($query, $name);
         }
 
         if (! is_array($value) && ! is_string($value)) {
@@ -92,7 +109,7 @@ trait RequestBuilder
 
         $queryParameters = $this->updateQuery($name, $value);
 
-        $_this->request = $this->withUri($_this->getUri()->withQuery($queryParameters));
+        $_this->request = $this->request->withUri($_this->getUri()->withQuery($queryParameters));
 
         return $_this;
     }
@@ -106,7 +123,7 @@ trait RequestBuilder
         return http_build_query(
             $query,
             '',
-            null,
+            '&',
             PHP_QUERY_RFC3986
         );
     }
@@ -124,7 +141,7 @@ trait RequestBuilder
         $_this = $this->headerlessRequest();
 
         foreach ($headers as $headerName => $headerValue) {
-            $_this->request = $this->withHeader($headerName, $headerValue);
+            $_this->request = $_this->request->withAddedHeader($headerName, $headerValue);
         }
 
         return $_this;
@@ -136,7 +153,7 @@ trait RequestBuilder
 
         foreach($this->getHeaders() as $headerName => $headers) {
             foreach($headers as $header) {
-                $headers[] = "$headerName: $header";
+                $result[] = "$headerName: $header";
             }
         }
 
@@ -163,7 +180,7 @@ trait RequestBuilder
         }
 
         if (is_null($parameters) || false === $parameters) {
-            return json_decode($this->getBody()->getContents(), true);
+            return json_decode($this->getBody()->getContents(), true) ?: [];
         }
 
         $_this = clone $this;
@@ -190,10 +207,19 @@ trait RequestBuilder
         $_this->request = $_this->request->withUri($_this->getUri()->withQuery(http_build_query(
             $queryParameters,
             '',
-            null,
+            '&',
             PHP_QUERY_RFC3986
         )));
 
         return $_this;
+    }
+
+    public function protocol($protocol = null)
+    {
+        if (is_null($protocol)) {
+            return $this->getProtocolVersion();
+        }
+
+        return $this->withProtocolVersion($protocol);
     }
 }

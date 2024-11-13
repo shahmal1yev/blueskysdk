@@ -5,9 +5,13 @@ namespace Tests\Unit;
 use Atproto\Client;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
+use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
+use Nyholm\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use SplObserver;
@@ -171,5 +175,39 @@ class ClientTest extends TestCase
 
         $this->client->method('forge')
             ->willReturn($mockCreateSession);
+    }
+
+    public function testItCanReturnsGetProfile(): void
+    {
+        $getProfile = $this->client->app()->bsky()->actor()->getProfile()->forge();
+
+        $this->client->authenticate(
+            'shahmal1yevv.bsky.social',
+            'ucvlqcq8'
+        );
+
+        $this->assertInstanceOf(GetProfile::class, $getProfile);
+        $this->assertNotSame('did:plc:123', $getProfile->actor());
+
+        $auth = $this->client->authenticated();
+        $getProfile->actor($auth->did());
+
+        $this->assertInstanceOf(GetProfile::class, $getProfile);
+        $this->assertSame($this->client->authenticated()->did(), $getProfile->actor());
+
+        $response = $getProfile->send();
+
+        $this->assertInstanceOf(GetProfileResponse::class, $response);
+    }
+
+    public function testBody()
+    {
+        $a = '{"content": "content"}';
+        $response = PSR17Factory::createViaNyholm()->createResponse(200, 'OK')->withBody(Stream::create($a));
+
+        $content1 = $response->getBody()->getContents();
+        $content2 = $response->getBody()->getContents();
+
+        $this->assertSame($content1, $content2);
     }
 }

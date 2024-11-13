@@ -6,6 +6,11 @@ trait Lexicon
 {
     use Serializable;
 
+    public function __construct(...$arguments)
+    {
+        parent::__construct();
+    }
+
     public function nsid(): string
     {
         $segments = explode(

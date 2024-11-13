@@ -2,9 +2,9 @@
 
 namespace Atproto\Contracts\Lexicons;
 
-use SplObserver;
+use Psr\Http\Message\ResponseInterface;
 
-interface APIRequestContract extends RequestContract, SplObserver
+interface APIRequestContract
 {
     public const API_BASE_URL = 'https://bsky.social';
     public const API_BASE_HEADERS = [
@@ -12,5 +12,6 @@ interface APIRequestContract extends RequestContract, SplObserver
         'Accept' => 'application/json',
     ];
 
-    public function build(): RequestContract;
+    public function build(): APIRequestContract;
+    public function send(): ResponseInterface;
 }

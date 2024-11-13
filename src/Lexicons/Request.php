@@ -3,9 +3,10 @@
 namespace Atproto\Lexicons;
 
 use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\PSR\Factories\PSR17FactoryContract;
+use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Lexicons\Traits\RequestBuilder;
 use Atproto\Lexicons\Traits\RequestHandler;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -16,13 +17,13 @@ class Request implements RequestContract
     use RequestHandler;
     use RequestBuilder;
 
-    private Psr17Factory $factory;
+    private PSR17FactoryContract $factory;
     private RequestInterface $request;
 
-    public function __construct(RequestInterface $request = null)
+    public function __construct(PSR17FactoryContract $factory = null)
     {
-        $this->factory = new Psr17Factory();
-        $this->request = $request ?: $this->factory->createRequest('GET', '');
+        $this->factory = $factory ?? PSR17Factory::createViaNyholm();
+        $this->request = $this->factory->createRequest('GET', '');
     }
 
     /**

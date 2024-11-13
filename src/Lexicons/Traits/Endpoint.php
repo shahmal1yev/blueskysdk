@@ -23,7 +23,7 @@ trait Endpoint
 
     protected function initialize(): void
     {
-        $this->origin(self::API_BASE_URL)
+        $this->request = $this->request->url(self::API_BASE_URL)
             ->headers(self::API_BASE_HEADERS)
             ->path(sprintf("/xrpc/%s", $this->nsid()))
             ->method($this->method);

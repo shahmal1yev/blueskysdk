@@ -3,6 +3,7 @@
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
 use Atproto\Contracts\LexiconContract;
+use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
@@ -11,6 +12,7 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Exception;
+use GenericCollection\Exceptions\InvalidArgumentException;
 
 class GetProfile extends APIRequest implements LexiconContract
 {
@@ -22,10 +24,10 @@ class GetProfile extends APIRequest implements LexiconContract
     public function actor(string $actor = null)
     {
         if (is_null($actor)) {
-            return $this->queryParameter('actor');
+            return $this->request->queryParameter('actor');
         }
 
-        $this->queryParameter('actor', $actor);
+        $this->request = $this->request->queryParameter('actor', $actor);
 
         return $this;
     }
@@ -36,10 +38,10 @@ class GetProfile extends APIRequest implements LexiconContract
     public function token(string $token = null)
     {
         if (is_null($token)) {
-            return $this->header('Authorization');
+            return $this->request->header('Authorization');
         }
 
-        $this->header('Authorization', "Bearer $token");
+        $this->request = $this->request->header('Authorization', "Bearer $token");
 
         return $this;
     }
@@ -47,20 +49,20 @@ class GetProfile extends APIRequest implements LexiconContract
     /**
      * @throws Exception
      */
-    public function build(): RequestContract
+    public function build(): APIRequestContract
     {
-        if (! $this->header('Authorization')) {
+        if (! $this->request->hasHeader('Authorization')) {
             throw new AuthMissingException();
         }
 
-        if (! $this->queryParameter('actor')) {
+        if (! $this->request->queryParameter('actor')) {
             throw new MissingFieldProvidedException('actor');
         }
 
         return $this;
     }
 
-    public function response(array $data): ResponseContract
+    public function response(ResponseContract $data): GetProfileResponse
     {
         return new GetProfileResponse($data);
     }

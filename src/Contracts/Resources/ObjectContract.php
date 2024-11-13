@@ -2,7 +2,7 @@
 
 namespace Atproto\Contracts\Resources;
 
-interface ObjectContract extends ResponseContract
+interface ObjectContract
 {
     public function cast();
     public function revert();

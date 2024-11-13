@@ -3,15 +3,16 @@
 namespace Atproto\Responses;
 
 use Atproto\Contracts\Resources\ObjectContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Support\Arr;
 use Atproto\Traits\Castable;
 
 trait BaseResponse
 {
-    protected array $content = [];
+    protected ResponseContract $content;
 
-    public function __construct(array $content)
+    public function __construct(ResponseContract $content)
     {
         $this->content = $content;
     }
@@ -47,12 +48,12 @@ trait BaseResponse
 
     public function exist(string $name): bool
     {
-        return Arr::has($this->content, $name);
+        return $this->content->exist($name);
     }
 
     private function parse(string $name)
     {
-        $value = Arr::get($this->content, $name);
+        $value = $this->content->get($name);
 
         if (in_array(Castable::class, class_uses_recursive(static::class))) {
             /** @var ?ObjectContract $cast */

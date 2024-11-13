@@ -3,9 +3,9 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Observer;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 
 trait Smith
 {
@@ -24,24 +24,10 @@ trait Smith
      */
     public function forge(...$arguments)
     {
-        $arguments = array_merge([$this], array_values($arguments));
-
-        $request = $this->request();
-
-        if (! class_exists($request)) {
-            throw new LexiconNotFoundException("$request class does not exist.");
-        }
-
-        /** @var APIRequestContract $request */
-        $request = new $request(...$arguments);
-
-        if ($request instanceof \SplObserver) {
-            $this->attach($request);
-        }
-
+        $this->subscribe($instance = $this->instantiate($arguments));
         $this->refresh();
 
-        return $request;
+        return $instance;
     }
 
     public function path(): string
@@ -57,10 +43,27 @@ trait Smith
         $this->path = [];
     }
 
-    private function request(): string
+    private function namespace(): string
     {
         return $this->prefix . $this->path();
     }
 
-
+    /**
+     * @throws LexiconNotFoundException
+     */
+    private function instantiate(array $arguments = []): object
+    {
+        if (! $namespace = $this->namespace()) {
+            throw new LexiconNotFoundException("$namespace lexicon does not exist.");
+        }
+        
+        return new $namespace(...array_values($arguments));
+    }
+    
+    private function subscribe($instance): void
+    {
+        if (in_array(AuthenticatedEndpoint::class, class_uses_recursive($instance))) {
+            $this->attach($instance);
+        }
+    }
 }

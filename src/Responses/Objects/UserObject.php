@@ -2,6 +2,7 @@
 
 namespace Atproto\Responses\Objects;
 
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Traits\Castable;
 
 /**
@@ -26,7 +27,7 @@ trait UserObject
     use BaseObject;
     use Castable;
 
-    public function __construct(array $content)
+    public function __construct(ResponseContract $content)
     {
         $this->content = $content;
     }

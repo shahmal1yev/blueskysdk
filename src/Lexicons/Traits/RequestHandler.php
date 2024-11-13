@@ -11,6 +11,8 @@ trait RequestHandler
     /** @var resource|ResponseContract $resource */
     private $resource;
 
+    private string $reason = '';
+
     /** @var array $responseHeaders */
     private array $responseHeaders;
 
@@ -21,12 +23,22 @@ trait RequestHandler
     /**
      * @throws BlueskyException
      */
-    public function send()
+    public function send(): array
     {
         $this->request();
         $this->handle();
 
-        return $this->content;
+        $response = [
+            'statusCode' => curl_getinfo($this->resource, CURLINFO_HTTP_CODE),
+            'headers' => $this->responseHeaders,
+            'content' => $this->content,
+            'protocolVersion' => curl_getinfo($this->resource, CURLINFO_HTTP_VERSION),
+            'reason' => $this->reason
+        ];
+
+        $this->resource = null;
+
+        return $response;
     }
 
     /**
@@ -35,7 +47,20 @@ trait RequestHandler
     private function handle(): void
     {
         $this->handleError();
+        $this->handleReason();
         $this->handleResponse();
+        $this->handleResponseError();
+    }
+
+    private function handleReason(): void
+    {
+        preg_match(
+            '#^HTTP/1.(?:0|1) [\d]{3} (.*)$#m',
+            $this->content,
+            $match
+        );
+
+        $this->reason = $match[1];
     }
 
     /**
@@ -43,8 +68,15 @@ trait RequestHandler
      */
     private function handleResponse(): void
     {
-        $this->content = json_decode($this->content, true);
-        $this->handleResponseError();
+        $content = substr(
+            $this->content,
+            curl_getinfo($this->resource, CURLINFO_HEADER_SIZE),
+        );
+
+        $this->content = json_decode(
+            $content,
+            true
+        ) ?: [];
     }
 
     /**
@@ -77,6 +109,10 @@ trait RequestHandler
         $name = trim(current($header));
         $value = trim(next($header));
 
+        if (isset($this->responseHeaders[$name])) {
+            $value = array_merge($this->responseHeaders[$name], [$value]);
+        }
+
         $this->responseHeaders[$name] = $value;
 
         return $length;
@@ -98,13 +134,17 @@ trait RequestHandler
 
         curl_setopt_array($this->resource, [
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => true,
             CURLOPT_HTTPHEADER     => $this->headers(true),
             CURLOPT_HEADERFUNCTION => [$this, 'handleResponseHeader'],
             CURLOPT_CUSTOMREQUEST  => $this->method(),
             CURLOPT_POSTFIELDS     => $this->parameters(true),
             CURLOPT_URL            => $this->url(),
+            CURLOPT_HTTP_VERSION   => $this->protocol()
         ]);
 
         $this->content = curl_exec($this->resource);
+
+        return;
     }
 }

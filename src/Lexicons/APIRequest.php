@@ -2,33 +2,32 @@
 
 namespace Atproto\Lexicons;
 
-use Atproto\Client;
+use Atproto\Contracts\HTTPFactoryContract;
 use Atproto\Contracts\Lexicons\APIRequestContract;
+use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
-use SplSubject;
+use Atproto\Factories\HTTPFactory;
+use Psr\Http\Message\ResponseInterface;
 
-abstract class APIRequest extends Request implements APIRequestContract
+abstract class APIRequest implements APIRequestContract
 {
-    protected Client $client;
+    private HTTPFactoryContract $factory;
+    protected RequestContract $request;
 
-    public function __construct(Client $client)
+    public function __construct(HTTPFactoryContract $factory = null)
     {
-        $this->client = $client;
+        $this->factory = ($factory ?: new HTTPFactory());
+        $this->request = $this->factory->createRequest('GET', '');
+
         $this->initialize();
     }
 
     public function send(): ResponseContract
     {
-        return $this->response(parent::send());
+        return $this->response($this->factory->createFullCoverageResponse(...array_values($this->request->send())));
     }
 
     abstract protected function initialize(): void;
 
-    abstract public function response(array $data): ResponseContract;
-
-    public function update(SplSubject $subject): void
-    {
-        /** @var Client $subject */
-        $this->client = $subject;
-    }
+    abstract public function response(ResponseContract $data): ResponseContract;
 }

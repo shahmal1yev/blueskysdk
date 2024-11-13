@@ -6,21 +6,16 @@ use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\API\Com\Atrproto\Repo\CreateRecord;
 use Atproto\API\Com\Atrproto\Repo\UploadBlob;
 use Atproto\Exceptions\Resource\BadAssetCallException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @see GetProfile
  * @see CreateRecord
  * @see UploadBlob
  */
-interface ResponseContract
+interface ResponseContract extends ResponseInterface
 {
-    /**
-     * @param  string  $name
-     * @return mixed
-     *
-     * @throws BadAssetCallException If the asset does not exist on resource.
-     */
-    public function get($offset);
+    public function get($name);
 
     /**
      * @param  string  $name
