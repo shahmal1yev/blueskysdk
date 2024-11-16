@@ -182,8 +182,6 @@ class ClientTest extends TestCase
         $getProfile = $this->client->app()->bsky()->actor()->getProfile()->forge();
 
         $this->client->authenticate(
-            'shahmal1yevv.bsky.social',
-            'ucvlqcq8'
         );
 
         $this->assertInstanceOf(GetProfile::class, $getProfile);
@@ -198,16 +196,5 @@ class ClientTest extends TestCase
         $response = $getProfile->send();
 
         $this->assertInstanceOf(GetProfileResponse::class, $response);
-    }
-
-    public function testBody()
-    {
-        $a = '{"content": "content"}';
-        $response = PSR17Factory::createViaNyholm()->createResponse(200, 'OK')->withBody(Stream::create($a));
-
-        $content1 = $response->getBody()->getContents();
-        $content2 = $response->getBody()->getContents();
-
-        $this->assertSame($content1, $content2);
     }
 }

@@ -2,11 +2,10 @@
 
 namespace Atproto\Lexicons;
 
-use Atproto\Contracts\PSR\Factories\PSR17FactoryContract;
+use Atproto\Contracts\HTTP\PSR\Factories\PSR17FactoryContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Support\Arr;
-use Nyholm\Psr7\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;

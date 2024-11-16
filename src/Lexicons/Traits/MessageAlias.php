@@ -6,7 +6,7 @@ use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Support\Arr;
 
-trait RequestBuilder
+trait MessageAlias
 {
     public function url($url = null, bool $preserveHost = false)
     {
@@ -81,7 +81,7 @@ trait RequestBuilder
 
         $_this = clone $this;
 
-        $_this->request = $this->withBody($this->factory->createStream(json_encode($content)));
+        $_this->request = $this->request->withBody($this->factory->createStream(json_encode($content)));
 
         return $_this;
     }
@@ -185,7 +185,7 @@ trait RequestBuilder
 
         $_this = clone $this;
 
-        $_this->request = $this->withBody($this->factory->createStream(json_encode($parameters)));
+        $_this->request = $this->request->withBody($this->factory->createStream(json_encode($parameters)));
 
         return $_this;
     }

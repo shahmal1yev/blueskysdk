@@ -3,6 +3,7 @@
 namespace Atproto\Contracts\Lexicons;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Interface RequestContract
@@ -85,5 +86,5 @@ interface RequestContract extends RequestInterface
      */
     public function queryParameters($queryParameters = null);
 
-    public function send();
+    public function send(): ResponseInterface;
 }

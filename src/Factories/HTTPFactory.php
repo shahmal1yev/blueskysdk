@@ -2,7 +2,7 @@
 
 namespace Atproto\Factories;
 
-use Atproto\Contracts\HTTPFactoryContract;
+use Atproto\Contracts\HTTP\HTTPFactoryContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Lexicons\Request;
@@ -38,7 +38,7 @@ class HTTPFactory implements HTTPFactoryContract
     ): ResponseContract {
         $response = (new Response())
             ->withStatus($status, $reason)
-            ->withBody($this->createStream(json_encode($body)))
+            ->withBody($this->createStream($body))
             ->withProtocolVersion($version);
 
         foreach ($headers as $name => $value) {

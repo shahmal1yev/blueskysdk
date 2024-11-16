@@ -2,7 +2,7 @@
 
 namespace Atproto\Factories\PSR;
 
-use Atproto\Contracts\PSR\Factories\PSR17FactoryContract;
+use Atproto\Contracts\HTTP\PSR\Factories\PSR17FactoryContract;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;

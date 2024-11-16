@@ -1,11 +1,10 @@
 <?php
 
-namespace Atproto\Contracts;
+namespace Atproto\Contracts\HTTP;
 
+use Atproto\Contracts\HTTP\PSR\Factories\PSR17FactoryContract;
 use Atproto\Contracts\Lexicons\RequestContract;
-use Atproto\Contracts\PSR\Factories\PSR17FactoryContract;
 use Atproto\Contracts\Resources\ResponseContract;
-use Psr\Http\Message\RequestInterface;
 
 interface HTTPFactoryContract extends PSR17FactoryContract
 {

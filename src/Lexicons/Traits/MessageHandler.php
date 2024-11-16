@@ -5,8 +5,9 @@ namespace Atproto\Lexicons\Traits;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\cURLException;
+use Psr\Http\Message\ResponseInterface;
 
-trait RequestHandler
+trait MessageHandler
 {
     /** @var resource|ResponseContract $resource */
     private $resource;
@@ -23,20 +24,25 @@ trait RequestHandler
     /**
      * @throws BlueskyException
      */
-    public function send(): array
+    public function send(): ResponseInterface
     {
         $this->request();
         $this->handle();
 
-        $response = [
-            'statusCode' => curl_getinfo($this->resource, CURLINFO_HTTP_CODE),
-            'headers' => $this->responseHeaders,
-            'content' => $this->content,
-            'protocolVersion' => curl_getinfo($this->resource, CURLINFO_HTTP_VERSION),
-            'reason' => $this->reason
-        ];
+        $response = $this->factory->createResponse(
+            curl_getinfo($this->resource, CURLINFO_HTTP_CODE),
+            $this->reason
+        )
+            ->withBody($this->factory->createStream(json_encode($this->content)))
+            ->withProtocolVersion(curl_getinfo($this->resource, CURLINFO_HTTP_VERSION));
 
-        $this->resource = null;
+        foreach($this->responseHeaders as $header => $value) {
+            if (! is_array($value)) {
+                $value = [$value];
+            }
+
+            $response = $response->withAddedHeader($header, $value);
+        }
 
         return $response;
     }
