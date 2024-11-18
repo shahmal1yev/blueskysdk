@@ -31,7 +31,7 @@ trait Smith
         return $instance;
     }
 
-    public function path(): string
+    private function path(): string
     {
         return implode('\\', array_map(
             'ucfirst',
