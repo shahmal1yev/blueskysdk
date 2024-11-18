@@ -55,13 +55,11 @@ trait Endpoint
 
     private function initialize(): void
     {
-        $this->header('Accept', 'application/json');
-            $this->header('Content-Type', 'application/json');
-            $this->url('https://bsky.social');
-
-        $this->path(sprintf('/xrpc/%s', $this->nsid()));
-        $this->method('GET')
-        ;
+        $this->header('Accept', 'application/json')
+            ->header('Content-Type', 'application/json')
+            ->url('https://bsky.social')
+            ->path(sprintf('/xrpc/%s', $this->nsid()))
+            ->method('GET');
     }
 
     /**
@@ -155,7 +153,9 @@ trait Endpoint
     private function alias($name, ...$args)
     {
         if (($return = $this->request->$name(...$args)) instanceof RequestContract) {
-            return $this->request = $return;
+            $this->request = $return;
+
+            return $this;
         }
 
         return $return;

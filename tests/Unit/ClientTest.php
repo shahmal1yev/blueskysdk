@@ -196,5 +196,11 @@ class ClientTest extends TestCase
         $response = $getProfile->send();
 
         $this->assertInstanceOf(GetProfileResponse::class, $response);
+        $this->assertSame($this->client->authenticated()->did(), $response->did());
+
+        $clone = $response->withProtocolVersion('2');
+
+        $this->assertSame($this->client->authenticated()->did(), $clone->did());
+        $this->assertEquals($response, $clone);
     }
 }

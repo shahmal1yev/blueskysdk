@@ -39,7 +39,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getProtocolVersion(): string
     {
-        // TODO: Implement getProtocolVersion() method.
+        return $this->response->getProtocolVersion();
     }
 
     /**
@@ -47,7 +47,11 @@ class GetProfileResponse implements ResponseContract
      */
     public function withProtocolVersion(string $version): MessageInterface
     {
-        // TODO: Implement withProtocolVersion() method.
+        $_this = clone $this;
+
+        $_this->response = $this->response->withProtocolVersion($version);
+
+        return $_this;
     }
 
     /**
@@ -55,7 +59,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getHeaders(): array
     {
-        // TODO: Implement getHeaders() method.
+        return $this->response->getHeaders();
     }
 
     /**
@@ -63,7 +67,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function hasHeader(string $name): bool
     {
-        // TODO: Implement hasHeader() method.
+        return $this->response->hasHeader($name);
     }
 
     /**
@@ -71,7 +75,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getHeader(string $name): array
     {
-        // TODO: Implement getHeader() method.
+        return $this->response->getHeader($name);
     }
 
     /**
@@ -79,7 +83,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getHeaderLine(string $name): string
     {
-        // TODO: Implement getHeaderLine() method.
+        return $this->response->getHeaderLine($name);
     }
 
     /**
@@ -87,7 +91,9 @@ class GetProfileResponse implements ResponseContract
      */
     public function withHeader(string $name, $value): MessageInterface
     {
-        // TODO: Implement withHeader() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withHeader($name, $value);
+        return $_this;
     }
 
     /**
@@ -95,7 +101,10 @@ class GetProfileResponse implements ResponseContract
      */
     public function withAddedHeader(string $name, $value): MessageInterface
     {
-        // TODO: Implement withAddedHeader() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withAddedHeader($name, $value);
+
+        return $_this;
     }
 
     /**
@@ -103,7 +112,11 @@ class GetProfileResponse implements ResponseContract
      */
     public function withoutHeader(string $name): MessageInterface
     {
-        // TODO: Implement withoutHeader() method.
+        $_this = clone $this;
+
+        $_this->response = $this->response->withoutHeader($name);
+
+        return $_this;
     }
 
     /**
@@ -111,7 +124,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getBody(): StreamInterface
     {
-        // TODO: Implement getBody() method.
+        return $this->response->getBody();
     }
 
     /**
@@ -119,7 +132,10 @@ class GetProfileResponse implements ResponseContract
      */
     public function withBody(StreamInterface $body): MessageInterface
     {
-        // TODO: Implement withBody() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withBody($body);
+
+        return $_this;
     }
 
     /**
@@ -127,7 +143,7 @@ class GetProfileResponse implements ResponseContract
      */
     public function getStatusCode(): int
     {
-        // TODO: Implement getStatusCode() method.
+        return $this->response->getStatusCode();
     }
 
     /**
@@ -135,7 +151,9 @@ class GetProfileResponse implements ResponseContract
      */
     public function withStatus(int $code, string $reasonPhrase = ''): ResponseInterface
     {
-        // TODO: Implement withStatus() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withStatus($code, $reasonPhrase);
+        return $_this;
     }
 
     /**
@@ -143,6 +161,6 @@ class GetProfileResponse implements ResponseContract
      */
     public function getReasonPhrase(): string
     {
-        // TODO: Implement getReasonPhrase() method.
+        return $this->response->getReasonPhrase();
     }
 }

@@ -15,9 +15,9 @@ class GetFollowersResponse implements ResponseContract
     use BaseObject;
     use Castable;
 
-    public function __construct(array $content)
+    public function __construct(array $response)
     {
-        $this->content = $content;
+        $this->response = $response;
     }
 
     protected function casts(): array

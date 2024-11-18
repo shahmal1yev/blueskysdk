@@ -23,40 +23,16 @@ use SplSubject;
  * @method bool active()
  * @method string|null status() The status of the account. Possible values are 'takendown', 'suspended', 'deactivated'. If `active` is `false`, this field may provide a reason for the account's inactivity.
  */
-class CreateSessionResponse implements ResponseContract, SplSubject
+class CreateSessionResponse implements ResponseContract
 {
     use BaseResponse;
-
-    private \SplObjectStorage $observers;
-
-    public function attach(SplObserver $observer): void
-    {
-        $this->observers->attach($observer);
-    }
-
-    public function detach(SplObserver $observer): void
-    {
-        $this->observers->detach($observer);
-    }
-
-    public function notify(): void
-    {
-        foreach ($this->observers as $observer) {
-            $observer->update($this);
-        }
-    }
-
-    public function getObservers(): SplObjectStorage
-    {
-        return $this->observers;
-    }
 
     /**
      * @inheritDoc
      */
     public function getProtocolVersion(): string
     {
-        // TODO: Implement getProtocolVersion() method.
+        return $this->response->getProtocolVersion();
     }
 
     /**
@@ -64,7 +40,11 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withProtocolVersion(string $version): MessageInterface
     {
-        // TODO: Implement withProtocolVersion() method.
+        $_this = clone $this;
+
+        $_this->response = $this->response->withProtocolVersion($version);
+
+        return $_this;
     }
 
     /**
@@ -72,7 +52,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getHeaders(): array
     {
-        // TODO: Implement getHeaders() method.
+        return $this->response->getHeaders();
     }
 
     /**
@@ -80,7 +60,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function hasHeader(string $name): bool
     {
-        // TODO: Implement hasHeader() method.
+        return $this->response->hasHeader($name);
     }
 
     /**
@@ -88,7 +68,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getHeader(string $name): array
     {
-        // TODO: Implement getHeader() method.
+        return $this->response->getHeader($name);
     }
 
     /**
@@ -96,7 +76,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getHeaderLine(string $name): string
     {
-        // TODO: Implement getHeaderLine() method.
+        return $this->response->getHeaderLine($name);
     }
 
     /**
@@ -104,7 +84,9 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withHeader(string $name, $value): MessageInterface
     {
-        // TODO: Implement withHeader() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withHeader($name, $value);
+        return $_this;
     }
 
     /**
@@ -112,7 +94,10 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withAddedHeader(string $name, $value): MessageInterface
     {
-        // TODO: Implement withAddedHeader() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withAddedHeader($name, $value);
+
+        return $_this;
     }
 
     /**
@@ -120,7 +105,11 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withoutHeader(string $name): MessageInterface
     {
-        // TODO: Implement withoutHeader() method.
+        $_this = clone $this;
+
+        $_this->response = $this->response->withoutHeader($name);
+
+        return $_this;
     }
 
     /**
@@ -128,7 +117,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getBody(): StreamInterface
     {
-        // TODO: Implement getBody() method.
+        return $this->response->getBody();
     }
 
     /**
@@ -136,7 +125,10 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withBody(StreamInterface $body): MessageInterface
     {
-        // TODO: Implement withBody() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withBody($body);
+
+        return $_this;
     }
 
     /**
@@ -144,7 +136,7 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getStatusCode(): int
     {
-        // TODO: Implement getStatusCode() method.
+        return $this->response->getStatusCode();
     }
 
     /**
@@ -152,7 +144,9 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function withStatus(int $code, string $reasonPhrase = ''): ResponseInterface
     {
-        // TODO: Implement withStatus() method.
+        $_this = clone $this;
+        $_this->response = $this->response->withStatus($code, $reasonPhrase);
+        return $_this;
     }
 
     /**
@@ -160,6 +154,6 @@ class CreateSessionResponse implements ResponseContract, SplSubject
      */
     public function getReasonPhrase(): string
     {
-        // TODO: Implement getReasonPhrase() method.
+        return $this->response->getReasonPhrase();
     }
 }

@@ -130,31 +130,6 @@ class Response implements ResponseContract
     /**
      * @inheritDoc
      */
-    public function get($name)
-    {
-        return Arr::get(json_decode($this->content(), true), $name);
-    }
-
-    private function content(): string
-    {
-        $content = $this->response->getBody()->getContents();
-
-        $this->response->getBody()->rewind();
-
-        return $content;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function exist(string $name): bool
-    {
-        return Arr::exists(json_decode($this->content(), true), $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getStatusCode(): int
     {
         return $this->response->getStatusCode();
@@ -176,5 +151,30 @@ class Response implements ResponseContract
     public function getReasonPhrase(): string
     {
         return $this->response->getReasonPhrase();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get($name)
+    {
+        return Arr::get(json_decode($this->content(), true), $name);
+    }
+
+    private function content(): string
+    {
+        $content = $this->response->getBody()->getContents();
+
+        $this->response->getBody()->rewind();
+
+        return $content;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function exist(string $name): bool
+    {
+        return Arr::exists(json_decode($this->content(), true), $name);
     }
 }

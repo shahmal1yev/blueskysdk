@@ -5,6 +5,7 @@ namespace Atproto\Factories;
 use Atproto\Contracts\HTTP\HTTPFactoryContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
+use Atproto\Decorators\RequestDecorator;
 use Atproto\Lexicons\Request;
 use Atproto\Lexicons\Response;
 use Nyholm\Psr7\Stream;
@@ -46,6 +47,11 @@ class HTTPFactory implements HTTPFactoryContract
         }
 
         return $response;
+    }
+
+    public function createRequestDecorator(RequestContract $requestContract): RequestContract
+    {
+        return new RequestDecorator($requestContract);
     }
 
     /**

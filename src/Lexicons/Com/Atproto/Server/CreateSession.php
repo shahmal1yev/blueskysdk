@@ -17,17 +17,14 @@ class CreateSession implements EndpointLexiconContract
     public function __construct(?HTTPFactoryContract $factory, string $identifier, string $password)
     {
         $this->factory = $factory ?? new HTTPFactory();
-        $this->request = $this->factory->createRequest('GET', '');
+        $this->request = $this->factory->createRequest('POST', '');
 
         $this->initialize();
 
-        $this->method('POST');
-        $this->parameter('identifier', $identifier);
-        $this->parameter('password', $password);
-        $this->url('https://bsky.social');
-        $this->path(sprintf("/xrpc/%s", $this->nsid()));
-        $this->header('Content-Type', 'application/json');
-        $this->header('Accept', 'application/json');
+        $this->method('POST')->parameters([
+            'identifier' => $identifier,
+            'password' => $password,
+        ]);
     }
 
     /**

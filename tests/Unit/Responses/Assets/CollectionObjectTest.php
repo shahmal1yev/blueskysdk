@@ -75,9 +75,9 @@ class TestCollectionObject extends GenericCollection implements ObjectContract
 {
     use CollectionObject;
 
-    public function __construct(array $content)
+    public function __construct(array $response)
     {
-        parent::__construct(new ExampleAssetType(), $content);
+        parent::__construct(new ExampleAssetType(), $response);
     }
 
     public function item($data): ObjectContract

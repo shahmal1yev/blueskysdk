@@ -7,14 +7,15 @@ use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 use Atproto\Support\Arr;
 use Atproto\Traits\Castable;
+use Psr\Http\Message\ResponseInterface;
 
 trait BaseResponse
 {
-    protected ResponseContract $content;
+    protected ResponseContract $response;
 
-    public function __construct(ResponseContract $content)
+    public function __construct(ResponseContract $response)
     {
-        $this->content = $content;
+        $this->response = $response;
     }
 
     /**
@@ -48,12 +49,12 @@ trait BaseResponse
 
     public function exist(string $name): bool
     {
-        return $this->content->exist($name);
+        return $this->response->exist($name);
     }
 
     private function parse(string $name)
     {
-        $value = $this->content->get($name);
+        $value = $this->response->get($name);
 
         if (in_array(Castable::class, class_uses_recursive(static::class))) {
             /** @var ?ObjectContract $cast */
