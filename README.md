@@ -3,8 +3,8 @@
 </p>
 
 # BlueSky SDK for PHP
-
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/shahmal1yev/blueskysdk?label=latest&style=flat)
+[![Discord](https://img.shields.io/badge/Discord-join%20server-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/tDajgYtBsZ)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/shahmal1yev/blueskysdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/shahmal1yev/blueskysdk)
@@ -499,6 +499,7 @@ BlueSky SDK is released under the MIT License. See [LICENSE](LICENSE) for more i
 - **SDK Documentation**: [SDK Docs](https://blueskysdk.shahmal1yev.dev)
 - **Issues**: [GitHub Issues](https://github.com/shahmal1yev/blueskysdk/issues)
 - **Discussions**: Start a discussion in [GitHub Discussions](https://github.com/shahmal1yev/blueskysdk/discussions)
+- **Community**: Join Discord server via [invite link](https://discord.gg/tDajgYtBsZ)
 
 ---
 Built with ❤️ by [Eldar Shahmaliyev](https://shahmal1yev.dev/about) for the PHP community.
