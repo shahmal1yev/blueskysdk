@@ -3,7 +3,6 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\Observer;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 use Atproto\Factories\HTTPFactory;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
@@ -45,9 +44,16 @@ trait Smith
         $this->path = [];
     }
 
+    /**
+     * @throws LexiconNotFoundException
+     */
     private function namespace(): string
     {
-        return $this->prefix . $this->path();
+        if (! class_exists($namespace = $this->prefix . $this->path())) {
+            throw new LexiconNotFoundException("$namespace lexicon does not exist.");
+        }
+
+        return $namespace;
     }
 
     /**
@@ -55,17 +61,13 @@ trait Smith
      */
     private function instantiate(array $arguments = []): object
     {
-        if (! $namespace = $this->namespace()) {
-            throw new LexiconNotFoundException("$namespace lexicon does not exist.");
-        }
-        
-        return new $namespace(...array_values($arguments));
+        return new ($this->namespace())(...array_values($arguments));
     }
     
     private function subscribe($instance): void
     {
         if (in_array(AuthenticatedEndpoint::class, class_uses_recursive($instance))) {
-            $this->attach($instance);
+            $this->authenticated->attach($instance);
         }
     }
 

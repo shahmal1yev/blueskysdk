@@ -4,11 +4,13 @@ namespace Tests\Unit;
 
 use Atproto\Client;
 use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use Nyholm\Psr7\Stream;
@@ -48,7 +50,7 @@ class ClientTest extends TestCase
     {
         $this->client->app()->bsky()->actor();
 
-        $method = $this->method('request', $this->client);
+        $method = $this->method('namespace', $this->client);
 
         $namespace = $method->invoke($this->client);
 
@@ -61,7 +63,7 @@ class ClientTest extends TestCase
         $this->client->nonExistentMethod();
 
         $this->expectException(LexiconNotFoundException::class);
-        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod class does not exist.");
+        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod lexicon does not exist.");
 
         $this->client->forge();
     }
@@ -99,9 +101,17 @@ class ClientTest extends TestCase
         $this->assertNull($this->client->authenticated());
     }
 
+    private function authenticatedEndpointTraitMock(): RequestContract
+    {
+        return new class () implements RequestContract {
+            use AuthenticatedEndpoint;
+            protected function response(ResponseContract $response): ResponseContract {}
+        };
+    }
+
     public function testAttachObserver(): void
     {
-        $mockObserver = $this->createMock(SplObserver::class);
+        $mockObserver = $this->authenticatedEndpointTraitMock();
         $this->client->attach($mockObserver);
 
         $observers = $this->getPropertyValue('observers', $this->client);
@@ -111,7 +121,7 @@ class ClientTest extends TestCase
 
     public function testDetachObserver(): void
     {
-        $mockObserver = $this->createMock(SplObserver::class);
+        $mockObserver = $this->authenticatedEndpointTraitMock();
         $this->client->attach($mockObserver);
         $this->client->detach($mockObserver);
 
