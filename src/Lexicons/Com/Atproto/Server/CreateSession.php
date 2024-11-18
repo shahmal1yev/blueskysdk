@@ -4,6 +4,7 @@ namespace Atproto\Lexicons\Com\Atproto\Server;
 
 use Atproto\Contracts\HTTP\EndpointLexiconContract;
 use Atproto\Contracts\HTTP\HTTPFactoryContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Factories\HTTPFactory;
 use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
@@ -14,14 +15,14 @@ class CreateSession implements EndpointLexiconContract
 {
     use Endpoint;
 
-    public function __construct(?HTTPFactoryContract $factory, string $identifier, string $password)
+    public function __construct(string $identifier, string $password, ?HTTPFactoryContract $factory = null)
     {
         $this->factory = $factory ?? new HTTPFactory();
         $this->request = $this->factory->createRequest('POST', '');
 
         $this->initialize();
 
-        $this->method('POST')->parameters([
+        $this->request = $this->method('POST')->parameters([
             'identifier' => $identifier,
             'password' => $password,
         ]);
@@ -30,7 +31,7 @@ class CreateSession implements EndpointLexiconContract
     /**
      * @throws InvalidArgumentException
      */
-    public function response(ResponseInterface $response): CreateSessionResponse
+    public function response(ResponseContract $response): CreateSessionResponse
     {
         return new CreateSessionResponse($response);
     }

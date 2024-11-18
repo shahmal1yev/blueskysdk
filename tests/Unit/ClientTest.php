@@ -188,7 +188,7 @@ class ClientTest extends TestCase
         $this->assertNotSame('did:plc:123', $getProfile->actor());
 
         $auth = $this->client->authenticated();
-        $getProfile->actor($auth->did());
+        $getProfile = $getProfile->actor($auth->did());
 
         $this->assertInstanceOf(GetProfile::class, $getProfile);
         $this->assertSame($this->client->authenticated()->did(), $getProfile->actor());

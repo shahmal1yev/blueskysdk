@@ -5,6 +5,7 @@ namespace Atproto\Lexicons\Traits;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Support\Arr;
+use Psr\Http\Message\MessageInterface;
 
 trait MessageAlias
 {
@@ -54,7 +55,7 @@ trait MessageAlias
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @return MessageInterface|string
      */
     public function header(string $name, $value = null)
     {
@@ -62,11 +63,7 @@ trait MessageAlias
             return $this->getHeaderLine($name);
         }
 
-        try {
-            return $this->withAddedHeader($name, $value);
-        } catch (\InvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        }
+        return $this->withAddedHeader($name, $value);
     }
 
     public function parameter(string $name, $value = null)

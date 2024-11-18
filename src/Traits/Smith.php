@@ -71,7 +71,7 @@ trait Smith
 
     private function arguments(array $arguments): array
     {
-        return array_merge($this->dependencies(), array_values($arguments));
+        return array_merge(array_values($arguments), $this->dependencies());
     }
 
     private function dependencies(): array

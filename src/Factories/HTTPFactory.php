@@ -9,6 +9,7 @@ use Atproto\Decorators\RequestDecorator;
 use Atproto\Lexicons\Request;
 use Atproto\Lexicons\Response;
 use Nyholm\Psr7\Stream;
+use Nyholm\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -47,11 +48,6 @@ class HTTPFactory implements HTTPFactoryContract
         }
 
         return $response;
-    }
-
-    public function createRequestDecorator(RequestContract $requestContract): RequestContract
-    {
-        return new RequestDecorator($requestContract);
     }
 
     /**
@@ -104,6 +100,6 @@ class HTTPFactory implements HTTPFactoryContract
      */
     public function createUri(string $uri = ''): UriInterface
     {
-        // TODO: Implement createUri() method.
+        return new Uri($uri);
     }
 }

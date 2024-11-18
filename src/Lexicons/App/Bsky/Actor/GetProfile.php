@@ -3,7 +3,6 @@
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
 use Atproto\Contracts\HTTP\EndpointLexiconContract;
-use Atproto\Contracts\Lexicons\APIRequestContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
@@ -17,6 +16,7 @@ class GetProfile implements EndpointLexiconContract
     /**
      * @param  string|null  $actor
      * @return RequestContract|string
+     * @throws \Atproto\Exceptions\InvalidArgumentException
      */
     public function actor(string $actor = null)
     {
@@ -24,9 +24,7 @@ class GetProfile implements EndpointLexiconContract
             return $this->queryParameter('actor');
         }
 
-        $this->queryParameter('actor', $actor);
-
-        return $this;
+        return $this->queryParameter('actor', $actor);
     }
 
     /**

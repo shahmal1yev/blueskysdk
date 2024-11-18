@@ -5,12 +5,15 @@ namespace Atproto\Responses;
 use Atproto\Contracts\Resources\ObjectContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
+use Atproto\Lexicons\Traits\ResponseTrait;
 use Atproto\Support\Arr;
 use Atproto\Traits\Castable;
 use Psr\Http\Message\ResponseInterface;
 
 trait BaseResponse
 {
+    use ResponseTrait;
+
     protected ResponseContract $response;
 
     public function __construct(ResponseContract $response)
