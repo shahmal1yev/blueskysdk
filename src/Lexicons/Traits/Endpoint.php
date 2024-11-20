@@ -6,6 +6,7 @@ use Atproto\Contracts\HTTP\HTTPFactoryContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Factories\HTTPFactory;
+use GenericCollection\Exceptions\InvalidArgumentException;
 
 trait Endpoint
 {
@@ -17,12 +18,9 @@ trait Endpoint
     private HTTPFactoryContract $factory;
     private RequestContract $request;
 
-    public function __construct(HTTPFactoryContract $factory = null)
+    public function __construct(?HTTPFactoryContract $factory = null)
     {
-        $this->factory = $factory ?? new HTTPFactory();
-        $this->request = $this->factory->createRequest('GET', '');
-
-        $this->initialize();
+        $this->initialize($factory);
     }
 
     public function jsonSerialize(): array
@@ -52,11 +50,12 @@ trait Endpoint
 
     abstract protected function response(ResponseContract $response): ResponseContract;
 
-    private function initialize(): void
+    private function initialize(?HTTPFactoryContract $factory = null): void
     {
-        $this->request = $this->request->url('https://bsky.social')
+        $this->factory = $factory ?? new HTTPFactory();
+        $this->request = $this->factory->createRequest('GET', '')
+            ->url('https://bsky.social')
             ->path(sprintf('/xrpc/%s', $this->nsid()))
-            ->method('GET')
             ->headers([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json'

@@ -16,10 +16,7 @@ class CreateSession implements EndpointLexiconContract
 
     public function __construct(string $identifier, string $password, ?HTTPFactoryContract $factory = null)
     {
-        $this->factory = $factory ?? new HTTPFactory();
-        $this->request = $this->factory->createRequest('POST', '');
-
-        $this->initialize();
+        $this->initialize($factory);
 
         $this->request = $this->request->method('POST')->parameters([
             'identifier' => $identifier,
