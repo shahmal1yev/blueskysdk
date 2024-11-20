@@ -23,9 +23,34 @@ use SplSubject;
  * @method bool active()
  * @method string|null status() The status of the account. Possible values are 'takendown', 'suspended', 'deactivated'. If `active` is `false`, this field may provide a reason for the account's inactivity.
  */
-class CreateSessionResponse implements ResponseContract
+class CreateSessionResponse implements ResponseContract, \SplSubject
 {
     use BaseResponse;
+
+    private SplObjectStorage $observers;
+
+    public function __construct(ResponseContract $response)
+    {
+        $this->response = $response;
+        $this->observers = new SplObjectStorage();
+    }
+
+    public function attach(SplObserver $observer)
+    {
+        $this->observers->attach($observer);
+    }
+
+    public function detach(SplObserver $observer)
+    {
+        $this->observers->detach($observer);
+    }
+
+    public function notify(): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
+    }
 
     /**
      * @inheritDoc

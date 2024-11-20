@@ -2,6 +2,7 @@
 
 namespace Atproto\Traits;
 
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
@@ -35,28 +36,26 @@ trait Authentication
         return $this->authenticated;
     }
 
-    public function attach($observer): void
+    public function attach(AuthEndpointLexiconContract $observer): void
     {
-        if (! in_array(AuthenticatedEndpoint::class, class_uses_recursive($observer), true)) {
-            throw new \RuntimeException(sprintf(
-                "Authentication observer error: Class '%s' must use the '%s' trait",
-                get_class($observer),
-                AuthenticatedEndpoint::class
-            ));
-        }
-
         $this->observers->attach($observer);
     }
 
-    public function detach($observer): void
+    public function detach(AuthEndpointLexiconContract $observer): void
     {
         $this->observers->detach($observer);
     }
 
     public function notify(): void
     {
-        foreach ($this->observers as $observer) {
-            $observer->update($this->authenticated());
+        if (! $this->authenticated) {
+            return;
         }
+
+        foreach ($this->observers as $observer) {
+            $this->authenticated->attach($observer);
+        }
+
+        $this->authenticated->notify();
     }
 }

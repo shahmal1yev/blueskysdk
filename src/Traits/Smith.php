@@ -3,6 +3,7 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
 use Atproto\Factories\HTTPFactory;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
@@ -66,7 +67,7 @@ trait Smith
     
     private function subscribe($instance): void
     {
-        if (in_array(AuthenticatedEndpoint::class, class_uses_recursive($instance))) {
+        if ($instance instanceof AuthEndpointLexiconContract) {
             $this->attach($instance);
         }
     }
@@ -83,10 +84,6 @@ trait Smith
 
         if (in_array(Endpoint::class, $uses, true)) {
             $dependencies[] = new HTTPFactory();
-        }
-
-        if (in_array(AuthenticatedEndpoint::class, $uses, true)) {
-            $dependencies[] = $this->authenticated;
         }
 
         return $dependencies;

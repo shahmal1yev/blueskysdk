@@ -2,14 +2,14 @@
 
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
-use Atproto\Contracts\HTTP\EndpointLexiconContract;
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use GenericCollection\Exceptions\InvalidArgumentException;
 
-class GetProfile implements EndpointLexiconContract
+class GetProfile implements AuthEndpointLexiconContract
 {
     use AuthenticatedEndpoint;
 

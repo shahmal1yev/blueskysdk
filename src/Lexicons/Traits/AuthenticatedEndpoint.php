@@ -11,7 +11,7 @@ trait AuthenticatedEndpoint
     /**
      * @param  CreateSessionResponse  $session
      */
-    public function update(CreateSessionResponse $session): void
+    public function update(\SplSubject $session): void
     {
         $this->request = $this->request->header("Authorization", "Bearer " . $session->accessJwt());
     }
