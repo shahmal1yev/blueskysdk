@@ -67,7 +67,7 @@ trait Smith
     private function subscribe($instance): void
     {
         if (in_array(AuthenticatedEndpoint::class, class_uses_recursive($instance))) {
-            $this->authenticated->attach($instance);
+            $this->attach($instance);
         }
     }
 

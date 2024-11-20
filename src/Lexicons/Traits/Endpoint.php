@@ -54,7 +54,7 @@ trait Endpoint
 
     private function initialize(): void
     {
-        $this->request = $this->url('https://bsky.social')
+        $this->request = $this->request->url('https://bsky.social')
             ->path(sprintf('/xrpc/%s', $this->nsid()))
             ->method('GET')
             ->headers([

@@ -6,6 +6,7 @@ use Atproto\Client;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
 use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
@@ -187,18 +188,29 @@ class ClientTest extends TestCase
             ->willReturn($mockCreateSession);
     }
 
+    public function testItCallsToSendOnlyOnce(): void
+    {
+        $this->client->authenticate('username', 'password');
+    }
+
     public function testItCanReturnsGetProfile(): void
     {
         $getProfile = $this->client->app()->bsky()->actor()->getProfile()->forge();
 
+        $credentials = [
+        ];
+
         $this->client->authenticate(
+            ...$credentials
         );
 
-        $this->assertInstanceOf(GetProfile::class, $getProfile);
-        $this->assertNotSame('did:plc:123', $getProfile->actor());
+        $headers = $getProfile->getHeaders();
+        $this->assertArrayHasKey('Authorization', $headers);
 
-        $auth = $this->client->authenticated();
-        $getProfile = $getProfile->actor($auth->did());
+        $this->assertInstanceOf(GetProfile::class, $getProfile);
+        $this->assertNotSame($this->client->authenticated()->did(), $getProfile->actor());
+
+        $getProfile = $getProfile->actor($this->client->authenticated()->did());
 
         $this->assertInstanceOf(GetProfile::class, $getProfile);
         $this->assertSame($this->client->authenticated()->did(), $getProfile->actor());

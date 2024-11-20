@@ -9,7 +9,6 @@ use Atproto\Factories\HTTPFactory;
 use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use GenericCollection\Exceptions\InvalidArgumentException;
-use Psr\Http\Message\ResponseInterface;
 
 class CreateSession implements EndpointLexiconContract
 {
@@ -22,7 +21,7 @@ class CreateSession implements EndpointLexiconContract
 
         $this->initialize();
 
-        $this->request = $this->method('POST')->parameters([
+        $this->request = $this->request->method('POST')->parameters([
             'identifier' => $identifier,
             'password' => $password,
         ]);
