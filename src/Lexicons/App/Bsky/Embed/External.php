@@ -101,7 +101,7 @@ class External implements EmbedInterface, MediaContract
                 'uri' => $this->uri,
                 'title' => $this->title,
                 'description' => $this->description,
-                'blob' => ($b = $this->blob) ? $b : null,
+                'thumb' => ($b = $this->blob) ? $b : null,
             ])
         ];
     }

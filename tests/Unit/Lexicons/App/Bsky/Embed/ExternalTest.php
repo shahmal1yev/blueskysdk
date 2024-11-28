@@ -128,7 +128,7 @@ class ExternalTest extends TestCase
                 'uri' => 'https://shahmal1yev.dev',
                 'title' => 'foo',
                 'description' => 'bar',
-                'blob' => $this->blob->jsonSerialize()
+                'thumb' => $this->blob->jsonSerialize()
             ],
         ];
 
