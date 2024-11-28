@@ -74,7 +74,7 @@ class External implements EmbedInterface, MediaContract
             return $this->blob;
         }
 
-        if (! str_starts_with($blob->mimeType(), 'image/*')) {
+        if (! str_starts_with($blob->mimeType(), 'image/')) {
             throw new InvalidArgumentException(sprintf(
                 "\$blob is not a valid image type: %s",
                 $blob->mimeType()
