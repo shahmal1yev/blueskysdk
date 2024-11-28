@@ -125,4 +125,36 @@ class CreateRecordTest extends TestCase
 
         $this->assertIsString($createdRecord->uri());
     }
+
+    public function testPostCreationWithPreviewCard(): void
+    {
+        $client = static::$client;
+
+        $uploadedBlob = $client->com()->atproto()->repo()->uploadBlob()->forge()
+            ->token($client->authenticated()->accessJwt())
+            ->blob(__DIR__.'/../../../../../../art/logo-small.webp')
+            ->send()
+            ->blob();
+
+        $external = $client->app()->bsky()->embed()->external()->forge(
+            'https://shahmal1yev.dev',
+            'Eldar Shahmaliyev\'s blog',
+            'A personal blog about cybersecurity and development.'
+        )->thumb($uploadedBlob);
+
+        $post = $client->app()->bsky()->feed()->post()->forge()
+            ->text('Come to my blog: ')
+            ->link('https://shahmal1yev.dev', 'click here and read the posts')
+            ->embed($external);
+
+        $createRecord = $client->com()->atproto()->repo()->createRecord()->forge()
+            ->record($post)
+            ->repo($client->authenticated()->did())
+            ->collection($post->nsid())
+        ;
+
+        $serializedCreateRecord = json_decode($createRecord, true);
+
+        $this->assertIsArray(Arr::get($serializedCreateRecord, 'record.embed.external.thumb'));
+    }
 }
