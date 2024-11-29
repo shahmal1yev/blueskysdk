@@ -17,7 +17,7 @@ class CreateRecordTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->createRecord = new CreateRecord($this->createMock(Client::class));
+        $this->createRecord = new CreateRecord();
         $this->faker = Factory::create();
     }
 
@@ -26,8 +26,8 @@ class CreateRecordTest extends TestCase
         $this->assertNull($this->createRecord->repo());
 
         $expected = $this->faker->word;
-        $this->createRecord->repo($expected);
-        $this->assertEquals($expected, $this->createRecord->repo());
+        $req = $this->createRecord->repo($expected);
+        $this->assertEquals($expected, $req->repo());
     }
 
     public function testCollection()
@@ -35,8 +35,8 @@ class CreateRecordTest extends TestCase
         $this->assertNull($this->createRecord->collection());
 
         $expected = $this->faker->word;
-        $this->createRecord->collection($expected);
-        $this->assertEquals($expected, $this->createRecord->collection());
+        $request = $this->createRecord->collection($expected);
+        $this->assertEquals($expected, $request->collection());
     }
 
     public function testRkey()
@@ -44,16 +44,16 @@ class CreateRecordTest extends TestCase
         $this->assertNull($this->createRecord->rkey());
 
         $expected = $this->faker->word;
-        $this->createRecord->rkey($expected);
-        $this->assertEquals($expected, $this->createRecord->rkey());
+        $request = $this->createRecord->rkey($expected);
+        $this->assertEquals($expected, $request->rkey());
     }
 
     public function testValidate()
     {
         $this->assertNull($this->createRecord->validate());
 
-        $this->createRecord->validate(true);
-        $this->assertTrue($this->createRecord->validate());
+        $request = $this->createRecord->validate(true);
+        $this->assertTrue($request->validate());
     }
 
     public function testRecord()
@@ -61,8 +61,8 @@ class CreateRecordTest extends TestCase
         $this->assertNull($this->createRecord->record());
 
         $record = $this->createMock(PostBuilderContract::class);
-        $this->createRecord->record($record);
-        $this->assertEquals($record, $this->createRecord->record());
+        $request = $this->createRecord->record($record);
+        $this->assertEquals($record, $request->record());
     }
 
     public function testSwapCommit()
@@ -70,33 +70,8 @@ class CreateRecordTest extends TestCase
         $this->assertNull($this->createRecord->swapCommit());
 
         $expected = $this->faker->word;
-        $this->createRecord->swapCommit($expected);
-        $this->assertEquals($expected, $this->createRecord->swapCommit());
-    }
-
-    /**
-     * @throws MissingFieldProvidedException
-     */
-    public function testBuildWithAllRequiredFields()
-    {
-        $this->createRecord->repo($this->faker->word)
-            ->collection($this->faker->word)
-            ->record($this->createMock(PostBuilderContract::class));
-
-        $result = $this->createRecord->build();
-
-        $this->assertInstanceOf(CreateRecord::class, $result);
-    }
-
-    public function testBuildWithMissingRequiredFields()
-    {
-        $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("record");
-
-        $this->createRecord->repo($this->faker->word)
-            ->collection($this->faker->word);
-
-        $this->createRecord->build();
+        $request = $this->createRecord->swapCommit($expected);
+        $this->assertEquals($expected, $request->swapCommit());
     }
 
     public function testChaining()

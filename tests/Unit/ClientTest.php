@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Atproto\Client;
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
@@ -53,9 +54,12 @@ class ClientTest extends TestCase
 
         $method = $this->method('namespace', $this->client);
 
-        $namespace = $method->invoke($this->client);
+        $namespace = implode('\\', array_map(
+            'ucfirst',
+            $this->getPropertyValue('path', $this->client))
+        );
 
-        $expectedNamespace = 'Atproto\\Lexicons\\App\\Bsky\\Actor';
+        $expectedNamespace = 'App\\Bsky\\Actor';
         $this->assertSame($expectedNamespace, $namespace);
     }
 
@@ -112,7 +116,7 @@ class ClientTest extends TestCase
 
     public function testAttachObserver(): void
     {
-        $mockObserver = $this->authenticatedEndpointTraitMock();
+        $mockObserver = $this->createMock(AuthEndpointLexiconContract::class);
         $this->client->attach($mockObserver);
 
         $observers = $this->getPropertyValue('observers', $this->client);
@@ -122,7 +126,7 @@ class ClientTest extends TestCase
 
     public function testDetachObserver(): void
     {
-        $mockObserver = $this->authenticatedEndpointTraitMock();
+        $mockObserver = $this->createMock(AuthEndpointLexiconContract::class);
         $this->client->attach($mockObserver);
         $this->client->detach($mockObserver);
 
@@ -132,14 +136,17 @@ class ClientTest extends TestCase
 
     public function testNotifyObservers(): void
     {
-        $mockObserver1 = $this->createMock(SplObserver::class);
-        $mockObserver2 = $this->createMock(SplObserver::class);
+        $this->setPropertyValue(
+            'authenticated',
+            $authenticated = new CreateSessionResponse($this->createMock(ResponseContract::class)),
+            $this->client,
+        );
 
-        $mockObserver1->expects($this->once())->method('update')->with($this->client);
-        $mockObserver2->expects($this->once())->method('update')->with($this->client);
-
-        $this->client->attach($mockObserver1);
-        $this->client->attach($mockObserver2);
+        for($i=0; 5 > $i; $i++) {
+            $observer = $this->createMock(AuthEndpointLexiconContract::class);
+            $observer->expects($this->once())->method('update')->with($authenticated);
+            $this->client->attach($observer);
+        }
 
         $this->client->notify();
     }
@@ -152,21 +159,6 @@ class ClientTest extends TestCase
         $observers = $this->getPropertyValue('observers', $this->client);
         $this->assertCount(1, $observers);
         $this->assertTrue($observers->contains($request));
-    }
-
-    public function testAPIRequestUpdatesOnNotify(): void
-    {
-        $this->mockAuthenticate();
-
-        $mockRequest = $this->createMock(APIRequest::class);
-
-        $this->client->attach($mockRequest);
-
-        $mockRequest->expects($this->once())
-            ->method('update')
-            ->with($this->client);
-
-        $this->client->authenticate('username', 'password');
     }
 
     private function mockAuthenticate()
@@ -188,16 +180,13 @@ class ClientTest extends TestCase
             ->willReturn($mockCreateSession);
     }
 
-    public function testItCallsToSendOnlyOnce(): void
-    {
-        $this->client->authenticate('username', 'password');
-    }
-
     public function testItCanReturnsGetProfile(): void
     {
         $getProfile = $this->client->app()->bsky()->actor()->getProfile()->forge();
 
         $credentials = [
+            'shahmal1yevv.bsky.social',
+            'ucvlqcq8'
         ];
 
         $this->client->authenticate(

@@ -37,9 +37,7 @@ class GetProfile implements AuthEndpointLexiconContract
             return $this->header('Authorization');
         }
 
-        $this->header('Authorization', "Bearer $token");
-
-        return $this;
+        return $this->header('Authorization', "Bearer $token");
     }
 
     /**

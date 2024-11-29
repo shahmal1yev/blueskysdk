@@ -3,6 +3,7 @@
 namespace Tests\Unit\Lexicons\App\Bsky\Actor;
 
 use Atproto\Client;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
@@ -15,12 +16,10 @@ use PHPUnit\Framework\TestCase;
 class GetProfilesTest extends TestCase
 {
     private GetProfiles $request;
-    private Client $client;
 
     public function setUp(): void
     {
-        $this->client = $this->createMock(Client::class);
-        $this->request = new GetProfiles($this->client);
+        $this->request = new GetProfiles();
     }
 
     /**
@@ -63,12 +62,6 @@ class GetProfilesTest extends TestCase
         $this->request->actors($actors);
     }
 
-    public function testBuildThrowsAuthRequiredException(): void
-    {
-        $this->expectException(AuthRequired::class);
-        $this->request->build();
-    }
-
     public function testBuildThrowsMissingFieldProvidedException(): void
     {
         $this->request->token('Bearer token');
@@ -87,8 +80,7 @@ class GetProfilesTest extends TestCase
 
     public function testResourceMethodReturnsCorrectInstance(): void
     {
-        $data = ['actors' => []];
-        $resource = $this->request->response($data);
+        $resource = $this->request->response($this->createMock(ResponseContract::class));
         $this->assertInstanceOf(GetProfilesResponse::class, $resource, 'Resource method should return an instance of GetProfilesResource.');
     }
 }

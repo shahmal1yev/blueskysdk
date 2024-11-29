@@ -2,25 +2,25 @@
 
 namespace Atproto\Lexicons\App\Bsky\Actor;
 
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Auth\AuthRequired;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Actor\GetProfilesResponse;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 use GenericCollection\Types\Primitive\StringType;
 
-class GetProfiles extends APIRequest implements LexiconContract
+class GetProfiles implements AuthEndpointLexiconContract
 {
     use AuthenticatedEndpoint;
 
     private ?GenericCollectionInterface $actors = null;
 
-    public function response(array $data): ResponseContract
+    public function response(ResponseContract $data): ResponseContract
     {
         return new GetProfilesResponse($data);
     }
@@ -48,9 +48,7 @@ class GetProfiles extends APIRequest implements LexiconContract
 
         $this->actors = $actors;
 
-        $this->queryParameter('actors', array_values($this->actors->toArray()));
-
-        return $this;
+        return $this->queryParameter('actors', array_values($this->actors->toArray()));
     }
 
     /**
