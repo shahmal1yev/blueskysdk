@@ -1,57 +1,14 @@
 <?php
 
-namespace Atproto\Responses\Com\Atproto\Server;
+namespace Atproto\Lexicons\Traits;
 
-use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Responses\BaseResponse;
+use Atproto\Support\Arr;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use SplObjectStorage;
-use SplObserver;
-use SplSubject;
 
-/**
- * @method string accessJwt()
- * @method string refreshJwt()
- * @method string handle()
- * @method string did()
- * @method string didDoc()
- * @method string email()
- * @method bool emailConfirmed()
- * @method bool emailAuthFactor()
- * @method bool active()
- * @method string|null status() The status of the account. Possible values are 'takendown', 'suspended', 'deactivated'. If `active` is `false`, this field may provide a reason for the account's inactivity.
- */
-class CreateSessionResponse implements ResponseContract, \SplSubject
+trait ResponseTrait
 {
-    use BaseResponse;
-
-    private SplObjectStorage $observers;
-
-    public function __construct(ResponseContract $response)
-    {
-        $this->response = $response;
-        $this->observers = new SplObjectStorage();
-    }
-
-    public function attach(SplObserver $observer)
-    {
-        $this->observers->attach($observer);
-    }
-
-    public function detach(SplObserver $observer)
-    {
-        $this->observers->detach($observer);
-    }
-
-    public function notify(): void
-    {
-        foreach ($this->observers as $observer) {
-            $observer->update($this);
-        }
-    }
-
     /**
      * @inheritDoc
      */
@@ -180,5 +137,30 @@ class CreateSessionResponse implements ResponseContract, \SplSubject
     public function getReasonPhrase(): string
     {
         return $this->response->getReasonPhrase();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get($name)
+    {
+        return Arr::get(json_decode($this->content(), true), $name);
+    }
+
+    private function content(): string
+    {
+        $content = $this->response->getBody()->getContents();
+
+        $this->response->getBody()->rewind();
+
+        return $content;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function exist(string $name): bool
+    {
+        return Arr::exists(json_decode($this->content(), true), $name);
     }
 }

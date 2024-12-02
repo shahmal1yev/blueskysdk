@@ -14,6 +14,17 @@ class ImageCollection extends GenericCollection implements EmbedInterface, Media
     use Lexicon;
     use EmbedCollection;
 
+    public function __construct(iterable $collection = [])
+    {
+        $this->collection = $collection;
+
+        try {
+            parent::__construct($this->validator(), $collection);
+        } catch (\TypeError|\GenericCollection\Exceptions\InvalidArgumentException $e) {
+            $this->throw($e);
+        }
+    }
+
     private const MAX_LENGTH = 4;
     private const MAX_SIZE  = 1000000;
 

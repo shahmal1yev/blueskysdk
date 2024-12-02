@@ -26,7 +26,7 @@ class GetProfileTest extends TestCase
     {
         parent::setUp();
         $this->faker = Factory::create();
-        $this->request = new GetProfile($this->createMock(Client::class));
+        $this->request = new GetProfile();
     }
 
     /**
@@ -38,8 +38,8 @@ class GetProfileTest extends TestCase
         $expected = $this->faker->word;
 
         // Act
-        $this->request->actor($expected);
-        $actual = $this->request->queryParameter('actor');
+        $request = $this->request->actor($expected);
+        $actual = $request->queryParameter('actor');
 
         // Assert
         $this->assertSame($expected, $actual, 'Actor should be set correctly.');
@@ -53,10 +53,10 @@ class GetProfileTest extends TestCase
     {
         // Arrange
         $expected = $this->faker->word;
-        $this->request->queryParameter('actor', $expected);
+        $request = $this->request->queryParameter('actor', $expected);
 
         // Act
-        $actual = $this->request->actor();
+        $actual = $request->actor();
 
         // Assert
         $this->assertSame($expected, $actual, 'Actor should be retrieved correctly.');
@@ -70,31 +70,13 @@ class GetProfileTest extends TestCase
 
         // Assert
         $this->assertInstanceOf(RequestContract::class, $actual, 'Should return an instance of RequestContract.');
-        $this->assertInstanceOf(APIRequestContract::class, $actual, 'Should return an instance of APIRequestContract.');
-        $this->assertInstanceOf(Request::class, $actual, 'Should return an instance of Request.');
-        $this->assertInstanceOf(APIRequest::class, $actual, 'Should return an instance of APIRequest.');
     }
 
     public function testBuildReturnsSameInterface(): void
     {
-        $this->request->actor($this->faker->word);
-        $this->request->token($this->faker->word);
-
-        $actual = $this->request->build();
+        $actual = $this->request->token($this->faker->word)
+            ->actor($this->faker->word);
 
         $this->assertInstanceOf(RequestContract::class, $actual, 'Should return an instance of RequestContract.');
-        $this->assertInstanceOf(APIRequestContract::class, $actual, 'Should return an instance of APIRequestContract.');
-        $this->assertInstanceOf(Request::class, $actual, 'Should return an instance of Request.');
-        $this->assertInstanceOf(APIRequest::class, $actual, 'Should return an instance of APIRequest.');
-    }
-
-    public function testBuildThrowsAnExceptionWhenActorDoesNotExist(): void
-    {
-        $this->request->token($this->faker->word);
-
-        $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing fields provided: actor");
-
-        $this->request->build();
     }
 }

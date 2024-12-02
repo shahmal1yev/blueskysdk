@@ -4,9 +4,8 @@ namespace Atproto;
 
 use Atproto\Traits\Authentication;
 use Atproto\Traits\Smith;
-use SplSubject;
 
-class Client implements SplSubject
+class Client
 {
     use Smith;
     use Authentication;

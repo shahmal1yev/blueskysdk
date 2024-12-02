@@ -2,16 +2,16 @@
 
 namespace Atproto\Lexicons\App\Bsky\Graph;
 
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\MissingFieldProvidedException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Graph\GetFollowersResponse;
 
-class GetFollowers extends APIRequest implements LexiconContract
+class GetFollowers implements AuthEndpointLexiconContract
 {
     use AuthenticatedEndpoint;
 
@@ -21,15 +21,13 @@ class GetFollowers extends APIRequest implements LexiconContract
             return $this->queryParameter('actor');
         }
 
-        $this->queryParameter('actor', $actor);
-
-        return $this;
+        return $this->queryParameter('actor', $actor);
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function limit(int $limit = null)
+    public function limit(string $limit = null)
     {
         if (is_null($limit)) {
             return (int) $this->queryParameter('limit') ?: null;
@@ -39,9 +37,7 @@ class GetFollowers extends APIRequest implements LexiconContract
             throw new InvalidArgumentException("Limit must be between 1 and 100.");
         }
 
-        $this->queryParameter('limit', $limit);
-
-        return $this;
+        return $this->queryParameter('limit', $limit);
     }
 
     public function cursor(string $cursor = null)
@@ -50,25 +46,11 @@ class GetFollowers extends APIRequest implements LexiconContract
             return $this->queryParameter('cursor');
         }
 
-        $this->queryParameter('cursor', $cursor);
-
-        return $this;
+        return $this->queryParameter('cursor', $cursor);
     }
 
-    public function response(array $data): ResponseContract
+    public function response(ResponseContract $data): ResponseContract
     {
         return new GetFollowersResponse($data);
-    }
-
-    /**
-     * @throws MissingFieldProvidedException
-     */
-    public function build(): RequestContract
-    {
-        if (! $this->queryParameter('actor')) {
-            throw new MissingFieldProvidedException('actor');
-        }
-
-        return $this;
     }
 }

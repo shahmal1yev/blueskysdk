@@ -15,26 +15,24 @@ class GetFollowersTest extends TestCase
     /** @var GetFollowers */
     private $request;
 
-    private Client $clientMock;
 
     protected function setUp(): void
     {
-        $this->clientMock = $this->createMock(Client::class);
-        $this->request = new GetFollowers($this->clientMock);
+        $this->request = new GetFollowers();
     }
 
     public function testActorSetterAndGetter()
     {
         $actor = 'testActor';
-        $this->request->actor($actor);
-        $this->assertSame($actor, $this->request->actor(), 'Actor getter should return the value set by the setter.');
+        $request = $this->request->actor($actor);
+        $this->assertSame($actor, $request->actor(), 'Actor getter should return the value set by the setter.');
     }
 
     public function testLimitSetterAndGetter()
     {
         $limit = 50;
-        $this->request->limit($limit);
-        $this->assertSame($limit, $this->request->limit(), 'Limit getter should return the value set by the setter.');
+        $request = $this->request->limit($limit);
+        $this->assertSame($limit, $request->limit(), 'Limit getter should return the value set by the setter.');
     }
 
     public function testLimitSetterThrowsExceptionForZero()
@@ -61,37 +59,13 @@ class GetFollowersTest extends TestCase
     public function testCursorSetterAndGetter()
     {
         $cursor = 'testCursor';
-        $this->request->cursor($cursor);
-        $this->assertSame($cursor, $this->request->cursor(), 'Cursor getter should return the value set by the setter.');
-    }
-
-    public function testBuildThrowsExceptionWhenActorParameterMissing()
-    {
-        $this->expectException(MissingFieldProvidedException::class);
-        $this->expectExceptionMessage("Missing fields provided: actor");
-
-        // Do not set 'actor' parameter
-        $this->request->build();
-    }
-
-    /**
-     * @throws MissingFieldProvidedException
-     * @throws AuthMissingException
-     */
-    public function testBuildSucceedsWithRequiredParameters()
-    {
-        // Set required 'Authorization' header and 'actor' parameter
-        $this->request->actor('testActor');
-
-        // Should not throw any exceptions
-        $builtRequest = $this->request->build();
-        $this->assertInstanceOf(GetFollowers::class, $builtRequest, 'Build should return an instance of GetFollowers.');
+        $request = $this->request->cursor($cursor);
+        $this->assertSame($cursor, $request->cursor(), 'Cursor getter should return the value set by the setter.');
     }
 
     public function testResourceMethodReturnsCorrectInstance()
     {
-        $data = ['followers' => []];
-        $resource = $this->request->response($data);
+        $resource = $this->request->response($this->createMock(ResponseContract::class));
         $this->assertInstanceOf(ResponseContract::class, $resource, 'Resource method should return an instance of ResourceContract.');
     }
 

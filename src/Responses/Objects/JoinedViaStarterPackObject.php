@@ -23,7 +23,7 @@ class JoinedViaStarterPackObject implements ObjectContract
 
     public function __construct($content)
     {
-        $this->content = $content;
+        $this->response = $content;
     }
 
     public function casts(): array

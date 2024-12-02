@@ -10,10 +10,10 @@ trait CollectionObject
 {
     use BaseObject;
 
-    public function __construct(array $content)
+    public function __construct(array $response)
     {
-        $this->value = $content;
-        $this->content = $content;
+        $this->value = $response;
+        $this->response = $response;
 
         parent::__construct(
             $this->type(),

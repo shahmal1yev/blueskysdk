@@ -2,7 +2,9 @@
 
 namespace Atproto\Traits;
 
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Exceptions\BlueskyException;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use SplObjectStorage;
 use SplObserver;
@@ -22,12 +24,9 @@ trait Authentication
      */
     public function authenticate(string $identifier, string $password): void
     {
-        $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password);
-
-        /** @var CreateSessionResponse $response */
-        $response = $request->send();
-
-        $this->authenticated = $response;
+        $this->authenticated = $this->com()->atproto()->server()->createSession()
+            ->forge($identifier, $password)
+            ->send();
 
         $this->notify();
     }
@@ -37,20 +36,26 @@ trait Authentication
         return $this->authenticated;
     }
 
-    public function attach(SplObserver $observer): void
+    public function attach(AuthEndpointLexiconContract $observer): void
     {
         $this->observers->attach($observer);
     }
 
-    public function detach(SplObserver $observer): void
+    public function detach(AuthEndpointLexiconContract $observer): void
     {
         $this->observers->detach($observer);
     }
 
     public function notify(): void
     {
-        foreach ($this->observers as $observer) {
-            $observer->update($this);
+        if (! $this->authenticated) {
+            return;
         }
+
+        foreach ($this->observers as $observer) {
+            $this->authenticated->attach($observer);
+        }
+
+        $this->authenticated->notify();
     }
 }

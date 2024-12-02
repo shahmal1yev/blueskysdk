@@ -3,11 +3,19 @@
 namespace Tests\Unit;
 
 use Atproto\Client;
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Exceptions\Http\Response\AuthenticationRequiredException;
+use Atproto\Factories\PSR\PSR17Factory;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
+use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
+use Nyholm\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use SplObserver;
@@ -44,11 +52,14 @@ class ClientTest extends TestCase
     {
         $this->client->app()->bsky()->actor();
 
-        $method = $this->method('request', $this->client);
+        $method = $this->method('namespace', $this->client);
 
-        $namespace = $method->invoke($this->client);
+        $namespace = implode('\\', array_map(
+            'ucfirst',
+            $this->getPropertyValue('path', $this->client))
+        );
 
-        $expectedNamespace = 'Atproto\\Lexicons\\App\\Bsky\\Actor';
+        $expectedNamespace = 'App\\Bsky\\Actor';
         $this->assertSame($expectedNamespace, $namespace);
     }
 
@@ -57,7 +68,7 @@ class ClientTest extends TestCase
         $this->client->nonExistentMethod();
 
         $this->expectException(LexiconNotFoundException::class);
-        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod class does not exist.");
+        $this->expectExceptionMessage("Atproto\\Lexicons\\NonExistentMethod lexicon does not exist.");
 
         $this->client->forge();
     }
@@ -95,9 +106,17 @@ class ClientTest extends TestCase
         $this->assertNull($this->client->authenticated());
     }
 
+    private function authenticatedEndpointTraitMock(): RequestContract
+    {
+        return new class () implements RequestContract {
+            use AuthenticatedEndpoint;
+            protected function response(ResponseContract $response): ResponseContract {}
+        };
+    }
+
     public function testAttachObserver(): void
     {
-        $mockObserver = $this->createMock(SplObserver::class);
+        $mockObserver = $this->createMock(AuthEndpointLexiconContract::class);
         $this->client->attach($mockObserver);
 
         $observers = $this->getPropertyValue('observers', $this->client);
@@ -107,7 +126,7 @@ class ClientTest extends TestCase
 
     public function testDetachObserver(): void
     {
-        $mockObserver = $this->createMock(SplObserver::class);
+        $mockObserver = $this->createMock(AuthEndpointLexiconContract::class);
         $this->client->attach($mockObserver);
         $this->client->detach($mockObserver);
 
@@ -117,14 +136,17 @@ class ClientTest extends TestCase
 
     public function testNotifyObservers(): void
     {
-        $mockObserver1 = $this->createMock(SplObserver::class);
-        $mockObserver2 = $this->createMock(SplObserver::class);
+        $this->setPropertyValue(
+            'authenticated',
+            $authenticated = new CreateSessionResponse($this->createMock(ResponseContract::class)),
+            $this->client,
+        );
 
-        $mockObserver1->expects($this->once())->method('update')->with($this->client);
-        $mockObserver2->expects($this->once())->method('update')->with($this->client);
-
-        $this->client->attach($mockObserver1);
-        $this->client->attach($mockObserver2);
+        for($i=0; 5 > $i; $i++) {
+            $observer = $this->createMock(AuthEndpointLexiconContract::class);
+            $observer->expects($this->once())->method('update')->with($authenticated);
+            $this->client->attach($observer);
+        }
 
         $this->client->notify();
     }
@@ -137,21 +159,6 @@ class ClientTest extends TestCase
         $observers = $this->getPropertyValue('observers', $this->client);
         $this->assertCount(1, $observers);
         $this->assertTrue($observers->contains($request));
-    }
-
-    public function testAPIRequestUpdatesOnNotify(): void
-    {
-        $this->mockAuthenticate();
-
-        $mockRequest = $this->createMock(APIRequest::class);
-
-        $this->client->attach($mockRequest);
-
-        $mockRequest->expects($this->once())
-            ->method('update')
-            ->with($this->client);
-
-        $this->client->authenticate('username', 'password');
     }
 
     private function mockAuthenticate()
@@ -171,5 +178,40 @@ class ClientTest extends TestCase
 
         $this->client->method('forge')
             ->willReturn($mockCreateSession);
+    }
+
+    public function testItCanReturnsGetProfile(): void
+    {
+        $getProfile = $this->client->app()->bsky()->actor()->getProfile()->forge();
+
+        $credentials = [
+            'shahmal1yevv.bsky.social',
+            'ucvlqcq8'
+        ];
+
+        $this->client->authenticate(
+            ...$credentials
+        );
+
+        $headers = $getProfile->getHeaders();
+        $this->assertArrayHasKey('Authorization', $headers);
+
+        $this->assertInstanceOf(GetProfile::class, $getProfile);
+        $this->assertNotSame($this->client->authenticated()->did(), $getProfile->actor());
+
+        $getProfile = $getProfile->actor($this->client->authenticated()->did());
+
+        $this->assertInstanceOf(GetProfile::class, $getProfile);
+        $this->assertSame($this->client->authenticated()->did(), $getProfile->actor());
+
+        $response = $getProfile->send();
+
+        $this->assertInstanceOf(GetProfileResponse::class, $response);
+        $this->assertSame($this->client->authenticated()->did(), $response->did());
+
+        $clone = $response->withProtocolVersion('2');
+
+        $this->assertSame($this->client->authenticated()->did(), $clone->did());
+        $this->assertEquals($response, $clone);
     }
 }

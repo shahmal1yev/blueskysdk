@@ -3,9 +3,11 @@
 namespace Atproto\Traits;
 
 use Atproto\Client;
-use Atproto\Contracts\Lexicons\APIRequestContract;
-use Atproto\Contracts\Observer;
+use Atproto\Contracts\HTTP\AuthEndpointLexiconContract;
 use Atproto\Exceptions\Http\Request\LexiconNotFoundException;
+use Atproto\Factories\HTTPFactory;
+use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
+use Atproto\Lexicons\Traits\Endpoint;
 
 trait Smith
 {
@@ -24,27 +26,13 @@ trait Smith
      */
     public function forge(...$arguments)
     {
-        $arguments = array_merge([$this], array_values($arguments));
-
-        $request = $this->request();
-
-        if (! class_exists($request)) {
-            throw new LexiconNotFoundException("$request class does not exist.");
-        }
-
-        /** @var APIRequestContract $request */
-        $request = new $request(...$arguments);
-
-        if ($request instanceof \SplObserver) {
-            $this->attach($request);
-        }
-
+        $this->subscribe($instance = $this->instantiate($this->arguments($arguments)));
         $this->refresh();
 
-        return $request;
+        return $instance;
     }
 
-    public function path(): string
+    private function path(): string
     {
         return implode('\\', array_map(
             'ucfirst',
@@ -57,10 +45,47 @@ trait Smith
         $this->path = [];
     }
 
-    private function request(): string
+    /**
+     * @throws LexiconNotFoundException
+     */
+    private function namespace(): string
     {
-        return $this->prefix . $this->path();
+        if (! class_exists($namespace = $this->prefix . $this->path())) {
+            throw new LexiconNotFoundException("$namespace lexicon does not exist.");
+        }
+
+        return $namespace;
     }
 
+    /**
+     * @throws LexiconNotFoundException
+     */
+    private function instantiate(array $arguments = []): object
+    {
+        return new ($this->namespace())(...array_values($arguments));
+    }
+    
+    private function subscribe($instance): void
+    {
+        if ($instance instanceof AuthEndpointLexiconContract) {
+            $this->attach($instance);
+        }
+    }
 
+    private function arguments(array $arguments): array
+    {
+        return array_merge(array_values($arguments), $this->dependencies());
+    }
+
+    private function dependencies(): array
+    {
+        $uses = class_uses_recursive($this->namespace());
+        $dependencies = [];
+
+        if (in_array(Endpoint::class, $uses, true)) {
+            $dependencies[] = new HTTPFactory();
+        }
+
+        return $dependencies;
+    }
 }

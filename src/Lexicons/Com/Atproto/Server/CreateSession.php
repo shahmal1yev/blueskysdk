@@ -2,35 +2,33 @@
 
 namespace Atproto\Lexicons\Com\Atproto\Server;
 
-use Atproto\Client;
-use Atproto\Contracts\LexiconContract;
-use Atproto\Contracts\Lexicons\RequestContract;
+use Atproto\Contracts\HTTP\EndpointLexiconContract;
+use Atproto\Contracts\HTTP\HTTPFactoryContract;
 use Atproto\Contracts\Resources\ResponseContract;
-use Atproto\Lexicons\APIRequest;
+use Atproto\Factories\HTTPFactory;
 use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
+use GenericCollection\Exceptions\InvalidArgumentException;
 
-class CreateSession extends APIRequest implements LexiconContract
+class CreateSession implements EndpointLexiconContract
 {
     use Endpoint;
 
-    public function __construct(Client $client, string $identifier, string $password)
+    public function __construct(string $identifier, string $password, ?HTTPFactoryContract $factory = null)
     {
-        parent::__construct($client);
+        $this->initialize($factory);
 
-        $this->method('POST')->parameters([
+        $this->request = $this->request->method('POST')->parameters([
             'identifier' => $identifier,
-            'password'   => $password,
+            'password' => $password,
         ]);
     }
 
-    public function build(): RequestContract
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function response(ResponseContract $response): CreateSessionResponse
     {
-        return $this;
-    }
-
-    public function response(array $data): ResponseContract
-    {
-        return new CreateSessionResponse($data);
+        return new CreateSessionResponse($response);
     }
 }

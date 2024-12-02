@@ -12,7 +12,7 @@ class KnownFollowersObject implements ObjectContract
 
     public function __construct(array $content)
     {
-        $this->content = $content;
+        $this->response = $content;
     }
 
     protected function casts(): array

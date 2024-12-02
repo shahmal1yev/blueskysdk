@@ -9,6 +9,9 @@ use Atproto\Responses\Objects\JoinedViaStarterPackObject;
 use Atproto\Responses\Objects\LabelsObject;
 use Atproto\Responses\Objects\UserObject;
 use Atproto\Responses\Objects\ViewerObject;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * @method string did()
