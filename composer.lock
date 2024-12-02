@@ -232,22 +232,23 @@
         },
         {
             "name": "shahmal1yev/gcollection",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shahmal1yev/gcollection.git",
-                "reference": "1ec135b2c65e15b1ab97b886c21bf49adc1358cc"
+                "reference": "314531d897864cb495a230e32b9356f2fcb53464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shahmal1yev/gcollection/zipball/1ec135b2c65e15b1ab97b886c21bf49adc1358cc",
-                "reference": "1ec135b2c65e15b1ab97b886c21bf49adc1358cc",
+                "url": "https://api.github.com/repos/shahmal1yev/gcollection/zipball/314531d897864cb495a230e32b9356f2fcb53464",
+                "reference": "314531d897864cb495a230e32b9356f2fcb53464",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "9.6.20"
             },
             "type": "library",
@@ -261,9 +262,9 @@
             "description": "GenericCollection is a versatile PHP library that provides a type-safe collection class for managing various data types. Simplify your data management with intuitive methods and strong type constraints.",
             "support": {
                 "issues": "https://github.com/shahmal1yev/gcollection/issues",
-                "source": "https://github.com/shahmal1yev/gcollection/tree/1.0.7"
+                "source": "https://github.com/shahmal1yev/gcollection/tree/1.0.8"
             },
-            "time": "2024-09-30T17:35:29+00:00"
+            "time": "2024-12-02T07:16:55+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
