@@ -115,7 +115,7 @@ $followers = $client->app()
     ->actor('user.bsky.social')
     ->send();
 
-foreach ($followers as $follower) {
+foreach ($followers->followers() as $follower) {
     // Each $follower is a typed object with guaranteed methods
     /** @var \Atproto\Responses\Objects\FollowerObject $follower */
     
@@ -300,7 +300,7 @@ class FollowerEngagement {
             
         $newFollowers = $this->filterTodaysFollowers($followers);
         
-        foreach ($newFollowers as $follower) {
+        foreach ($newFollowers->followers() as $follower) {
             $this->sendWelcomeMessage($follower);
         }
     }
