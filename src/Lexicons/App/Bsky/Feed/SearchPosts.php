@@ -126,7 +126,7 @@ class SearchPosts extends APIRequest implements LexiconContract
     /**
      * @throws InvalidArgumentException
      */
-    public function url(string $url = null): string
+    public function _url(string $url = null)
     {
         if (is_null($url)) {
             return $this->queryParameter('url');
