@@ -16,6 +16,7 @@ class SearchPosts extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;
 
+    private SortEnum $sort;
     private ?DateTimeImmutable $since = null;
     private ?DateTimeImmutable $until = null;
     private array $tag = [];
@@ -25,18 +26,30 @@ class SearchPosts extends APIRequest implements LexiconContract
         parent::__construct($client);
         $this->update($client);
 
-        $this->queryParameter('q', $query)
-            ->queryParameter('sort', SortEnum::get('latest'))
-            ->queryParameter('limit', 25);
+        $this->q($query)
+            ->sort(SortEnum::get('latest'))
+            ->limit(25);
+    }
+
+    public function q(string $query = null)
+    {
+        if (is_null($query)) {
+            return $this->queryParameter('q') ?? null;
+        }
+
+        $this->queryParameter('q', $query);
+
+        return $this;
     }
 
     public function sort(SortEnum $sort = null)
     {
         if (is_null($sort)) {
-            return $this->queryParameter('sort') ?? null;
+            return $this->sort->value ?? null;
         }
 
-        $this->queryParameter('sort', $sort);
+        $this->sort = $sort;
+        $this->queryParameter('sort', $sort->value);
 
         return $this;
     }
@@ -180,7 +193,7 @@ class SearchPosts extends APIRequest implements LexiconContract
     public function limit(int $limit = null)
     {
         if (is_null($limit)) {
-            return $this->queryParameter('limit') ?? null;
+            return ((int) $this->queryParameter('limit')) ?: null;
         }
 
         if ($limit > 100 || $limit < 1) {
