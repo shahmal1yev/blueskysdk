@@ -10,10 +10,15 @@ class PostObject implements ObjectContract
     use BaseObject;
     use Castable;
 
+    public function __construct(array $content)
+    {
+        $this->content = $content;
+    }
+
     protected function casts(): array
     {
         return [
-            'author' => UserObject::class,
+            'author' => ProfileObject::class,
             'indexedAt' => DatetimeObject::class,
             'viewer' => ViewerObject::class,
             'labels' => LabelsObject::class,

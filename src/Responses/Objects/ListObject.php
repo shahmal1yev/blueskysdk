@@ -15,8 +15,8 @@ class ListObject implements ObjectContract
      */
     public function __construct($data)
     {
+        $this->content = $data;
     }
-
 
     protected function casts(): array
     {
