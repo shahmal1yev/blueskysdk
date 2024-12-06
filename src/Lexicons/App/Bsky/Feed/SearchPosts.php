@@ -10,6 +10,7 @@ use Atproto\Enums\SearchPost\SortEnum;
 use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
+use Atproto\Responses\App\Bsky\Feed\SearchPostsResponse;
 use DateTimeImmutable;
 
 class SearchPosts extends APIRequest implements LexiconContract
@@ -218,7 +219,7 @@ class SearchPosts extends APIRequest implements LexiconContract
 
     public function response(array $data): ResponseContract
     {
-        // TODO: Implement response() method.
+        return new SearchPostsResponse($data);
     }
 
     public function build(): RequestContract
