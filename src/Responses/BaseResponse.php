@@ -30,11 +30,16 @@ trait BaseResponse
     }
 
     /**
+     * Get the value of the specified offset.
+     *
      * @param  string  $offset
      *
      * @return mixed
      *
      * @throws BadAssetCallException
+     *
+     * @deprecated 1.5.0-beta This method is deprecated and will be removed in version 2.x.
+     *             Use the `resolve` instead.
      */
     public function get($offset)
     {
@@ -42,12 +47,49 @@ trait BaseResponse
             throw new BadAssetCallException($offset);
         }
 
+        trigger_error(
+            sprintf(
+                'The method %s::get() is deprecated since version 1.5.0-beta and will be removed in version 2.x. Use %s::resolve() instead.',
+                __CLASS__,
+                __CLASS__
+            ),
+            E_USER_DEPRECATED
+        );
+
         return $this->parse($offset);
     }
 
+    public function resolve($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * Checks if the specified key exists in the content.
+     *
+     * @param  string  $name
+     * @return bool
+     *
+     * @deprecated 1.5.0-beta This method is deprecated and will be removed in version 2.x.
+     *             Use the `has` instead.
+     */
     public function exist(string $name): bool
     {
+        trigger_error(
+            sprintf(
+                'The method %s::exist() is deprecated since version 1.5.0-beta and will be removed in version 2.0. Use %s::hasKey() instead.',
+                __CLASS__,
+                __CLASS__
+            ),
+            E_USER_DEPRECATED
+        );
+
         return Arr::has($this->content, $name);
+    }
+
+    public function has(string $name): bool
+    {
+        return $this->exist($name);
     }
 
     private function parse(string $name)

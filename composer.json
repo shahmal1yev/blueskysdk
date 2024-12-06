@@ -1,6 +1,6 @@
 {
   "name": "shahmal1yev/blueskysdk",
-  "description": "BlueSky SDK is a PHP library used for interacting with the BlueSky API. This library allows you to perform various operations using the BlueSky API.",
+  "description": "BlueSky SDK is a comprehensive PHP library designed to seamlessly integrate with the BlueSky social network.",
   "keywords": [
     "bluesky",
     "sdk",
@@ -42,9 +42,9 @@
     "shahmal1yev/gcollection": "^1.0"
   },
   "scripts": {
-    "test": "vendor/bin/phpunit tests",
-    "test-unit": "vendor/bin/phpunit tests/Unit",
-    "test-feature": "vendor/bin/phpunit tests/Feature",
+    "test": "vendor/bin/phpunit tests -c ./phpunit.xml",
+    "test-unit": "vendor/bin/phpunit tests/Unit -c ./phpunit.xml",
+    "test-feature": "vendor/bin/phpunit tests/Feature -c ./phpunit.xml",
     "analyse": "vendor/bin/phpstan analyse ./src ./tests --error-format=github"
   }
 }
