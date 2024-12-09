@@ -9,6 +9,7 @@ interface BlobContract extends Stringable, \JsonSerializable
 {
     public static function viaFile(FileSupport $file): BlobContract;
     public static function viaBinary(string $binary): BlobContract;
+    public static function viaArray(array $blobContent): BlobContract;
 
     public function size(): int;
     public function mimeType(): string;
