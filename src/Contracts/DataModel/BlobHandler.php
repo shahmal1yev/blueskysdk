@@ -2,7 +2,9 @@
 
 namespace Atproto\Contracts\DataModel;
 
-interface BlobHandler
+use Atproto\Contracts\Stringable;
+
+interface BlobHandler extends Stringable
 {
     public function size(): int;
     public function mimeType(): string;

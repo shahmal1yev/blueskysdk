@@ -17,11 +17,6 @@ class Blob implements BlobContract
     private function __construct(BlobHandler $handler)
     {
         $this->handler = $handler;
-        $this->cid = new CID(
-            MultiCodec::get('raw'),
-            MultiBase::get('base32'),
-            $handler->content()
-        );
     }
 
     public static function viaBinary(string $binary): BlobContract
@@ -32,6 +27,11 @@ class Blob implements BlobContract
     public static function viaFile(FileSupport $file): BlobContract
     {
         return new self(new FileBlobHandler($file));
+    }
+
+    public static function viaArray(array $blobContent): BlobContract
+    {
+        return new self(new ArrayBlobHandler($blobContent));
     }
 
     public function size(): int
@@ -51,7 +51,7 @@ class Blob implements BlobContract
 
     public function link(): string
     {
-        return $this->cid->__toString();
+        return $this->handler->__toString();
     }
 
     public function jsonSerialize(): array
