@@ -2,17 +2,33 @@
 
 namespace Atproto\Lexicons\App\Bsky\Embed;
 
+use Atproto\Contracts\Lexicons\App\Bsky\Embed\EmbedInterface;
 use Atproto\Contracts\Lexicons\App\Bsky\Embed\MediaContract;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
+use Atproto\Lexicons\Traits\Lexicon;
 
-class RecordWithMedia extends Record
+class RecordWithMedia implements EmbedInterface
 {
+    use Lexicon;
+
+    private Record $record;
     private MediaContract $media;
 
-    public function __construct(StrongRef $ref, MediaContract $media)
+    public function __construct(Record $record, MediaContract $media)
     {
-        parent::__construct($ref);
+        $this->record($record);
         $this->media($media);
+    }
+
+    public function record(Record $record = null)
+    {
+        if (is_null($record)) {
+            return $this->record;
+        }
+
+        $this->record = $record;
+
+        return $this;
     }
 
     public function media(MediaContract $media = null)
@@ -28,8 +44,9 @@ class RecordWithMedia extends Record
 
     public function jsonSerialize(): array
     {
-        return array_merge(parent::jsonSerialize(), [
+        return array_merge([
             '$type' => $this->nsid(),
+            'record' => $this->record,
             'media' => $this->media,
         ]);
     }
