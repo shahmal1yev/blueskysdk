@@ -3,15 +3,25 @@
 namespace Atproto\DataModel\Blob;
 
 use Atproto\Contracts\DataModel\BlobHandler;
+use Atproto\Exceptions\InvalidArgumentException;
 use Atproto\Support\Arr;
 
 class ArrayBlobHandler implements BlobHandler
 {
     private array $blob;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __construct(array $blob)
     {
         $this->blob = $blob;
+
+        if (! isset($this->blob['size'], $this->blob['mimeType'], $this->blob['ref']['$link'])) {
+            throw new InvalidArgumentException(
+                "ArrayBlobHandler requires 'ref.\$link', 'mimeType', and 'size' fields."
+            );
+        }
     }
 
     public function size(): int

@@ -140,4 +140,55 @@ class BlobTest extends TestCase
             'size' => 7,
         ];
     }
+
+    public function testViaArrayConstructorWorkingCorrectly(): void
+    {
+        $blobContent = [
+            'ref' => ['$link' => 'mock-link'],
+            'mimeType' => 'application/json',
+            'size' => 1024,
+        ];
+
+        $blob = Blob::viaArray($blobContent);
+
+        $this->assertSame(1024, $blob->size());
+        $this->assertSame('application/json', $blob->mimeType());
+        $this->assertSame('mock-link', $blob->link());
+    }
+
+    public function testViaArrayConstructorThrowsExceptionForMissingFields(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            "ArrayBlobHandler requires 'ref.\$link', 'mimeType', and 'size' fields."
+        );
+
+        Blob::viaArray([
+            'mimeType' => 'application/json',
+            'size' => 1024,
+            // 'ref.$link' missing
+        ]);
+    }
+
+    public function testJsonSerializeForArrayBlob(): void
+    {
+        $blobContent = [
+            'ref' => ['$link' => 'mock-link'],
+            'mimeType' => 'application/json',
+            'size' => 1024,
+        ];
+
+        $blob = Blob::viaArray($blobContent);
+
+        $expectedSerialization = [
+            '$type' => 'blob',
+            'ref' => [
+                '$link' => 'mock-link',
+            ],
+            'mimeType' => 'application/json',
+            'size' => 1024,
+        ];
+
+        $this->assertSame($expectedSerialization, $blob->jsonSerialize());
+    }
 }
