@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class RecordWithMediaTest extends TestCase
 {
+    private Record $record;
     private MediaContract $media;
     private RecordWithMedia $recordWithMedia;
 
