@@ -192,14 +192,14 @@ class SearchPostsTest extends TestCase
     {
         $this->assertSame(25, $this->searchPosts->limit());
     }
-    
+
     public function testLimitCanSetNewValue(): void
     {
         $this->searchPosts->limit(10);
-        
+
         $this->assertSame(10, $this->searchPosts->limit());
     }
-    
+
     public function testLimitThrowsExceptionWhenPassedInvalidArgument(): void
     {
         $value = [0, 101][rand(0, 1)];

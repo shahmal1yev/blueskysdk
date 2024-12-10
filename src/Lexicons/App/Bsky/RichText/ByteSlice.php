@@ -9,23 +9,23 @@ class ByteSlice implements ByteSliceContract
 {
     use Serializable;
 
-    private string $text;
-    private string $added;
+    private int $start;
+    private int $end;
 
-    public function __construct(string $text, string $added)
+    private function __construct(int $start, int $end)
     {
-        $this->text = $text;
-        $this->added = $added;
+        $this->start = $start;
+        $this->end   = $end;
     }
 
     public function start(): int
     {
-        return mb_strpos($this->text, $this->added);
+        return $this->start;
     }
 
     public function end(): int
     {
-        return mb_strpos($this->text, $this->added) + mb_strlen($this->added);
+        return $this->end;
     }
 
     public function jsonSerialize(): array
@@ -34,5 +34,18 @@ class ByteSlice implements ByteSliceContract
             'byteStart' => $this->start(),
             'byteEnd' => $this->end(),
         ];
+    }
+
+    public static function viaText(string $text, string $added): ByteSliceContract
+    {
+        $start = mb_strpos($text, $added);
+        $end   = mb_strpos($text, $added) + mb_strlen($added);
+
+        return new self($start, $end);
+    }
+
+    public static function viaManual(int $start, int $end): ByteSliceContract
+    {
+        return new self($start, $end);
     }
 }

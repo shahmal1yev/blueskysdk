@@ -184,6 +184,7 @@ class SearchPosts extends APIRequest implements LexiconContract
         }
 
         $this->tag = $tags;
+        $this->queryParameter('tag', $tags);
 
         return $this;
     }
