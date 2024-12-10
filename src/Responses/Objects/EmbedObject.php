@@ -18,9 +18,11 @@ class EmbedObject implements ObjectContract
 
     public function cast(): EmbedInterface
     {
+        $args = array_pop($this->content);
+
         return EmbedFactory::make(
             Arr::get($this->content, '$type'),
-            ...array_pop($this->content)
+            ...array_values($args)
         );
     }
 }
