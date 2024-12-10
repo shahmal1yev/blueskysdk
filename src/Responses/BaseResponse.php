@@ -61,7 +61,7 @@ trait BaseResponse
 
     public function resolve($name)
     {
-        return $this->get($name);
+        return @$this->get($name);
     }
 
     /**
@@ -89,7 +89,7 @@ trait BaseResponse
 
     public function has(string $name): bool
     {
-        return $this->exist($name);
+        return @$this->exist($name);
     }
 
     private function parse(string $name)
