@@ -70,7 +70,7 @@ class SearchPostsTest extends TestCase
         $query = 'example';
         $url = 'https://example.com';
         $response = $this->createSearchPosts($query)
-            ->_url($url)
+            ->url($url)
             ->limit(3)
             ->send();
 
@@ -163,7 +163,7 @@ class SearchPostsTest extends TestCase
         $response = $this->createSearchPosts($query)
             ->author($author)
             ->lang($lang)
-            ->_url($url)
+            ->url($url)
             ->limit(1)
             ->send();
 

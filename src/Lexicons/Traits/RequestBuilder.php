@@ -11,7 +11,7 @@ trait RequestBuilder
     protected array $parameters = [];
     protected array $queryParameters = [];
 
-    public function url(): string
+    public function url()
     {
         $parts = array_map(fn ($part) => trim($part, "/"), [
             'origin' => $this->origin(),

@@ -137,10 +137,21 @@ class SearchPosts extends APIRequest implements LexiconContract
         return $this;
     }
 
+    public function url(string $url = null)
+    {
+        $backtrace = current(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1));
+
+        if (strpos($backtrace['file'], "RequestHandler")) {
+            return parent::url();
+        }
+
+        return $this->_url($url);
+    }
+
     /**
      * @throws InvalidArgumentException
      */
-    public function _url(string $url = null)
+    private function _url(string $url = null)
     {
         if (is_null($url)) {
             return $this->queryParameter('url');
