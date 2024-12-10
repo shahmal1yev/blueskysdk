@@ -14,7 +14,7 @@ interface RequestContract
      *
      * @return string The URL of the request
      */
-    public function url(): string;
+    public function url();
 
     /**
      * Get or set the host of the request.

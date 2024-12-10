@@ -133,14 +133,14 @@ class SearchPostsTest extends TestCase
 
     public function testUrlCanSetNewValue(): void
     {
-        $this->searchPosts->_url('https://shahmal1yev.dev');
+        $this->searchPosts->url('https://shahmal1yev.dev');
 
-        $this->assertSame($this->searchPosts->_url(), 'https://shahmal1yev.dev');
+        $this->assertSame($this->searchPosts->url(), 'https://shahmal1yev.dev');
     }
 
     public function testUrlReturnsNull(): void
     {
-        $this->assertNull($this->searchPosts->_url());
+        $this->assertNull($this->searchPosts->url());
     }
 
     public function testUrlThrowsExceptionWhenPassedInvalidValue(): void
@@ -148,7 +148,7 @@ class SearchPostsTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL format.');
 
-        $this->searchPosts->_url('invalid');
+        $this->searchPosts->url('invalid');
     }
 
     public function testTagReturnsDefaultValueAsEmptyArray(): void
@@ -192,14 +192,14 @@ class SearchPostsTest extends TestCase
     {
         $this->assertSame(25, $this->searchPosts->limit());
     }
-    
+
     public function testLimitCanSetNewValue(): void
     {
         $this->searchPosts->limit(10);
-        
+
         $this->assertSame(10, $this->searchPosts->limit());
     }
-    
+
     public function testLimitThrowsExceptionWhenPassedInvalidArgument(): void
     {
         $value = [0, 101][rand(0, 1)];

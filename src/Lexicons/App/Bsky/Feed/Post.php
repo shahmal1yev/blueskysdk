@@ -301,7 +301,7 @@ class Post implements PostBuilderContract
         try {
             $this->facets[] = new Facet(
                 new FeatureCollection([$feature]),
-                new ByteSlice($this->text, $label)
+                ByteSlice::viaText($this->text, $label)
             );
         } catch (\GenericCollection\Exceptions\InvalidArgumentException $e) {
             throw new InvalidArgumentException(
