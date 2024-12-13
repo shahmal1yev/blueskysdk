@@ -69,13 +69,13 @@ The SDK implements a smart builder pattern using method chaining. This provides 
 requests
 
 ```php
-$response = $client->app()      // Navigate to 'app' namespace
-    ->bsky()            // Navigate to 'bsky' subspace
-    ->feed()            // Navigate to 'feed' operations
-    ->post()            // Select 'post' operation
-    ->forge()           // Initialize the request builder
-    ->text("Hello!")    // Add content
-    ->send();           // Execute the request
+$response = $client->com()      // Navigate to 'com' namespace
+    ->atproto()                 // Navigate to 'atproto' subspace
+    ->repo()                    // Navigate to 'repo' operations
+    ->createRecord()            // Select 'createRecord' operation
+    ->forge()                   // Initialize the request builder
+    ->record($post)             // Add content
+    ->send();                   // Execute the request
 ```
 
 ### Response Handling
