@@ -15,7 +15,7 @@ trait BaseObject
     public function __construct($value)
     {
         $this->value = $value;
-        $this->cast();
+        @$this->cast();
     }
 
     /**

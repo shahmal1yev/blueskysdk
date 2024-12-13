@@ -22,11 +22,10 @@ trait BaseResponse
      *
      * @return mixed
      *
-     * @throws BadAssetCallException If the asset is not available on the resource
      */
     public function __call(string $name, array $arguments)
     {
-        return $this->get($name);
+        return $this->resolve($name);
     }
 
     /**

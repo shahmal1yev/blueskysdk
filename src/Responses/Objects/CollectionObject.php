@@ -18,7 +18,7 @@ trait CollectionObject
         parent::__construct(
             $this->type(),
             array_map(function (array $data) {
-                return $this->item($data)->cast();
+                return @$this->item($data)->cast();
             }, $this->value)
         );
     }
