@@ -112,7 +112,7 @@ class SearchPostsTest extends TestCase
     public function testSearchPostsWithLang(): void
     {
         $query = 'Multilingual Content';
-        $lang = 'en';
+        $lang = 'de';
         $response = $this->createSearchPosts($query)
             ->lang($lang)
             ->limit(3)
