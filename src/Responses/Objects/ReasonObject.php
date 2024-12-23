@@ -15,7 +15,7 @@ class ReasonObject implements ObjectContract
     {
         return [
             'by' => AuthorObject::class,
-            'indexedAt' => DateTimeObject::class,
+            'indexedAt' => DatetimeObject::class,
         ];
     }
 }
