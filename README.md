@@ -230,6 +230,54 @@ foreach ($response->posts() as $post) {
 }
 ```
 
+### GetTimeline
+
+Get a view of the requesting account's home timeline.
+
+```php
+$feed = $client->app()->bsky()->feed()->getTimeline()->forge()
+    ->limit(10)
+    ->send()
+    ->feed();
+
+foreach($feed as $entry) {
+    echo sprintf("Created by %s at %s" . PHP_EOL,
+        $entry->post()->author()->handle(),
+        $entry->post()->indexedAt()->format('d/m/Y H:i:s')
+    );
+}
+```
+
+### Call to non-implemented lexicons
+
+_Note that this is not recommended._
+
+It is possible to call non-implemented lexicons.
+
+```php
+use Atproto\Client;
+use Atproto\Lexicons\Request;
+use Atproto\Support\Arr;
+
+$client = new Client();
+$client->authenticate(getenv('BLUESKY_IDENTIFIER'), getenv('BLUESKY_PASSWORD'));
+
+$request = new Request();
+$request->origin('https://bsky.social/xrpc/app.bsky.feed.getTimeline')
+    ->method('GET')
+    ->headers([
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => sprintf("Bearer %s", $client->authenticated()->accessJwt())
+    ]);
+
+/** @var array $response */
+$response = $request->send();
+
+echo Arr::get($response, 'cursor') . PHP_EOL;
+print_r($response);
+```
+
 ### Serialization
 
 Any lexicon can be serialized
