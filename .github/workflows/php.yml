@@ -48,7 +48,7 @@ jobs:
 
   feature-tests:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/1.x'
     strategy:
       matrix:
         php-version: ['7.4', '8.0', '8.1']

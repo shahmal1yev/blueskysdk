@@ -4,6 +4,7 @@
 
 # BlueSky SDK for PHP
 
+[![PHP Workflow](https://github.com/shahmal1yev/blueskysdk/actions/workflows/php.yml/badge.svg)](https://github.com/shahmal1yev/blueskysdk/actions/workflows/php.yml)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/shahmal1yev/blueskysdk?label=latest&style=flat)
 ![GitHub last commit](https://img.shields.io/github/last-commit/shahmal1yev/blueskysdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
