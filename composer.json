@@ -38,8 +38,8 @@
     "ext-curl": "*",
     "ext-fileinfo": "*",
     "php": ">=7.4",
-    "nesbot/carbon": "2.x",
-    "shahmal1yev/gcollection": "^1.0"
+    "shahmal1yev/gcollection": "^1.0",
+    "nesbot/carbon": "3.x"
   },
   "scripts": {
     "test": "vendor/bin/phpunit tests -c ./phpunit.xml",

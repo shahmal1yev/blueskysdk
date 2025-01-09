@@ -67,8 +67,8 @@ class SearchPostsTest extends TestCase
      */
     public function testSearchPostsWithUrl(): void
     {
-        $query = 'example';
-        $url = 'https://example.com';
+        $query = 'www.rfc-editor.org';
+        $url = 'https://www.rfc-editor.org/rfc/rfc2606';
         $response = $this->createSearchPosts($query)
             ->url($url)
             ->limit(3)
