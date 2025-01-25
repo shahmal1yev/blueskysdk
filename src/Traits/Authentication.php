@@ -11,6 +11,7 @@ trait Authentication
 {
     private ?CreateSessionResponse $authenticated = null;
     private SplObjectStorage $observers;
+    private array $credentials = [];
 
     public function __construct()
     {
@@ -22,6 +23,8 @@ trait Authentication
      */
     public function authenticate(string $identifier, string $password, CreateSessionResponse $session = null): void
     {
+        $this->credentials = [$identifier, $password];
+
         $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password, $session);
 
         /** @var CreateSessionResponse $response */
@@ -52,5 +55,10 @@ trait Authentication
         foreach ($this->observers as $observer) {
             $observer->update($this);
         }
+    }
+
+    public function credentials(): array
+    {
+        return $this->credentials;
     }
 }

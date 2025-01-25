@@ -3,7 +3,12 @@
 namespace Atproto\Lexicons\Traits;
 
 use Atproto\Client;
+use Atproto\Contracts\Resources\ResponseContract;
+use Atproto\Exceptions\BlueskyException;
+use Atproto\Exceptions\Http\Response\ExpiredTokenException;
+use Atproto\Exceptions\Http\Response\InvalidTokenException;
 use Atproto\Lexicons\APIRequest;
+use Atproto\Lexicons\Com\Atproto\Server\RefreshSession;
 use SplSubject;
 
 trait AuthenticatedEndpoint
@@ -39,6 +44,26 @@ trait AuthenticatedEndpoint
         $this->header('Authorization', "Bearer $token");
 
         return $this;
+    }
+
+    public function send(): ResponseContract
+    {
+        try {
+            return parent::send();
+        } catch (BlueskyException $exception) {
+            if ($exception instanceof ExpiredTokenException) {
+                $this->client->authenticate(...array_merge(
+                    $this->client->credentials(),
+                    [$this->client->authenticated()]
+                ));
+
+                $this->update($this->client);
+
+                return $this->send();
+            }
+
+            throw $exception;
+        }
     }
 
     protected function initialize(): void
