@@ -117,6 +117,10 @@ trait RequestBuilder
     {
         if (is_bool($parameters)) {
             if ($parameters) {
+                if (empty($this->parameters)) {
+                    return "";
+                }
+
                 return json_encode($this->parameters);
             }
 

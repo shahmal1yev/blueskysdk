@@ -10,7 +10,6 @@ use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\Http\Response\ExpiredTokenException;
 use Atproto\Exceptions\Http\Response\InvalidTokenException;
 use Atproto\Lexicons\APIRequest;
-use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
 use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 
@@ -49,10 +48,10 @@ class CreateSession extends APIRequest implements LexiconContract
 
     private function withAccessToken(): self
     {
-        $this->path(sprintf("/xrpc/%s", (new GetProfile($this->client))->nsid()))
+        $this->path(sprintf("/xrpc/%s", (new GetSession($this->client))->nsid()))
             ->method('GET')
             ->headers(self::API_BASE_HEADERS + ['Authorization' => "Bearer " . $this->session->accessJwt()])
-            ->queryParameters(['actor' => $this->identifier])
+            ->queryParameters([])
             ->parameters([]);
 
         return $this;
@@ -104,7 +103,7 @@ class CreateSession extends APIRequest implements LexiconContract
             $pathIs = fn (string $lexiconName): bool => strpos($this->path(), $lexiconName) !== false;
             $itIsRelatedException = $e instanceof InvalidTokenException || $e instanceof ExpiredTokenException;
 
-            if ($this->session && $itIsRelatedException && $pathIs('getProfile')) {
+            if ($this->session && $itIsRelatedException && $pathIs('getSession')) {
                 return $this->withRefreshToken()->send();
             }
 
