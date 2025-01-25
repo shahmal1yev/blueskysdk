@@ -3,6 +3,7 @@
 namespace Feature;
 
 use Atproto\Client;
+use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use PHPUnit\Framework\TestCase;
@@ -12,13 +13,13 @@ class SessionManagementTest extends TestCase
 {
     use Reflection;
 
-    private static array $credentials;
+    private array $credentials;
 
-    public static function setUpBeforeClass(): void
+    public function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        self::$credentials = [
+        $this->credentials = [
             getenv('BLUESKY_IDENTIFIER'),
             getenv('BLUESKY_PASSWORD'),
         ];
@@ -27,11 +28,11 @@ class SessionManagementTest extends TestCase
     private function session(?CreateSessionResponse $session = null): CreateSessionResponse
     {
         if ($session) {
-            self::$credentials = array_merge(self::$credentials, [$session]);
+            $this->credentials = array_merge($this->credentials, [$session]);
         }
 
         return (new Client())->com()->atproto()->server()->createSession()
-            ->forge(...self::$credentials)
+            ->forge(...$this->credentials)
             ->send();
     }
 
@@ -42,7 +43,7 @@ class SessionManagementTest extends TestCase
 
     public function testInvalidCredentialsThrowException(): void
     {
-        self::$credentials = ['invalid identifier', 'invalid password'];
+        $this->credentials = ['invalid identifier', 'invalid password'];
 
         $this->expectException(BlueskyException::class);
 
@@ -62,6 +63,7 @@ class SessionManagementTest extends TestCase
         $invalidSession = new CreateSessionResponse([
             'handle' => 'invalid identifier',
             'accessJwt' => 'invalid access token',
+            'refreshJwt' => 'invalid refresh token',
         ]);
 
         $actualSession = $this->session($invalidSession);
@@ -71,7 +73,7 @@ class SessionManagementTest extends TestCase
 
     public function testInvalidSessionAndCredentialsThrowException(): void
     {
-        self::$credentials = [
+        $this->credentials = [
             'invalid handle',
             'invalid password',
         ];
@@ -79,6 +81,7 @@ class SessionManagementTest extends TestCase
         $invalidSession = new CreateSessionResponse([
             'handle' => 'invalid identifier',
             'accessJwt' => 'invalid access token',
+            'refreshJwt' => 'invalid refresh token',
         ]);
 
         $this->expectException(BlueskyException::class);

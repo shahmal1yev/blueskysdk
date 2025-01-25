@@ -7,6 +7,8 @@ use Atproto\Contracts\LexiconContract;
 use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
+use Atproto\Exceptions\Http\Response\ExpiredTokenException;
+use Atproto\Exceptions\Http\Response\InvalidTokenException;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\App\Bsky\Actor\GetProfile;
 use Atproto\Lexicons\Traits\Endpoint;
@@ -28,13 +30,9 @@ class CreateSession extends APIRequest implements LexiconContract
     )
     {
         $this->client = $client;
-
         $this->identifier = $identifier;
         $this->password = $password;
-
-        if ($session) {
-            $this->session = $session;
-        }
+        $this->session = $session;
 
         $this->initialize();
     }
@@ -60,11 +58,23 @@ class CreateSession extends APIRequest implements LexiconContract
         return $this;
     }
 
+    private function withRefreshToken(): self
+    {
+        $this->path(sprintf("/xrpc/%s", (new RefreshSession($this->client))->nsid()))
+            ->method('POST')
+            ->headers(self::API_BASE_HEADERS + ['Authorization' => "Bearer " . $this->session->refreshJwt()])
+            ->queryParameters([])
+            ->parameters([]);
+
+        return $this;
+    }
+
     private function withCredentials(): self
     {
         $this->path(sprintf("/xrpc/%s", $this->nsid()))
             ->method('POST')
             ->headers(self::API_BASE_HEADERS)
+            ->queryParameters([])
             ->parameters([
                 'identifier' => $this->identifier,
                 'password' => $this->password,
@@ -77,10 +87,10 @@ class CreateSession extends APIRequest implements LexiconContract
     {
         $this->origin(self::API_BASE_URL);
 
+        $this->withCredentials();
+
         if ($this->session) {
             $this->withAccessToken();
-        } else {
-            $this->withCredentials();
         }
     }
 
@@ -91,10 +101,17 @@ class CreateSession extends APIRequest implements LexiconContract
 
             return $this->session ?: $response;
         } catch (BlueskyException $e) {
-            if ($this->session && in_array($e->getCode(), [400, 401, 403])) {
-                $this->withCredentials();
+            $pathIs = fn (string $lexiconName): bool => strpos($this->path(), $lexiconName) !== false;
+            $itIsRelatedException = $e instanceof InvalidTokenException || $e instanceof ExpiredTokenException;
 
-                return parent::send();
+            if ($this->session && $itIsRelatedException && $pathIs('getProfile')) {
+                return $this->withRefreshToken()->send();
+            }
+
+            if ($this->session && $itIsRelatedException && $pathIs('refreshSession')) {
+                // passed session invalid
+                $this->session = null;
+                return $this->withCredentials()->send();
             }
 
             throw $e;
