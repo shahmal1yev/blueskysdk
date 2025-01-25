@@ -106,4 +106,14 @@ trait BaseResponse
 
         return $value;
     }
+
+    public function __toString(): string
+    {
+        return json_encode($this->jsonSerialize());
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->content;
+    }
 }

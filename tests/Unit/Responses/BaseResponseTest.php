@@ -50,6 +50,15 @@ class BaseResponseTest extends TestCase
         $this->assertInstanceOf(ExampleObject::class, $result);
     }
 
+    public function testResponseCanBeSerialized(): void
+    {
+        $expected = json_encode([
+            'example' => 'some value',
+        ]);
+
+        $this->assertJsonStringEqualsJsonString($expected, (string) $this->resource);
+        $this->assertJsonStringEqualsJsonString($expected, json_encode($this->resource));
+    }
 }
 
 class TestableResponse implements ResponseContract

@@ -5,6 +5,7 @@ namespace Atproto\Contracts\Resources;
 use Atproto\API\App\Bsky\Actor\GetProfile;
 use Atproto\API\Com\Atrproto\Repo\CreateRecord;
 use Atproto\API\Com\Atrproto\Repo\UploadBlob;
+use Atproto\Contracts\Stringable;
 use Atproto\Exceptions\Resource\BadAssetCallException;
 
 /**
@@ -12,7 +13,7 @@ use Atproto\Exceptions\Resource\BadAssetCallException;
  * @see CreateRecord
  * @see UploadBlob
  */
-interface ResponseContract
+interface ResponseContract extends Stringable, \JsonSerializable
 {
     /**
      * @param  string  $name
@@ -27,4 +28,7 @@ interface ResponseContract
      * @return bool
      */
     public function exist(string $name): bool;
+
+    public function __toString(): string;
+    public function jsonSerialize(): array;
 }
