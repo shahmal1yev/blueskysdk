@@ -77,13 +77,7 @@ class SearchPostsTest extends TestCase
         $this->assertNotEmpty($response->posts());
 
         foreach ($response->posts() as $post) {
-            $source = $this->getPostSource($post);
-
-            if ($source instanceof External) {
-                $this->assertStringContainsString($query, $source->uri());
-            } elseif ($source instanceof FacetsObject) {
-                $this->assertFacetsContainQuery($source, substr($query, strlen('https://')));
-            }
+            $this->assertStringContainsString($query, $post->record()->text());
         }
     }
 
