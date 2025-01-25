@@ -11,6 +11,7 @@ trait Authentication
 {
     private ?CreateSessionResponse $authenticated = null;
     private SplObjectStorage $observers;
+    private array $credentials = [];
 
     public function __construct()
     {
@@ -20,9 +21,11 @@ trait Authentication
     /**
      * @throws BlueskyException
      */
-    public function authenticate(string $identifier, string $password): void
+    public function authenticate(string $identifier, string $password, CreateSessionResponse $session = null): void
     {
-        $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password);
+        $this->credentials = [$identifier, $password];
+
+        $request = $this->com()->atproto()->server()->createSession()->forge($identifier, $password, $session);
 
         /** @var CreateSessionResponse $response */
         $response = $request->send();
@@ -52,5 +55,10 @@ trait Authentication
         foreach ($this->observers as $observer) {
             $observer->update($this);
         }
+    }
+
+    public function credentials(): array
+    {
+        return $this->credentials;
     }
 }
