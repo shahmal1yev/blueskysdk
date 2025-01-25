@@ -16,6 +16,7 @@
 BlueSky SDK is a comprehensive PHP library designed to seamlessly integrate with the BlueSky social network.
 
 ### Key Features
+- Import/Export Sessions
 - Create posts with text, links, and media
 - Retrieve and manage user profiles
 - Search posts with keywords and filters
@@ -131,6 +132,65 @@ $client->authenticate(getenv('BLUESKY_IDENTIFIER'), getenv('BLUESKY_PASSWORD'));
 
 echo $client->authenticated()->handle();
 ```
+
+After the first authentication, the SDK saves the created session on the current instance and reuses it for
+subsequent requests within the same runtime.
+
+### Using Existing Sessions
+
+You can save and reuse sessions to avoid redundant authentications in future requests. Here's how:
+
+#### Exporting Sessions
+
+Save an authenticated session for later use:
+
+```php
+// Retrieve the current authenticated session
+$session = $client->authenticated();
+
+// Save the session to a database or a file
+$saveToDatabase(json_encode($session)); // Alternatively, use (string) $session
+```
+
+#### Importing Sessions
+
+Restore and reuse a previously saved session:
+
+```php
+use Atproto\Client;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
+
+// Fetch the saved session from storage (e.g., database, file)
+$savedSession = json_decode($fetchFromDatabase(), true);
+
+// Recreate the session object
+$session = new CreateSessionResponse($savedSession);
+
+// Initialize the client and authenticate with the restored session
+$client = new Client();
+$client->authenticate(
+    getenv('BLUESKY_IDENTIFIER'), 
+    getenv('BLUESKY_PASSWORD'),
+    $session // Optional: provide the restored session
+);
+```
+
+### Session Validation Workflow
+
+1. **`accessJwt`**: The SDK first checks the validity of the `accessJwt` token.
+    - If valid: the session is accepted and used.
+    - If invalid: it moves to the next step.
+
+2. **`refreshJwt`**: The SDK checks the validity of the `refreshJwt` token.
+    - If valid: it generates a new session and starts using it.
+    - If invalid: it moves to the next step.
+
+3. **`credentials`**: The SDK uses the provided credentials (`username` and `password`) to create a new session.
+    - If successful: the new session is used.
+    - If unsuccessful: an exception is thrown.
+
+**Note:** The third parameter, `CreateSessionResponse`, is optional. If you don’t provide it, the SDK will directly
+use the credentials for session management.
 
 ### Create a Simple Post
 
@@ -281,7 +341,7 @@ print_r($response);
 
 ### Serialization
 
-Any lexicon can be serialized
+Any lexicon or response can be serialized
 
 ```php
 use \Atproto\Client as LexiconSmith;
@@ -318,10 +378,14 @@ $post = $smith->app()->bsky()->feed()->post()->forge()
     );
 
 echo json_encode($post, JSON_PRETTY_PRINT);
+
+$createdRecordResponse = ...->send();
+
+echo json_encode($createdRecordResponse, JSON_PRETTY_PRINT);
 ```
 
 <details>
-<summary>Result</summary>
+<summary>Encoded Post</summary>
 
 ```json
 {
@@ -401,6 +465,22 @@ echo json_encode($post, JSON_PRETTY_PRINT);
 }
 ```
 
+</details>
+
+<details>
+<summary>Encoded Response</summary>
+
+```json
+{
+    "uri": "at:\/\/did:plc:mq5rndmqj3n4vpj443d22jop\/app.bsky.feed.post\/3lglquifzhx2i",
+    "cid": "bafyreihc5i26lzgcy3eq4q7ukzy5ouul3pgv6y76pedqyfkfg4xhc3iyre",
+    "commit": {
+        "cid": "bafyreickwjaufsayfv4zyi327n6pyzwzzav5woxqn54u4ypkntayexabb4",
+        "rev": "3lglquigf6x2i"
+    },
+    "validationStatus": "valid"
+}
+```
 </details>
 
 ## 📝 Documentation
