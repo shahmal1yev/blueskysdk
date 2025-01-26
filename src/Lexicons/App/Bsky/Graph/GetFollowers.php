@@ -11,6 +11,9 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Graph\GetFollowersResponse;
 
+/**
+ * @method GetFollowersResponse send()
+ */
 class GetFollowers extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

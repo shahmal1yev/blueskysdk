@@ -11,6 +11,9 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Feed\GetTimelineResponse;
 
+/**
+ * @method GetTimelineResponse send()
+ */
 class GetTimeline extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

@@ -13,6 +13,9 @@ use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Feed\SearchPostsResponse;
 use DateTimeImmutable;
 
+/**
+ * @method SearchPostsResponse send()
+ */
 class SearchPosts extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

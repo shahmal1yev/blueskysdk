@@ -13,6 +13,9 @@ use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\Com\Atproto\Repo\UploadBlobResponse;
 use Atproto\Support\FileSupport;
 
+/**
+ * @method UploadBlobResponse send()
+ */
 class UploadBlob extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

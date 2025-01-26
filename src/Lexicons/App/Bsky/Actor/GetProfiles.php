@@ -14,6 +14,9 @@ use Atproto\Responses\App\Bsky\Actor\GetProfilesResponse;
 use GenericCollection\Interfaces\GenericCollectionInterface;
 use GenericCollection\Types\Primitive\StringType;
 
+/**
+ * @method GetProfilesResponse send()
+ */
 class GetProfiles extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;
