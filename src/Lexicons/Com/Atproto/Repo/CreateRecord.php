@@ -12,6 +12,9 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\Com\Atproto\Repo\CreateRecordResponse;
 
+/**
+ * @method CreateRecordResponse send()
+ */
 class CreateRecord extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

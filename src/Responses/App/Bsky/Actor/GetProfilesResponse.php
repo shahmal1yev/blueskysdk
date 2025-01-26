@@ -7,6 +7,9 @@ use Atproto\Responses\BaseResponse;
 use Atproto\Responses\Objects\ProfilesObject;
 use Atproto\Traits\Castable;
 
+/**
+ * @method ProfilesObject profiles()
+ */
 class GetProfilesResponse implements ResponseContract
 {
     use BaseResponse;

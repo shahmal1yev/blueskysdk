@@ -12,6 +12,9 @@ use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\App\Bsky\Actor\GetProfileResponse;
 use Exception;
 
+/**
+ * @method GetProfileResponse send()
+ */
 class GetProfile extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

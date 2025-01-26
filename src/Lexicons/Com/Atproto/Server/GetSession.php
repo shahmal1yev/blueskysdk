@@ -9,6 +9,9 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
 use Atproto\Responses\Com\Atproto\Server\GetSessionResponse;
 
+/**
+ * @method GetSessionResponse send()
+ */
 class GetSession extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;

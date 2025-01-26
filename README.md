@@ -71,6 +71,8 @@ The SDK implements a smart builder pattern using method chaining. This provides 
 requests
 
 ```php
+use Atproto\Client;
+
 $response = $client->com()      // Navigate to 'com' namespace
     ->atproto()                 // Navigate to 'atproto' subspace
     ->repo()                    // Navigate to 'repo' operations
@@ -78,6 +80,52 @@ $response = $client->com()      // Navigate to 'com' namespace
     ->forge()                   // Initialize the request builder
     ->record($post)             // Add content
     ->send();                   // Execute the request
+
+// or
+
+$facade = bskyFacade($client)
+    ->createRecord()
+    ->record($post)
+    ->send();
+```
+
+### Using `BskyFacade`
+
+The `BskyFacade` simplifies API interactions by providing a centralized, singleton-based interface for commonly used operations. With this facade, you can streamline your SDK usage and avoid deep method chains.
+
+#### Why Use `BskyFacade`?
+
+- **Simplified API Calls**: Replace complex chains with straightforward methods.
+- **Helper Function**: Use the `bskyFacade()` helper for quick access to the instance.
+- **Singleton Design**: Maintains a consistent, shared instance.
+- **Error Handling**: Ensures a valid `Client` is set, throwing an `InvalidArgumentException` otherwise.
+
+#### Example Usage
+
+Initialize and use the `BskyFacade` as follows:
+
+```php
+// Access the facade using the helper function
+$facade = bskyFacade($client); // or Atproto\BskyFacade::getInstance($client);
+
+// Create a post
+$post = $facade->post()->text("Hello, BlueSky!");
+$createdRecord = $facade->createRecord()->record($post)->send();
+
+echo $createdRecord->uri(); // Output: URI of the created post
+```
+
+#### Updating the `Client` Instance
+
+The `BskyFacade` allows you to update the `Client` instance at any point:
+
+```php
+$client1 = new Client();
+$client2 = new Client();
+
+// Set or replace the current client
+bskyFacade($client1); // First instance
+bskyFacade($client2); // Replaces the previous client
 ```
 
 ### Response Handling
@@ -86,9 +134,13 @@ The SDK uses type-safe response objects that automatically cast API responses in
 
 ```php
 // Getting a profile
-$profile = $client->app()->bsky()->actor()->getProfile()->forge()
+$profile = bskyFacade($client)->getProfile()
     ->actor($client->authenticated()->handle())
     ->send();
+    
+// $profile = $client->app()->bsky()->actor()->getProfile()->forge()
+//    ->actor($client->authenticated()->handle())
+//    ->send();
 
 // Access data through typed methods
 echo $profile->displayName();    // Returns string
@@ -99,7 +151,7 @@ $createdAt = $profile->createdAt();      // Returns Carbon instance
 
 // Response objects are iterable when representing collections
 /** @var \Atproto\Responses\Objects\FollowersObject $response */
-$response = $client->app()->bsky()->graph()->getFollowers()->forge()
+$response = bskyFacade()->getFollowers()
     ->actor($profile->handle())
     ->send();
 
@@ -198,11 +250,10 @@ Easily create and send a text-based post to BlueSky.
 
 ```php
 // Forge a new post with simple text
-$post = $client->app()->bsky()->feed()->post()->forge()
-    ->text("Hello, BlueSky!");
+$post = bskyFacade($client)->post()->text("Hello, BlueSky!");
 
 // Send the post to the server
-$createdRecord = $client->com()->atproto()->repo()->createRecord()->forge()
+$createdRecord = bskyFacade()->createRecord()
     ->record($post) // Include the forged post
     ->repo($client->authenticated()->did()) // Specify the authenticated user's DID
     ->collection($post->nsid()) // Use the appropriate collection namespace
@@ -221,20 +272,20 @@ use \Atproto\Lexicons\App\Bsky\Embed\Collections\ImageCollection;
 use \Atproto\Lexicons\App\Bsky\Embed\Image;
 
 // Upload an image to the server
-$uploadedBlob = $client->com()->atproto()->repo()->uploadBlob()->forge()
+$uploadedBlob = bskyFacade($client)->uploadBlob()
     ->blob('/path/to/image.jpg') // Specify the image path
     ->send()
     ->blob(); // Retrieve the uploaded blob metadata
 
 // Forge a post embedding the uploaded image
-$post = $client->app()->bsky()->feed()->post()->forge()
+$post = bskyFacade()->post()
     ->text("Hello, BlueSky with an image!")
-    ->embed(new ImageCollection([
-        new Image($uploadedBlob, 'Image description') // Attach the image with alt text
-    ]));
+    ->embed(bskyFacade()->imagesEmbed(
+       bskyFacade()->image($uploadedBlob, 'Image description')
+    ));
 
 // Send the post and log the URI
-$createdRecord = $client->com()->atproto()->repo()->createRecord()->forge()
+$createdRecord = bskyFacade()->createRecord()
     ->record($post)
     ->repo($client->authenticated()->did())
     ->collection($post->nsid())
@@ -249,25 +300,25 @@ Add external links with thumbnails for informative posts.
 
 ```php
 // Upload an image for the link preview
-$uploadedBlob = $client->com()->atproto()->repo()->uploadBlob()->forge()
+$uploadedBlob = bskyFacade($client)->uploadBlob()
     ->blob('/path/to/image.jpg')
     ->send()
     ->blob();
 
 // Forge external link details
-$external = $client->app()->bsky()->embed()->external()->forge(
+$external = bskyFacade()->externalEmbed(
     'https://example.com', // Link URL
     'Example Website',    // Link title
     'A description of the website.' // Link description
 )->thumb($uploadedBlob); // Add the uploaded image as a thumbnail
 
 // Forge a post including the external link
-$post = $client->app()->bsky()->feed()->post()->forge()
+$post = bskyFacade()->post()
     ->text("Check out this website!")
     ->embed($external);
 
 // Send the post and retrieve the URI
-$createdRecord = $client->com()->atproto()->repo()->createRecord()->forge()
+$createdRecord = bskyFacade()->createRecord()
     ->record($post)
     ->repo($client->authenticated()->did())
     ->collection($post->nsid())
@@ -282,7 +333,7 @@ Search for posts on BlueSky using keywords or filters.
 
 ```php
 // Perform a keyword search on posts
-$response = $client->app()->bsky()->feed()->searchPosts()->forge('keyword')
+$response = bskyFacade()->searchPosts('keyword')
     ->send();
 
 // Loop through and display the search results
@@ -296,7 +347,7 @@ foreach ($response->posts() as $post) {
 Get a view of the requesting account's home timeline.
 
 ```php
-$feed = $client->app()->bsky()->feed()->getTimeline()->forge()
+$feed = bskyFacade($client)->getTimeline()
     ->limit(10)
     ->send()
     ->feed();
@@ -350,7 +401,7 @@ use \Atproto\Lexicons\App\Bsky\RichText\RichText;
 
 $smith = new LexiconSmith();
 
-$post = $smith->app()->bsky()->feed()->post()->forge()
+$post = bskyFacade($smih)->post()
     ->text("Hello, BlueSky!\n\n")
     ->text("This post was sent via ")
     ->link("https://blueskysdk.shahmal1yev.dev", "Bluesky PHP SDK")
@@ -363,7 +414,7 @@ $post = $smith->app()->bsky()->feed()->post()->forge()
         RichText::tag("bsky_sdk", "Bsky SDK")
     )
     ->embed(
-        $smith->app()->bsky()->embed()->external()->forge(
+        bskyFacade()->externalEmbed(
             'https://blueskysdk.shahmal1yev.dev',
             'Bluesky PHP SDK',
             'Official documentation of the BlueSky PHP SDK'

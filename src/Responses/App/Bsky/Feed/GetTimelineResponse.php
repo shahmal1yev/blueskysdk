@@ -7,6 +7,10 @@ use Atproto\Responses\BaseResponse;
 use Atproto\Responses\Objects\FeedObject;
 use Atproto\Traits\Castable;
 
+/**
+ * @method string cursor()
+ * @method FeedObject feed()
+ */
 class GetTimelineResponse implements ResponseContract
 {
     use BaseResponse;

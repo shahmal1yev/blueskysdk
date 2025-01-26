@@ -9,6 +9,11 @@ use Atproto\Responses\Objects\FollowersObject;
 use Atproto\Responses\Objects\SubjectObject;
 use Atproto\Traits\Castable;
 
+/**
+ * @method SubjectObject subject()
+ * @method FollowersObject followers()
+ * @method string cursor()
+ */
 class GetFollowersResponse implements ResponseContract
 {
     use BaseResponse;

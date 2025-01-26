@@ -13,6 +13,9 @@ use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\Endpoint;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 
+/**
+ * @method CreateSessionResponse send()
+ */
 class CreateSession extends APIRequest implements LexiconContract
 {
     use Endpoint;

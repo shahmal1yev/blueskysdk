@@ -8,9 +8,13 @@ use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Lexicons\APIRequest;
 use Atproto\Lexicons\Traits\AuthenticatedEndpoint;
+use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse as SessionResponse;
 use SplSubject;
 
+/**
+ * @method CreateSessionResponse send()
+ */
 class RefreshSession extends APIRequest implements LexiconContract
 {
     use AuthenticatedEndpoint;
