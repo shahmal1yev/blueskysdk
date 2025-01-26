@@ -227,11 +227,10 @@ class BskyFacade
     /**
      * A set of images embedded in a Bluesky record (eg, a post).
      *
-     * @param  iterable<Image>  $imageCollection
+     * @param  Image  ...$imageCollection
      * @return ImageCollection
-     * @throws InvalidArgumentException If collection contains any object which is not instance of `Image`
      */
-    public function imagesEmbed(iterable $imageCollection = []): ImageCollection
+    public function imagesEmbed(Image ...$imageCollection): ImageCollection
     {
         return new ImageCollection($imageCollection);
     }
