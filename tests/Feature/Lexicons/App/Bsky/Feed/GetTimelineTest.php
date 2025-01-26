@@ -22,7 +22,7 @@ class GetTimelineTest extends TestCase
         $client = static::$client;
 
         $getTimeline = $client->app()->bsky()->feed()->getTimeline()->forge()
-            ->limit(20);
+            ->limit(5);
 
         $response = $getTimeline->send();
 
