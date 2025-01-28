@@ -15,7 +15,7 @@ trait RequestHandler
     private array $responseHeaders;
 
     /** @var string|array */
-    private $content;
+    private $content = [];
 
 
     /**
@@ -26,6 +26,11 @@ trait RequestHandler
         $this->request();
         $this->handle();
 
+        return $this->content;
+    }
+
+    public function content(): array
+    {
         return $this->content;
     }
 
