@@ -17,13 +17,17 @@ use Atproto\Lexicons\App\Bsky\Feed\GetTimeline;
 use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\Feed\SearchPosts;
 use Atproto\Lexicons\App\Bsky\Graph\GetFollowers;
+use Atproto\Lexicons\App\Bsky\Video\GetJobStatus;
+use Atproto\Lexicons\App\Bsky\Video\UploadVideo;
 use Atproto\Lexicons\Com\Atproto\Repo\CreateRecord;
 use Atproto\Lexicons\Com\Atproto\Repo\StrongRef;
 use Atproto\Lexicons\Com\Atproto\Repo\UploadBlob;
 use Atproto\Lexicons\Com\Atproto\Server\CreateSession;
+use Atproto\Lexicons\Com\Atproto\Server\GetServiceAuth;
 use Atproto\Lexicons\Com\Atproto\Server\GetSession;
 use Atproto\Lexicons\Com\Atproto\Server\RefreshSession;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
+use Atproto\Support\FileSupport;
 
 class BskyFacade
 {
@@ -269,5 +273,24 @@ class BskyFacade
     public function videoEmbed(Blob $blob): Video
     {
         return $this->client->app()->bsky()->embed()->video()->forge($blob);
+    }
+
+    public function getServiceAuth(): GetServiceAuth
+    {
+        return $this->client->com()->atproto()->server()->getServiceAuth()->forge();
+    }
+
+    public function uploadVideo(
+        string $name,
+        FileSupport $file,
+        string $token = null
+    ): UploadVideo
+    {
+        return $this->client->app()->bsky()->video()->uploadVideo()->forge($name, $file, $token);
+    }
+
+    public function getJobStatus(string $jobId): GetJobStatus
+    {
+        return $this->client->app()->bsky()->video()->getJobStatus()->forge($jobId);
     }
 }
