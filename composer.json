@@ -40,7 +40,7 @@
     "php": ">=7.4",
     "nesbot/carbon": "2.x",
     "shahmal1yev/gcollection": "^1.0",
-    "illuminate/collections": "v8.83.27"
+    "illuminate/collections": "~v8.83"
   },
   "scripts": {
     "test": "vendor/bin/phpunit tests -c ./phpunit.xml",
