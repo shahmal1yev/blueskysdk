@@ -287,7 +287,7 @@ class PostTest extends TestCase
         $this->assertArrayHasKey('createdAt', $result);
         $this->assertArrayHasKey('facets', $result);
         $this->assertArrayHasKey('embed', $result);
-        $this->assertArrayHasKey('replyRef', $result);
+        $this->assertArrayHasKey('reply', $result);
         $this->assertArrayHasKey('langs', $result);
         $this->assertArrayHasKey('labels', $result);
         $this->assertArrayHasKey('tags', $result);

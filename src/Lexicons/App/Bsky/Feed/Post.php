@@ -208,7 +208,7 @@ class Post implements PostBuilderContract
             'text' => $this->text,
             'facets' => $this->facets->toArray(),
             'embed' => $this->embed,
-            'replyRef' => $this->reply,
+            'reply' => $this->reply,
             'langs' => $this->languages,
             'labels' => $this->labels,
             'tags' => $this->tags,
