@@ -3,6 +3,7 @@
 namespace Atproto\Lexicons\Traits;
 
 use Atproto\Client;
+use Atproto\Contracts\Lexicons\RequestContract;
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\Http\Response\ExpiredTokenException;
@@ -35,10 +36,14 @@ trait AuthenticatedEndpoint
         }
     }
 
+    /**
+     * @return RequestContract|string
+     */
     public function token(string $token = null)
     {
         if (is_null($token)) {
-            return $this->header('Authorization');
+            $token = $this->header('Authorization');
+            return trim(substr($token, strrpos($token, ' '))) ?: null;
         }
 
         $this->header('Authorization', "Bearer $token");
