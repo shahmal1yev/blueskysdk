@@ -53,19 +53,7 @@ class UploadBlob extends APIRequest implements LexiconContract
             return $this->parameters['blob'] ?: '';
         }
 
-        parent::parameters($parameters);
-    }
-
-    public function token(string $token = null)
-    {
-        if (is_null($token)) {
-            $token = $this->header('Authorization');
-            return trim(substr($token, strrpos($token, ' '))) ?: null;
-        }
-
-        $this->header('Authorization', "Bearer $token");
-
-        return $this;
+        return parent::parameters($parameters);
     }
 
     /**

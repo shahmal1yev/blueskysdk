@@ -42,17 +42,6 @@ class RefreshSession extends APIRequest implements LexiconContract
         }
     }
 
-    public function token(string $token = null)
-    {
-        if (! $token) {
-            return str_replace("Bearer ", '', $this->header('Authorization'));
-        }
-
-        $this->header("Authorization", "Bearer $token");
-
-        return $this;
-    }
-
     public function build(): RequestContract
     {
         return $this;

@@ -34,20 +34,6 @@ class GetProfile extends APIRequest implements LexiconContract
     }
 
     /**
-     * @return RequestContract|string
-     */
-    public function token(string $token = null)
-    {
-        if (is_null($token)) {
-            return $this->header('Authorization');
-        }
-
-        $this->header('Authorization', "Bearer $token");
-
-        return $this;
-    }
-
-    /**
      * @throws Exception
      */
     public function build(): RequestContract
