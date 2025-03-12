@@ -22,8 +22,8 @@ class CreateRecordTest extends TestCase
     {
         static::$client = new Client();
         static::$client->authenticate(
-            'shahmal1yevv.bsky.social',
-            'ucvlqcq8'
+            getenv('BLUESKY_IDENTIFIER'),
+            getenv('BLUESKY_PASSWORD')
         );
     }
 
