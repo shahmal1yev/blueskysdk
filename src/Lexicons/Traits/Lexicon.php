@@ -6,7 +6,7 @@ trait Lexicon
 {
     use Serializable;
 
-    public function nsid(): string
+    public static function nsid(): string
     {
         $segments = explode(
             '\\',

@@ -40,7 +40,7 @@ class ImageCollection extends GenericCollection implements EmbedInterface, Media
         ];
     }
 
-    public function nsid(): string
+    public static function nsid(): string
     {
         return 'app.bsky.embed.images';
     }
