@@ -30,7 +30,7 @@ class GetTimelineTest extends TestCase
 
         foreach($feed as $entry) {
             $this->assertInstanceOf(PostObject::class, $post = $entry->post());
-            $this->assertSame($client->authenticated()->did(), $post->author()->did());
+            $this->assertSame($client->authenticated()->handle(), $post->author()->handle());
         }
     }
 }
