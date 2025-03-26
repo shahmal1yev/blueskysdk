@@ -6,7 +6,6 @@ use Atproto\Client;
 use Atproto\Enums\SearchPost\SortEnum;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\Lexicons\App\Bsky\Feed\Post;
 use Atproto\Lexicons\App\Bsky\Feed\SearchPosts;
 use Carbon\Carbon;
 use DateTimeImmutable;

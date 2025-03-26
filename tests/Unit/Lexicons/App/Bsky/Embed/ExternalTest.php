@@ -6,7 +6,6 @@ use Atproto\Client;
 use Atproto\Contracts\DataModel\BlobContract;
 use Atproto\DataModel\Blob\Blob;
 use Atproto\Exceptions\InvalidArgumentException;
-use Atproto\IPFS\CID\CID;
 use Atproto\Lexicons\App\Bsky\Embed\External;
 use PHPUnit\Framework\TestCase;
 

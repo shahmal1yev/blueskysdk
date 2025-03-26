@@ -2,8 +2,10 @@
 
 namespace Atproto\Responses;
 
+use Atproto\Contracts\FieldTypes\FieldTypeHandlerContract;
 use Atproto\Contracts\Resources\ObjectContract;
 use Atproto\Exceptions\Resource\BadAssetCallException;
+use Atproto\FieldTypes\CastableFields\CastableField;
 use Atproto\Support\Arr;
 use Atproto\Traits\Castable;
 
@@ -98,6 +100,10 @@ trait BaseResponse
         if (in_array(Castable::class, class_uses_recursive(static::class))) {
             /** @var ?ObjectContract $cast */
             $asset = Arr::get($this->casts(), $name);
+
+            if ($asset instanceof CastableField) {
+                return $asset->handler()->handle($value, $asset->definition());
+            }
 
             if ($asset) {
                 $value = (new $asset($value))->cast();

@@ -2,13 +2,9 @@
 
 namespace Tests\Unit\Responses\Assets;
 
-use Atproto\Responses\Objects\DatetimeObject;
 use Atproto\Responses\Objects\LabelObject;
 use Atproto\Responses\Objects\LabelsObject;
-use Atproto\Responses\Objects\ListObject;
 use Atproto\Responses\Objects\PostObject;
-use Atproto\Responses\Objects\ProfileObject;
-use Atproto\Responses\Objects\ThreadGateObject;
 use Atproto\Responses\Objects\ViewerObject;
 use Carbon\Carbon;
 use Faker\Generator;

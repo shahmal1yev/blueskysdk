@@ -27,7 +27,7 @@ abstract class FeatureAbstract implements LexiconContract
         return ['$type' => sprintf("%s#%s", $this->nsid(), $this->type())] + $this->schema();
     }
 
-    public function nsid(): string
+    public static function nsid(): string
     {
         return 'app.bsky.richtext.facet';
     }
