@@ -3,7 +3,6 @@
 namespace Feature;
 
 use Atproto\Client;
-use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Exceptions\BlueskyException;
 use Atproto\Responses\Com\Atproto\Server\CreateSessionResponse;
 use PHPUnit\Framework\TestCase;

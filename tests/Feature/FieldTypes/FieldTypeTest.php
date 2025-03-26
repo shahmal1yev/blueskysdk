@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\FieldTypes;
 
-use Atproto\FieldTypes\FieldType;
 use Atproto\Contracts\LexiconContract;
+use Atproto\FieldTypes\FieldType;
 use PHPUnit\Framework\TestCase;
 
 class FieldTypeTest extends TestCase

@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\FieldTypes\Handlers;
 
+use Atproto\Contracts\LexiconContract;
 use Atproto\FieldTypes\Definitions\UnionTypeDefinition;
 use Atproto\FieldTypes\Handlers\UnionTypeHandler;
-use Atproto\Contracts\LexiconContract;
-use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class UnionTypeHandlerTest extends TestCase
 {

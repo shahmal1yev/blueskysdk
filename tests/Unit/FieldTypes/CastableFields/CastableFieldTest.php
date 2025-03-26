@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\FieldTypes\CastableFields;
 
+use Atproto\Contracts\FieldTypes\FieldTypeHandlerContract;
 use Atproto\FieldTypes\CastableFields\CastableField;
 use Atproto\FieldTypes\Definitions\AbstractDefinition;
-use Atproto\Contracts\FieldTypes\FieldTypeHandlerContract;
 use PHPUnit\Framework\TestCase;
 
 class CastableFieldTest extends TestCase

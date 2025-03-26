@@ -3,8 +3,8 @@
 namespace Tests\Unit\FieldTypes\Definitions;
 
 use Atproto\Contracts\FieldTypes\FieldTypeHandlerContract;
-use Atproto\FieldTypes\Definitions\ArrTypeDefinition;
 use Atproto\FieldTypes\Definitions\AbstractDefinition;
+use Atproto\FieldTypes\Definitions\ArrTypeDefinition;
 use PHPUnit\Framework\TestCase;
 
 class ArrTypeDefinitionTest extends TestCase

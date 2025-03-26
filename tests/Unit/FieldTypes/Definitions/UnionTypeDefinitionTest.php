@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\FieldTypes\Definitions;
 
-use Atproto\FieldTypes\Definitions\UnionTypeDefinition;
 use Atproto\Contracts\LexiconContract;
+use Atproto\FieldTypes\Definitions\UnionTypeDefinition;
 use PHPUnit\Framework\TestCase;
 
 class UnionTypeDefinitionTest extends TestCase
