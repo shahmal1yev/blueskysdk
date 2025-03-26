@@ -238,7 +238,9 @@ class FakeVariant implements LexiconContract
         return 'com.example.fake#view';
     }
 
-    public function jsonSerialize() {}
+    public function jsonSerialize():array {
+        return [];
+    }
 
     public function __toString(): string
     {
@@ -251,7 +253,9 @@ class AnotherFakeVariant implements LexiconContract {
     public function __construct(array $data) {$this->data = $data;}
     public function data(): array { return $this->data; }
     public static function nsid(): string { return 'com.example.other#view'; }
-    public function jsonSerialize() {}
+    public function jsonSerialize():array {
+        return [];
+    }
     public function __toString(): string { return json_encode($this->data); }
 }
 
@@ -260,7 +264,9 @@ class FakeArrayWrapper implements LexiconContract {
     public function __construct(array $data) {$this->data = $data;}
     public function data(): array { return $this->data; }
     public static function nsid(): string { return 'com.example.arr#view'; }
-    public function jsonSerialize() {}
+    public function jsonSerialize():array {
+        return [];
+    }
     public function __toString(): string { return json_encode($this->data); }
 }
 

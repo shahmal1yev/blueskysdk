@@ -145,7 +145,7 @@ class DummyProfile implements LexiconContract
     public function __construct(array $data) { $this->data = $data; }
     public function data(): array { return $this->data; }
     public static function nsid(): string { return 'app.test.profile'; }
-    public function jsonSerialize() {}
+    public function jsonSerialize():array {return [];}
     public function __toString(): string { return json_encode($this->data); }
 }
 
@@ -155,6 +155,6 @@ class DummyEmbed implements LexiconContract
     public function __construct(array $data) { $this->data = $data; }
     public function data(): array { return $this->data; }
     public static function nsid(): string { return 'app.test.embed'; }
-    public function jsonSerialize() {}
+    public function jsonSerialize():array {return [];}
     public function __toString(): string { return json_encode($this->data); }
 }
