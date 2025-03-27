@@ -30,5 +30,5 @@ interface ResponseContract extends Stringable, \JsonSerializable
     public function exist(string $name): bool;
 
     public function __toString(): string;
-    public function jsonSerialize(): array;
+    public function jsonSerialize();
 }
