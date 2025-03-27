@@ -4,15 +4,13 @@ namespace Atproto\Responses\Com\Atproto\Server;
 
 use Atproto\Contracts\Resources\ResponseContract;
 use Atproto\Responses\BaseResponse;
-use Atproto\Responses\Objects\DidDocObject;
-use Atproto\Traits\Castable;
 
 /**
  * @method string accessJwt()
  * @method string refreshJwt()
  * @method string handle()
  * @method string did()
- * @method DidDocObject didDoc()
+ * @method mixed didDoc()
  * @method string email()
  * @method bool emailConfirmed()
  * @method bool emailAuthFactor()
@@ -22,12 +20,4 @@ use Atproto\Traits\Castable;
 class CreateSessionResponse implements ResponseContract
 {
     use BaseResponse;
-    use Castable;
-
-    protected function casts(): array
-    {
-        return [
-            'didDoc' => DidDocObject::class,
-        ];
-    }
 }
