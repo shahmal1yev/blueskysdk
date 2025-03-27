@@ -1,0 +1,36 @@
+<?php
+
+namespace Atproto\Lexicons\App\Bsky\Embed\Record;
+
+use Atproto\Contracts\DefinitionContract;
+use Atproto\Lexicons\App\Bsky\Feed\Defs\BlockedAuthor;
+use Atproto\Responses\Objects\BaseObject;
+use Atproto\Traits\Castable;
+
+/**
+ * @method string uri
+ * @method true blocked
+ * @method BlockedAuthor author
+ */
+class ViewBlocked implements DefinitionContract
+{
+    use Castable;
+    use BaseObject;
+
+    public function __construct($value)
+    {
+        $this->content = $value;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'author' => BlockedAuthor::class,
+        ];
+    }
+
+    public static function nsid(): string
+    {
+        return 'app.bsky.embed.record#viewBlocked';
+    }
+}
