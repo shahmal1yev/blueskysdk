@@ -43,7 +43,7 @@ class SearchPostsTest extends TestCase
         try {
             return $post->embed();
         } catch (BadAssetCallException $e) {
-            return $post->record()->facets();
+            return $post->record()['facets'];
         }
     }
 
@@ -77,7 +77,7 @@ class SearchPostsTest extends TestCase
         $this->assertNotEmpty($response->posts());
 
         foreach ($response->posts() as $post) {
-            $this->assertStringContainsString($query, $post->record()->text());
+            $this->assertStringContainsString($query, $post->record()['text']);
         }
     }
 
@@ -115,7 +115,7 @@ class SearchPostsTest extends TestCase
         $this->assertNotEmpty($response->posts());
 
         foreach ($response->posts() as $post) {
-            $this->assertTrue(in_array($lang, $post->record()->langs()));
+            $this->assertTrue(in_array($lang, $post->record()['langs']));
         }
     }
 
@@ -165,8 +165,8 @@ class SearchPostsTest extends TestCase
 
         foreach ($response->posts() as $post) {
             $this->assertSame($author, $post->author()->handle());
-            $this->assertTrue(in_array($lang, $post->record()->langs()));
-            $this->assertStringContainsString('shahmal1yev', $post->record()->text());
+            $this->assertTrue(in_array($lang, $post->record()['langs']));
+            $this->assertStringContainsString('shahmal1yev', $post->record()['text']);
         }
     }
 
@@ -197,8 +197,8 @@ class SearchPostsTest extends TestCase
         $secondResponse = $request->cursor($cursor)->limit(3)->send();
         $this->assertNotEmpty($secondResponse->posts());
 
-        $firstTexts = array_map(fn ($post) => $post->record()->text(), $firstResponse->posts()->toArray());
-        $secondTexts = array_map(fn ($post) => $post->record()->text(), $secondResponse->posts()->toArray());
+        $firstTexts = array_map(fn ($post) => $post->record()['text'], $firstResponse->posts());
+        $secondTexts = array_map(fn ($post) => $post->record()['text'], $secondResponse->posts());
 
         $this->assertNotEquals($firstTexts, $secondTexts);
     }

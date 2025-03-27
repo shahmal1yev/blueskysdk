@@ -12,7 +12,7 @@ use Atproto\Traits\Castable;
  * @method string playlist
  * @method string thumbnail
  * @method string alt
- * @method string aspectRatio
+ * @method AspectRatio aspectRatio
  */
 class View implements DefinitionContract
 {

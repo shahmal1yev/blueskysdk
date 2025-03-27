@@ -3,14 +3,15 @@
 namespace Atproto\Responses\App\Bsky\Feed;
 
 use Atproto\Contracts\Resources\ResponseContract;
+use Atproto\FieldTypes\FieldType;
+use Atproto\Lexicons\App\Bsky\Feed\Defs\PostView;
 use Atproto\Responses\BaseResponse;
-use Atproto\Responses\Objects\PostsObject;
 use Atproto\Traits\Castable;
 
 /**
  * @method string cursor
  * @method integer hitsTotal
- * @method PostsObject posts
+ * @method array<PostView> posts
  */
 class SearchPostsResponse implements ResponseContract
 {
@@ -20,7 +21,7 @@ class SearchPostsResponse implements ResponseContract
     protected function casts(): array
     {
         return [
-            'posts' => PostsObject::class,
+            'posts' => FieldType::array(FieldType::object(PostView::class)),
         ];
     }
 }
