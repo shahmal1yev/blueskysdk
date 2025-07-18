@@ -40,10 +40,13 @@ $client = new Client();
 // Authenticate with BlueSky
 $client->authenticate('your-handle', 'your-password');
 
-// Create a post
-$response = $client->feed()->post()
-    ->text('Hello from BlueSky SDK!')
+// Get your profile
+$profile = bskyFacade($client)->getProfile()
+    ->actor($client->authenticated()->handle())
     ->send();
+
+// Get the date you joined
+$createdAt = $profile->createdAt();
 ```
 
 ## 📋 Requirements
