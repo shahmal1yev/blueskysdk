@@ -19,9 +19,68 @@ BlueSky SDK is a comprehensive PHP library designed to seamlessly integrate with
 
 Explore the [Wiki](https://github.com/shahmal1yev/blueskysdk/wiki) for documentation.
 
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+composer require shahmal1yev/blueskysdk
+```
+
+### Basic Usage
+
+```php
+<?php
+
+use Atproto\Client;
+
+// Create a client instance
+$client = new Client();
+
+// Authenticate with BlueSky
+$client->authenticate('your-handle', 'your-password');
+
+// Create a post
+$response = $client->feed()->post()
+    ->text('Hello from BlueSky SDK!')
+    ->send();
+```
+
+## 📋 Requirements
+
+- PHP 7.4 or higher
+- Extensions: `json`, `curl`, `fileinfo`
+- Composer
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+composer test
+
+# Run unit tests only
+composer test-unit
+
+# Run feature tests only  
+composer test-feature
+
+# Static analysis
+composer analyse
+```
+
 ## 🤝 Contributing
 
---
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- Code standards (PSR, SOLID principles)
+- Development setup and workflow
+- Testing requirements
+- Pull request process
+
+Before contributing, please:
+1. Read the [Contributing Guide](CONTRIBUTING.md)
+2. Check existing issues and pull requests
+3. Join our [Discord community](https://discord.gg/tDajgYtBsZ) for discussions
 
 ## 📝 License
 
